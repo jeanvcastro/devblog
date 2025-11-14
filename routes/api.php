@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdminAuthController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\ImageUploadController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PostViewController;
 use App\Http\Controllers\Api\TagController;
@@ -46,5 +47,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/comments/{comment:uuid}/approve', [CommentController::class, 'approve']);
         Route::delete('/comments/{comment:uuid}', [CommentController::class, 'destroy']);
+
+        Route::post('/images/upload', [ImageUploadController::class, 'upload']);
+        Route::delete('/images/{filename}', [ImageUploadController::class, 'delete']);
     });
 });
