@@ -12,14 +12,6 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         \App\Models\User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@techblog.com',
-            'password' => bcrypt('password'),
-            'is_admin' => true,
-            'avatar' => 'https://ui-avatars.com/api/?name=Admin+User',
-        ]);
-
-        \App\Models\User::create([
             'name' => 'João Silva',
             'email' => 'joao@example.com',
             'password' => bcrypt('password'),

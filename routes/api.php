@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\AdminAuthController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PostViewController;
 use App\Http\Controllers\Api\TagController;
+use App\Http\Controllers\Api\VisitorAuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/posts', [PostController::class, 'index']);
@@ -19,7 +21,18 @@ Route::get('/tags/{tag:uuid}', [TagController::class, 'show']);
 
 Route::get('/posts/{post:uuid}/comments', [CommentController::class, 'index']);
 
+Route::post('/admin/login', [AdminAuthController::class, 'login']);
+
+Route::get('/auth/google', [VisitorAuthController::class, 'redirect']);
+Route::get('/auth/google/callback', [VisitorAuthController::class, 'callback']);
+
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
+    Route::get('/admin/me', [AdminAuthController::class, 'me']);
+
+    Route::post('/auth/logout', [VisitorAuthController::class, 'logout']);
+    Route::get('/auth/me', [VisitorAuthController::class, 'me']);
+
     Route::post('/comments', [CommentController::class, 'store']);
 
     Route::middleware('admin')->group(function () {
