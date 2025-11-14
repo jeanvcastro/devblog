@@ -1,0 +1,25 @@
+{
+  "singleQuote": false,
+  "arrowParens": "avoid",
+  "plugins": [
+    "@prettier/plugin-php", 
+    "@shufo/prettier-plugin-blade", 
+    "prettier-plugin-tailwindcss"
+  ],
+  "overrides": [
+    {
+      "files": ["*.php"],
+      "options": {
+        "tabWidth": 4,
+        "parser": "php"
+      }
+    },
+    {
+      "files": ["*.blade.php"],
+      "options": {
+        "tabWidth": 2,
+        "parser": "blade"
+      }
+    }
+  ]
+}
