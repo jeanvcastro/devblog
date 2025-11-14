@@ -1,0 +1,37 @@
+<?php
+
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\PostViewController;
+use App\Http\Controllers\Api\TagController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/most-viewed', [PostController::class, 'mostViewed']);
+Route::get('/posts/recent', [PostController::class, 'recent']);
+Route::get('/posts/search', [PostController::class, 'search']);
+Route::get('/posts/{post:uuid}', [PostController::class, 'show']);
+
+Route::post('/posts/{post:uuid}/track-view', [PostViewController::class, 'track']);
+
+Route::get('/tags', [TagController::class, 'index']);
+Route::get('/tags/{tag:uuid}', [TagController::class, 'show']);
+
+Route::get('/posts/{post:uuid}/comments', [CommentController::class, 'index']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/comments', [CommentController::class, 'store']);
+
+    Route::middleware('admin')->group(function () {
+        Route::post('/posts', [PostController::class, 'store']);
+        Route::put('/posts/{post:uuid}', [PostController::class, 'update']);
+        Route::delete('/posts/{post:uuid}', [PostController::class, 'destroy']);
+
+        Route::post('/tags', [TagController::class, 'store']);
+        Route::put('/tags/{tag:uuid}', [TagController::class, 'update']);
+        Route::delete('/tags/{tag:uuid}', [TagController::class, 'destroy']);
+
+        Route::post('/comments/{comment:uuid}/approve', [CommentController::class, 'approve']);
+        Route::delete('/comments/{comment:uuid}', [CommentController::class, 'destroy']);
+    });
+});
