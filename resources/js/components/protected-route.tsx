@@ -11,7 +11,7 @@ export function ProtectedRoute({
   children,
   requireAdmin = false,
 }: ProtectedRouteProps) {
-  const { isAuthenticated, isAdmin, loading } = useAuth();
+  const { isAuthenticated, is_admin, loading } = useAuth();
 
   if (loading) {
     return (
@@ -28,7 +28,7 @@ export function ProtectedRoute({
     return <Navigate to="/login" replace />;
   }
 
-  if (requireAdmin && !isAdmin) {
+  if (requireAdmin && !is_admin) {
     return <Navigate to="/" replace />;
   }
 

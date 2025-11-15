@@ -9,6 +9,7 @@ import {
     CardHeader,
 } from "@/components/ui/card";
 import { ViewCounter } from "@/components/view-counter";
+import { formatDate } from "@/lib/date";
 import { useNavigate } from "react-router-dom";
 
 interface PostCardProps {
@@ -17,14 +18,7 @@ interface PostCardProps {
 
 export function PostCard({ post }: PostCardProps) {
     const navigate = useNavigate();
-
-    const publishedDate = new Date(
-        post.publishedAt || post.createdAt,
-    ).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-    });
+    const publishedDate = formatDate(post.published_at || post.created_at);
 
     const handleCardClick = () => {
         navigate(`/post/${post.uuid}`);
@@ -32,7 +26,7 @@ export function PostCard({ post }: PostCardProps) {
 
     return (
         <Card
-            className="hover:border-primary group cursor-pointer transition-colors duration-200"
+            className="group cursor-pointer transition-colors duration-200"
             onClick={handleCardClick}
         >
             <CardHeader>
@@ -46,9 +40,12 @@ export function PostCard({ post }: PostCardProps) {
                     {post.excerpt}
                 </p>
             </CardContent>
-            <CardFooter className="flex flex-col gap-4">
-                <div className="flex flex-wrap gap-2" onClick={(e) => e.stopPropagation()}>
-                    {post.tags.map(tag => (
+            <CardFooter className="flex flex-col gap-6">
+                <div
+                    className="flex w-full flex-wrap gap-2"
+                    onClick={e => e.stopPropagation()}
+                >
+                    {post.tags?.map(tag => (
                         <TagBadge key={tag.uuid} tag={tag} />
                     ))}
                 </div>
@@ -68,8 +65,8 @@ export function PostCard({ post }: PostCardProps) {
                         </span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <ViewCounter count={post.viewsCount} />
-                        <ReadingTime minutes={post.readingTime} />
+                        <ViewCounter count={post.views_count} />
+                        <ReadingTime minutes={post.reading_time} />
                     </div>
                 </div>
             </CardFooter>

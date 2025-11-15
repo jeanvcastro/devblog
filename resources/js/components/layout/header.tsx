@@ -1,4 +1,5 @@
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
 import { Menu, X } from "lucide-react";
@@ -31,8 +32,16 @@ export function Header() {
                                 to="/search"
                                 className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
                             >
-                                Buscar
+                                Artigos
                             </Link>
+                            {user?.is_admin && (
+                                <Link
+                                    to="/admin/dashboard"
+                                    className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
+                                >
+                                    Dashboard
+                                </Link>
+                            )}
                         </nav>
                     </div>
 
@@ -42,22 +51,26 @@ export function Header() {
                         <div className="hidden items-center gap-4 md:flex">
                             {isAuthenticated ? (
                                 <>
-                                    <span className="text-sm text-white/60">
-                                        {user?.name}
-                                    </span>
-                                    {user?.isAdmin && (
-                                        <Link
-                                            to="/admin/dashboard"
-                                            className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
-                                        >
-                                            Admin
-                                        </Link>
-                                    )}
+                                    <div className="flex items-center gap-2">
+                                        <Avatar className="h-8 w-8">
+                                            <AvatarImage
+                                                src={user?.avatar || undefined}
+                                                alt={user?.name}
+                                            />
+                                            <AvatarFallback className="bg-primary text-primary-foreground">
+                                                {user?.name.charAt(0).toUpperCase()}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <span className="text-sm text-white/60">
+                                            {user?.name}
+                                        </span>
+                                    </div>
+
                                     <Button
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => logout()}
-                                        className="hover:text-primary text-white/60"
+                                        className="hover:text-primary cursor-pointer bg-black text-white/60 hover:bg-white/10"
                                     >
                                         Sair
                                     </Button>
@@ -72,7 +85,7 @@ export function Header() {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="text-white/50 hover:text-white/50 md:hidden dark:bg-black dark:hover:bg-white/10"
+                            className="bg-black text-white/60 hover:bg-white/10 hover:text-white/60 md:hidden"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         >
                             {mobileMenuOpen ? (
@@ -98,34 +111,27 @@ export function Header() {
                             className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
                             onClick={() => setMobileMenuOpen(false)}
                         >
-                            Buscar
+                            Artigos
                         </Link>
+                        {user?.is_admin && (
+                            <Link
+                                to="/admin/dashboard"
+                                className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
+                            >
+                                Dashboard
+                            </Link>
+                        )}
                         {isAuthenticated ? (
-                            <>
-                                <span className="text-sm text-white/60">
-                                    {user?.name}
-                                </span>
-                                {user?.isAdmin && (
-                                    <Link
-                                        to="/admin/dashboard"
-                                        className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        Admin
-                                    </Link>
-                                )}
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => {
-                                        logout();
-                                        setMobileMenuOpen(false);
-                                    }}
-                                    className="hover:text-primary text-white/60"
-                                >
-                                    Sair
-                                </Button>
-                            </>
+                            <Button
+                                size="sm"
+                                onClick={() => {
+                                    logout();
+                                    setMobileMenuOpen(false);
+                                }}
+                                className="hover:text-primary text-white/60"
+                            >
+                                Sair
+                            </Button>
                         ) : (
                             <Button size="sm" asChild>
                                 <Link

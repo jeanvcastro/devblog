@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import type { Tag } from "@/@types";
 
 interface TagBadgeProps {
@@ -7,14 +7,35 @@ interface TagBadgeProps {
 }
 
 export function TagBadge({ tag }: TagBadgeProps) {
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const location = useLocation();
+
+    const handleClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (location.pathname === "/search") {
+            const currentTags = searchParams.get("tags")?.split(",").filter(Boolean) || [];
+
+            if (!currentTags.includes(tag.slug)) {
+                const newTags = [...currentTags, tag.slug];
+                const params = new URLSearchParams(searchParams);
+                params.set("tags", newTags.join(","));
+                navigate(`/search?${params.toString()}`, { replace: true });
+            }
+        } else {
+            navigate(`/search?tags=${tag.slug}`);
+        }
+    };
+
     return (
-        <Link to={`/tag/${tag.slug}`}>
-            <Badge
-                variant="secondary"
-                className="hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
-            >
-                {tag.name}
-            </Badge>
-        </Link>
+        <Badge
+            variant="secondary"
+            className="hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
+            onClick={handleClick}
+        >
+            {tag.name}
+        </Badge>
     );
 }

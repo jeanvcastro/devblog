@@ -1,7 +1,7 @@
 import { Layout } from "@/components/layout";
 import { PostList } from "@/components/post-list";
 import api from "@/services/api";
-import type { ApiResponse, Post, Tag } from "@/@types";
+import type { Post, Tag } from "@/@types";
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
@@ -19,8 +19,8 @@ export default function TagPage() {
         const fetchTagPosts = async () => {
             try {
                 // Find tag by slug
-                const tagsRes = await api.get<ApiResponse<Tag[]>>("/tags");
-                const foundTag = tagsRes.data.data.find((t) => t.slug === slug);
+                const tagsRes = await api.get<Tag[]>("/tags");
+                const foundTag = tagsRes.data.find((t) => t.slug === slug);
 
                 if (!foundTag) {
                     navigate("/");
@@ -30,8 +30,8 @@ export default function TagPage() {
                 setTag(foundTag);
 
                 // Fetch posts for this tag
-                const postsRes = await api.get<ApiResponse<Post[]>>(`/tags/${foundTag.uuid}`);
-                setPosts(postsRes.data.data);
+                const postsRes = await api.get<{ posts: Post[] }>(`/tags/${foundTag.uuid}`);
+                setPosts(postsRes.data.posts);
             } catch (error) {
                 console.error("Erro ao carregar tag:", error);
                 navigate("/");

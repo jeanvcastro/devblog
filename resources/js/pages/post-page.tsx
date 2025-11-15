@@ -1,4 +1,4 @@
-import type { ApiResponse, Comment, Post } from "@/@types";
+import type { Comment, Post } from "@/@types";
 import { CommentSection } from "@/components/comment-section";
 import { Layout } from "@/components/layout";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
@@ -8,6 +8,7 @@ import { TagBadge } from "@/components/tag-badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ViewCounter } from "@/components/view-counter";
+import { formatDate } from "@/lib/date";
 import api from "@/services/api";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -27,24 +28,24 @@ export default function PostPage() {
         const fetchPost = async () => {
             try {
                 const [postRes, commentsRes] = await Promise.all([
-                    api.get<ApiResponse<Post>>(`/posts/${uuid}`),
-                    api.get<ApiResponse<Comment[]>>(`/posts/${uuid}/comments`),
+                    api.get<Post>(`/posts/${uuid}`),
+                    api.get<Comment[]>(`/posts/${uuid}/comments`),
                 ]);
 
-                setPost(postRes.data.data);
-                setComments(commentsRes.data.data);
+                setPost(postRes.data);
+                setComments(commentsRes.data);
 
                 // Track view
                 await api.post(`/posts/${uuid}/track-view`).catch(() => {});
 
                 // Fetch related posts (same tags)
-                if (postRes.data.data.tags.length > 0) {
-                    const tagUuid = postRes.data.data.tags[0].uuid;
-                    const relatedRes = await api.get<ApiResponse<Post[]>>(
+                if (postRes.data.tags && postRes.data.tags.length > 0) {
+                    const tagUuid = postRes.data.tags[0].uuid;
+                    const relatedRes = await api.get<{ posts: Post[] }>(
                         `/tags/${tagUuid}`,
                     );
                     setRelatedPosts(
-                        relatedRes.data.data
+                        relatedRes.data.posts
                             .filter(p => p.uuid !== uuid)
                             .slice(0, 5),
                     );
@@ -75,10 +76,10 @@ export default function PostPage() {
             });
 
             // Reload comments
-            const commentsRes = await api.get<ApiResponse<Comment[]>>(
+            const commentsRes = await api.get<Comment[]>(
                 `/posts/${uuid}/comments`,
             );
-            setComments(commentsRes.data.data);
+            setComments(commentsRes.data);
         } catch (error) {
             console.error("Erro ao enviar comentário:", error);
             throw error;
@@ -99,17 +100,11 @@ export default function PostPage() {
         );
     }
 
-    const publishedDate = new Date(
-        post.publishedAt || post.createdAt,
-    ).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-    });
+    const publishedDate = formatDate(post.published_at || post.created_at);
 
     return (
         <Layout>
-            <article className="container mx-auto max-w-7xl px-4 py-12">
+            <article className="container mx-auto max-w-7xl px-4 pt-12 pb-6">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                     {/* Main Content */}
                     <div className="lg:col-span-2">
@@ -142,13 +137,13 @@ export default function PostPage() {
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <ViewCounter count={post.viewsCount} />
-                                    <ReadingTime minutes={post.readingTime} />
+                                    <ViewCounter count={post.views_count} />
+                                    <ReadingTime minutes={post.reading_time} />
                                 </div>
                             </div>
 
                             <div className="flex flex-wrap gap-2">
-                                {post.tags.map(tag => (
+                                {post.tags?.map(tag => (
                                     <TagBadge key={tag.uuid} tag={tag} />
                                 ))}
                             </div>

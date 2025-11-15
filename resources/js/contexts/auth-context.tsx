@@ -9,7 +9,7 @@ type AuthContextType = {
   loginGoogle: () => void;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
-  isAdmin: boolean;
+  is_admin: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -72,7 +72,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     loginGoogle,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.isAdmin ?? false,
+    is_admin: user?.is_admin ?? false,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

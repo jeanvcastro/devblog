@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
     --color-primary: #ff4800;
     --color-primary-foreground: #ffffff;
@@ -15,7 +17,7 @@
     --color-popover: light-dark(#ffffff, #545751);
     --color-popover-foreground: light-dark(#545751, #f2f0e4);
 
-    --color-muted: light-dark(#a6ada2, #545751);
+    --color-muted: light-dark(#e0dcc8, #1a1a1a);
     --color-muted-foreground: light-dark(#545751, #a6ada2);
 
     --color-accent: light-dark(#f2f0e4, #545751);

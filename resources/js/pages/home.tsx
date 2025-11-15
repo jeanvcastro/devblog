@@ -5,9 +5,9 @@ import { PostList } from "@/components/post-list";
 import { TagCloud } from "@/components/tag-cloud";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import api from "@/services/api";
+import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search } from "lucide-react";
 
 export default function HomePage() {
     const [recentPosts, setRecentPosts] = useState<Post[]>([]);
@@ -96,7 +96,7 @@ export default function HomePage() {
                     </div>
 
                     {/* Sidebar */}
-                    <aside className="sticky top-20 space-y-6 md:mt-15">
+                    <aside className="space-y-6 md:mt-15">
                         <PopularPosts posts={popularPosts} loading={loading} />
 
                         <Card>
