@@ -10,37 +10,70 @@ use Laravel\Socialite\Facades\Socialite;
 
 class VisitorAuthController extends Controller
 {
-    public function redirect()
+    public function redirect(Request $request)
     {
-        return Socialite::driver('google')->redirect();
+        $utmParams = [
+            'utm_source' => $request->input('utm_source'),
+            'utm_medium' => $request->input('utm_medium'),
+            'utm_campaign' => $request->input('utm_campaign'),
+            'utm_term' => $request->input('utm_term'),
+            'utm_content' => $request->input('utm_content'),
+        ];
+
+        $filteredParams = array_filter($utmParams);
+
+        if (!empty($filteredParams)) {
+            $cacheKey = 'oauth_utm_' . $request->ip() . '_' . time();
+            cache()->put($cacheKey, $filteredParams, now()->addMinutes(10));
+            cookie()->queue('oauth_utm_key', $cacheKey, 10);
+        }
+
+        return Socialite::driver('google')->stateless()->redirect();
     }
 
-    public function callback()
+    public function callback(Request $request)
     {
-        $googleUser = Socialite::driver('google')->user();
+        $googleUser = Socialite::driver('google')->stateless()->user();
+
+        $utmParams = [];
+        $cacheKey = $request->cookie('oauth_utm_key');
+        if ($cacheKey) {
+            $utmParams = cache()->get($cacheKey, []);
+            cache()->forget($cacheKey);
+        }
+
+        $userData = [
+            'name' => $googleUser->name,
+            'email' => $googleUser->email,
+            'avatar' => $googleUser->avatar,
+            'google_id' => $googleUser->id,
+        ];
+
+        if (!empty($utmParams) && !User::where('google_id', $googleUser->id)->exists()) {
+            $userData = array_merge($userData, $utmParams);
+        }
 
         $user = User::updateOrCreate(
             ['google_id' => $googleUser->id],
-            [
-                'name' => $googleUser->name,
-                'email' => $googleUser->email,
-                'avatar' => $googleUser->avatar,
-                'google_id' => $googleUser->id,
-            ]
+            $userData
         );
 
         $token = $user->createToken('visitor-token')->plainTextToken;
+        $userData = [
+            'uuid' => $user->uuid,
+            'name' => $user->name,
+            'email' => $user->email,
+            'avatar' => $user->avatar,
+            'is_admin' => $user->is_admin,
+        ];
 
-        return response()->json([
-            'user' => [
-                'uuid' => $user->uuid,
-                'name' => $user->name,
-                'email' => $user->email,
-                'avatar' => $user->avatar,
-                'is_admin' => $user->is_admin,
-            ],
-            'token' => $token,
-        ]);
+        $redirectUrl = sprintf(
+            '/?token=%s&user=%s',
+            urlencode($token),
+            urlencode(json_encode($userData))
+        );
+
+        return redirect($redirectUrl);
     }
 
     public function logout(Request $request)

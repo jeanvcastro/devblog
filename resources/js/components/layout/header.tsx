@@ -16,7 +16,7 @@ export function Header() {
                 <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center gap-8">
                         <Link to="/" className="flex items-center">
-                            <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-2xl font-bold text-transparent">
+                            <span className="from-primary to-secondary bg-linear-to-r bg-clip-text text-2xl font-bold text-transparent">
                                 DevBlog
                             </span>
                         </Link>

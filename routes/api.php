@@ -28,8 +28,6 @@ Route::middleware('throttle:views')->group(function () {
 
 Route::middleware('throttle:auth')->group(function () {
     Route::post('/admin/login', [AdminAuthController::class, 'login']);
-    Route::get('/auth/google', [VisitorAuthController::class, 'redirect']);
-    Route::get('/auth/google/callback', [VisitorAuthController::class, 'callback']);
 });
 
 Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function () {

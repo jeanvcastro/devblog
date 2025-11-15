@@ -21,6 +21,11 @@ class User extends Authenticatable
         'avatar',
         'google_id',
         'is_admin',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_term',
+        'utm_content',
     ];
 
     protected $hidden = [

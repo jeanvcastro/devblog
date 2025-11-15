@@ -29,7 +29,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const handleOAuthCallback = () => {
+            const params = new URLSearchParams(window.location.search);
+            const token = params.get('token');
+            const userJson = params.get('user');
+
+            if (token && userJson) {
+                tokenService.set(token);
+                setUser(JSON.parse(userJson));
+                window.history.replaceState({}, '', '/');
+                setLoading(false);
+                return true;
+            }
+            return false;
+        };
+
         const loadUser = async () => {
+            if (handleOAuthCallback()) {
+                return;
+            }
+
             const token = tokenService.get();
             if (!token) {
                 setLoading(false);
@@ -59,7 +78,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
 
     const loginGoogle = () => {
-        window.location.href = "/api/auth/google";
+        const params = new URLSearchParams(window.location.search);
+        const utmParams = new URLSearchParams();
+
+        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(key => {
+            const value = params.get(key);
+            if (value) utmParams.append(key, value);
+        });
+
+        const queryString = utmParams.toString();
+        window.location.href = `/auth/google${queryString ? '?' + queryString : ''}`;
     };
 
     const logout = async () => {

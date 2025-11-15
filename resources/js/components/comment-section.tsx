@@ -3,6 +3,7 @@ import { CommentForm } from "@/components/comment-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface CommentSectionProps {
     comments: Comment[];
@@ -23,8 +24,13 @@ function CommentItem({
     const [showReplyForm, setShowReplyForm] = useState(false);
 
     const handleReplySubmit = async (content: string) => {
-        await onSubmit(content, comment.uuid);
-        setShowReplyForm(false);
+        try {
+            await onSubmit(content, comment.uuid);
+            setShowReplyForm(false);
+            toast.success("Resposta enviada! Aguardando aprovação.");
+        } catch {
+            toast.error("Erro ao enviar resposta. Tente novamente.");
+        }
     };
 
     return (
@@ -98,7 +104,12 @@ export function CommentSection({
     loading,
 }: CommentSectionProps) {
     const handleMainCommentSubmit = async (content: string) => {
-        await onSubmit(content);
+        try {
+            await onSubmit(content);
+            toast.success("Comentário enviado! Aguardando aprovação.");
+        } catch {
+            toast.error("Erro ao enviar comentário. Tente novamente.");
+        }
     };
 
     if (loading) {
