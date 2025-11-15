@@ -32,7 +32,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         <>
             <Link
                 to="/admin/dashboard"
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive("/admin/dashboard")}`}
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${isActive("/admin/dashboard")}`}
                 onClick={() => setOpen(false)}
             >
                 <LayoutDashboard className="h-5 w-5" />
@@ -40,7 +40,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             </Link>
             <Link
                 to="/admin/posts"
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive("/admin/posts")}`}
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${isActive("/admin/posts")}`}
                 onClick={() => setOpen(false)}
             >
                 <FileText className="h-5 w-5" />
@@ -48,7 +48,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             </Link>
             <Link
                 to="/admin/comments"
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive("/admin/comments")}`}
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${isActive("/admin/comments")}`}
                 onClick={() => setOpen(false)}
             >
                 <MessageSquare className="h-5 w-5" />
@@ -56,7 +56,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             </Link>
             <Link
                 to="/admin/media"
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive("/admin/media")}`}
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${isActive("/admin/media")}`}
                 onClick={() => setOpen(false)}
             >
                 <Image className="h-5 w-5" />
@@ -64,7 +64,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             </Link>
             <Link
                 to="/admin/analytics"
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive("/admin/analytics")}`}
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${isActive("/admin/analytics")}`}
                 onClick={() => setOpen(false)}
             >
                 <BarChart3 className="h-5 w-5" />
@@ -76,7 +76,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     return (
         <div className="flex min-h-screen">
             <aside className="border-border bg-card hidden w-64 border-r lg:block">
-                <div className="border-border flex h-16 items-center border-b px-6">
+                <div className="flex h-16 items-center px-6">
                     <Link to="/admin/dashboard">
                         <span className="text-primary text-xl font-bold">
                             DevBlog Admin
@@ -90,7 +90,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             </aside>
 
             <div className="flex flex-1 flex-col">
-                <header className="border-border bg-background flex h-16 items-center justify-between border-b px-4 lg:px-6">
+                <header className="border-border bg-card flex h-16 items-center justify-between border-b px-4 lg:px-6">
                     <div className="flex items-center gap-4">
                         <Sheet open={open} onOpenChange={setOpen}>
                             <SheetTrigger asChild>
@@ -149,7 +149,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                         <ThemeToggle />
                         <Link
                             to="/"
-                            className="hover:text-primary text-sm font-medium transition-colors"
+                            className="hover:text-primary text-sm font-medium"
                         >
                             Ver Site
                         </Link>

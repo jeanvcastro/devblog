@@ -200,7 +200,7 @@ export function MediaPage() {
                         {images.map(image => (
                             <Card
                                 key={image.filename}
-                                className="flex flex-col overflow-hidden border-0 py-0 shadow-md dark:border-2"
+                                className="flex flex-col overflow-hidden border-0 py-0 shadow-md dark:border"
                             >
                                 <div className="bg-muted relative aspect-square overflow-hidden">
                                     <img

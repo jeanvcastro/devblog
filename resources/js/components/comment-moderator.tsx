@@ -139,7 +139,7 @@ export function CommentModerator({
                         <CardContent>
                             <p className="text-sm">{comment.content}</p>
                             {comment.replies && comment.replies.length > 0 && (
-                                <div className="mt-4 space-y-3 border-l-2 pl-4">
+                                <div className="mt-4 space-y-3 border-l pl-4">
                                     {comment.replies.map(reply => {
                                         const replyFirstLetter = reply.user.name
                                             .charAt(0)

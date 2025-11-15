@@ -4,14 +4,20 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export function Header() {
     const { user, isAuthenticated, logout } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const location = useLocation();
+
+    const isActive = (path: string) => {
+        if (path === "/") return location.pathname === "/";
+        return location.pathname.startsWith(path);
+    };
 
     return (
-        <header className="border-border sticky top-0 z-50 w-full border-b-2 bg-black">
+        <header className="bg-card text-card-foreground border-border sticky top-0 z-50 w-full border-b">
             <div className="container mx-auto max-w-7xl px-4">
                 <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center gap-8">
@@ -24,20 +30,32 @@ export function Header() {
                         <nav className="hidden items-center gap-6 md:flex">
                             <Link
                                 to="/"
-                                className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
+                                className={
+                                    isActive("/")
+                                        ? "border-primary text-primary border-b text-sm font-medium"
+                                        : "text-foreground hover:text-primary text-sm font-medium"
+                                }
                             >
                                 Home
                             </Link>
                             <Link
                                 to="/search"
-                                className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
+                                className={
+                                    isActive("/search")
+                                        ? "border-primary text-primary border-b text-sm font-medium"
+                                        : "text-foreground hover:text-primary text-sm font-medium"
+                                }
                             >
                                 Artigos
                             </Link>
                             {user?.is_admin && (
                                 <Link
                                     to="/admin/dashboard"
-                                    className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
+                                    className={
+                                        isActive("/admin")
+                                            ? "border-primary text-primary border-b text-sm font-medium"
+                                            : "text-foreground hover:text-primary text-sm font-medium"
+                                    }
                                 >
                                     Dashboard
                                 </Link>
@@ -46,13 +64,13 @@ export function Header() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <ThemeToggle className="bg-black text-white/60 hover:bg-white/10 hover:text-white/60" />
+                        <ThemeToggle />
 
                         <div className="hidden items-center gap-4 md:flex">
                             {isAuthenticated ? (
                                 <>
                                     <div className="flex items-center gap-2">
-                                        <Avatar className="h-8 w-8">
+                                        <Avatar className="ring-background h-8 w-8 ring-2">
                                             <AvatarImage
                                                 src={user?.avatar || undefined}
                                                 alt={user?.name}
@@ -63,7 +81,7 @@ export function Header() {
                                                     .toUpperCase()}
                                             </AvatarFallback>
                                         </Avatar>
-                                        <span className="text-sm text-white/60">
+                                        <span className="text-muted-foreground text-sm">
                                             {user?.name}
                                         </span>
                                     </div>
@@ -72,7 +90,7 @@ export function Header() {
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => logout()}
-                                        className="hover:text-primary cursor-pointer bg-black text-white/60 hover:bg-white/10"
+                                        className="hover:text-primary"
                                     >
                                         Sair
                                     </Button>
@@ -87,7 +105,7 @@ export function Header() {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="bg-black text-white/60 hover:bg-white/10 hover:text-white/60 md:hidden"
+                            className="md:hidden"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         >
                             {mobileMenuOpen ? (
@@ -100,17 +118,25 @@ export function Header() {
                 </div>
 
                 {mobileMenuOpen && (
-                    <nav className="flex flex-col items-center gap-4 border-t border-black py-6 md:hidden">
+                    <nav className="border-border flex flex-col items-center gap-4 border-t py-6 md:hidden">
                         <Link
                             to="/"
-                            className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
+                            className={
+                                isActive("/")
+                                    ? "border-primary text-primary border-b text-sm font-medium"
+                                    : "text-foreground hover:text-primary text-sm font-medium"
+                            }
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             Home
                         </Link>
                         <Link
                             to="/search"
-                            className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
+                            className={
+                                isActive("/search")
+                                    ? "border-primary text-primary border-b text-sm font-medium"
+                                    : "text-foreground hover:text-primary text-sm font-medium"
+                            }
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             Artigos
@@ -118,7 +144,11 @@ export function Header() {
                         {user?.is_admin && (
                             <Link
                                 to="/admin/dashboard"
-                                className="hover:text-primary text-sm font-medium text-white/60 transition-colors"
+                                className={
+                                    isActive("/admin")
+                                        ? "border-primary text-primary border-b text-sm font-medium"
+                                        : "text-foreground hover:text-primary text-sm font-medium"
+                                }
                             >
                                 Dashboard
                             </Link>
@@ -130,7 +160,7 @@ export function Header() {
                                     logout();
                                     setMobileMenuOpen(false);
                                 }}
-                                className="hover:text-primary text-white/60"
+                                className="hover:text-primary"
                             >
                                 Sair
                             </Button>

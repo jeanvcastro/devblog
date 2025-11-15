@@ -23,7 +23,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, CheckCircle2, Clock } from "lucide-react";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 
@@ -119,7 +119,7 @@ export function PostsPage() {
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {post.tags.map((tag) => (
-                <Badge key={tag.uuid} variant="outline" className="text-xs">
+                <Badge key={tag.uuid} variant="default" className="text-xs">
                   {tag.name}
                 </Badge>
               ))}
@@ -127,9 +127,23 @@ export function PostsPage() {
           )}
           <div className="flex items-center gap-2 sm:hidden">
             <Badge
-              variant={post.status === "published" ? "default" : "secondary"}
+              className={
+                post.status === "published"
+                  ? "bg-green-600 text-white hover:bg-green-700 border-transparent"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80 border-transparent"
+              }
             >
-              {post.status === "published" ? "Publicado" : "Rascunho"}
+              {post.status === "published" ? (
+                <>
+                  <CheckCircle2 className="h-3 w-3" />
+                  Publicado
+                </>
+              ) : (
+                <>
+                  <Clock className="h-3 w-3" />
+                  Rascunho
+                </>
+              )}
             </Badge>
             <span className="text-muted-foreground text-xs">
               {post.views_count} views
@@ -143,8 +157,24 @@ export function PostsPage() {
       key: "status",
       header: "Status",
       cell: (post) => (
-        <Badge variant={post.status === "published" ? "default" : "secondary"}>
-          {post.status === "published" ? "Publicado" : "Rascunho"}
+        <Badge
+          className={
+            post.status === "published"
+              ? "bg-green-600 text-white hover:bg-green-700 border-transparent"
+              : "bg-muted text-muted-foreground hover:bg-muted/80 border-transparent"
+          }
+        >
+          {post.status === "published" ? (
+            <>
+              <CheckCircle2 className="h-3 w-3" />
+              Publicado
+            </>
+          ) : (
+            <>
+              <Clock className="h-3 w-3" />
+              Rascunho
+            </>
+          )}
         </Badge>
       ),
       className: "hidden w-32 sm:table-cell",

@@ -134,8 +134,8 @@ export default function SearchPage() {
                                     return tag ? (
                                         <Badge
                                             key={slug}
-                                            variant="secondary"
-                                            className="gap-1 cursor-pointer hover:bg-destructive/10 hover:text-destructive transition-colors"
+                                            variant="default"
+                                            className="gap-1 cursor-pointer hover:bg-primary/90 transition-colors"
                                             onClick={() => toggleTag(slug)}
                                         >
                                             {tag.name}
@@ -153,7 +153,7 @@ export default function SearchPage() {
                                     <Badge
                                         key={tag.uuid}
                                         variant={selectedTags.includes(tag.slug) ? "default" : "outline"}
-                                        className="cursor-pointer transition-colors"
+                                        className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
                                         onClick={() => toggleTag(tag.slug)}
                                     >
                                         {tag.name}

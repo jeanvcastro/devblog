@@ -22,11 +22,11 @@ function CodeBlock({ language, code }: { language: string; code: string }) {
     };
 
     return (
-        <div className="relative group">
+        <div className="relative group border border-border rounded-lg overflow-hidden">
             <Button
                 size="icon"
                 variant="ghost"
-                className="absolute right-2 top-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute right-2 top-2 h-8 w-8 opacity-0 group-hover:opacity-100 z-10"
                 onClick={handleCopy}
             >
                 {copied ? (
@@ -73,6 +73,18 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                                 className="rounded-lg max-w-full h-auto"
                                 loading="lazy"
                             />
+                        );
+                    },
+                    a({ href, children }) {
+                        return (
+                            <a
+                                href={href}
+                                className="text-primary hover:underline underline-offset-2"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {children}
+                            </a>
                         );
                     },
                 }}

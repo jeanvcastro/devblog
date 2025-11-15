@@ -84,7 +84,7 @@ export function DataTable<T extends Record<string, unknown>>({
     }
 
     return (
-        <Card className="overflow-hidden border-0 py-0 dark:border-2">
+        <Card className="overflow-hidden py-0">
             <div className="overflow-x-auto">
                 <Table>
                     <TableHeader>

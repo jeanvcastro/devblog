@@ -7,6 +7,7 @@ import api from "@/services/api";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+import { CheckCircle2, Clock } from "lucide-react";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 
@@ -95,12 +96,9 @@ export function AnalyticsPage() {
       key: "title",
       header: "Post",
       cell: (post) => (
-        <Link
-          to={`/post/${post.uuid}`}
-          className="hover:text-primary block font-medium transition-colors"
-        >
+        <div className="group-hover:text-primary font-medium">
           {post.title}
-        </Link>
+        </div>
       ),
       className: "min-w-0",
     },
@@ -118,17 +116,28 @@ export function AnalyticsPage() {
       header: "Post",
       cell: (post) => (
         <div className="min-w-0 space-y-1">
-          <Link
-            to={`/post/${post.uuid}`}
-            className="hover:text-primary block font-medium transition-colors"
-          >
+          <div className="group-hover:text-primary font-medium">
             {post.title}
-          </Link>
+          </div>
           <div className="sm:hidden">
             <Badge
-              variant={post.status === "published" ? "default" : "secondary"}
+              className={
+                post.status === "published"
+                  ? "bg-green-600 text-white hover:bg-green-700 border-transparent"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80 border-transparent"
+              }
             >
-              {post.status === "published" ? "Publicado" : "Rascunho"}
+              {post.status === "published" ? (
+                <>
+                  <CheckCircle2 className="h-3 w-3" />
+                  Publicado
+                </>
+              ) : (
+                <>
+                  <Clock className="h-3 w-3" />
+                  Rascunho
+                </>
+              )}
             </Badge>
           </div>
         </div>
@@ -139,8 +148,24 @@ export function AnalyticsPage() {
       key: "status",
       header: "Status",
       cell: (post) => (
-        <Badge variant={post.status === "published" ? "default" : "secondary"}>
-          {post.status === "published" ? "Publicado" : "Rascunho"}
+        <Badge
+          className={
+            post.status === "published"
+              ? "bg-green-600 text-white hover:bg-green-700 border-transparent"
+              : "bg-muted text-muted-foreground hover:bg-muted/80 border-transparent"
+          }
+        >
+          {post.status === "published" ? (
+            <>
+              <CheckCircle2 className="h-3 w-3" />
+              Publicado
+            </>
+          ) : (
+            <>
+              <Clock className="h-3 w-3" />
+              Rascunho
+            </>
+          )}
         </Badge>
       ),
       className: "hidden w-32 sm:table-cell",
@@ -201,6 +226,9 @@ export function AnalyticsPage() {
                 columns={mostViewedColumns}
                 loading={loading}
                 emptyMessage="Nenhum post encontrado."
+                actions={(post) => (
+                  <Link to={`/admin/posts/${post.uuid}/edit`} className="absolute inset-0" />
+                )}
               />
             </CardContent>
           </Card>
@@ -215,6 +243,9 @@ export function AnalyticsPage() {
                 columns={recentPostsColumns}
                 loading={loading}
                 emptyMessage="Nenhum post encontrado."
+                actions={(post) => (
+                  <Link to={`/admin/posts/${post.uuid}/edit`} className="absolute inset-0" />
+                )}
               />
             </CardContent>
           </Card>

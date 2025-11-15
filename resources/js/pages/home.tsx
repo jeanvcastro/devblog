@@ -61,7 +61,7 @@ export default function HomePage() {
                     <div className="mt-8">
                         <Link
                             to="/search"
-                            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-8 py-3 transition-colors"
+                            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-8 py-3"
                         >
                             <Search className="h-5 w-5" />
                             Buscar Artigos

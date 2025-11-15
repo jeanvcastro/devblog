@@ -26,11 +26,11 @@ export function PostCard({ post }: PostCardProps) {
 
     return (
         <Card
-            className="group cursor-pointer transition-colors duration-200"
+            className="group cursor-pointer hover:border-primary/60"
             onClick={handleCardClick}
         >
             <CardHeader>
-                <h2 className="group-hover:text-primary text-2xl font-bold transition-colors duration-200">
+                <h2 className="group-hover:text-primary text-2xl font-bold">
                     {post.title}
                 </h2>
                 <p className="text-muted-foreground text-sm">{publishedDate}</p>

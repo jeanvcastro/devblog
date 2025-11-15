@@ -36,7 +36,7 @@ function CommentItem({
     return (
         <div className="space-y-4">
             <div className="flex gap-4">
-                <Avatar className="h-10 w-10">
+                <Avatar className="ring-background h-10 w-10 ring-2">
                     <AvatarImage
                         src={comment.user.avatar || undefined}
                         alt={comment.user.name}
@@ -82,7 +82,7 @@ function CommentItem({
             </div>
 
             {comment.replies && comment.replies.length > 0 && (
-                <div className="border-border ml-14 space-y-4 border-l-2 pl-4">
+                <div className="border-border ml-14 space-y-4 border-l pl-4">
                     {comment.replies.map(reply => (
                         <CommentItem
                             key={reply.uuid}

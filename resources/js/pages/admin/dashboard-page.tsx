@@ -72,12 +72,9 @@ export function DashboardPage() {
             header: "Título",
             cell: (post) => (
                 <div className="min-w-0 space-y-1">
-                    <Link
-                        to={`/admin/posts/${post.uuid}/edit`}
-                        className="hover:text-primary block font-medium transition-colors"
-                    >
+                    <div className="group-hover:text-primary font-medium">
                         {post.title}
-                    </Link>
+                    </div>
                     <div className="flex flex-wrap items-center gap-2 sm:hidden">
                         <Badge
                             variant={
@@ -171,6 +168,9 @@ export function DashboardPage() {
                         columns={columns}
                         loading={loading}
                         emptyMessage="Nenhum post encontrado."
+                        actions={(post) => (
+                            <Link to={`/admin/posts/${post.uuid}/edit`} className="absolute inset-0" />
+                        )}
                     />
                 </div>
             </div>

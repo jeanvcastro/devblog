@@ -96,8 +96,7 @@ export function DateTimePicker({
             <PopoverTrigger asChild>
                 <button
                     className={cn(
-                        "border-input flex h-9 w-full min-w-0 items-center rounded-md border bg-transparent px-3 py-1 text-base transition-colors outline-none",
-                        "hover:bg-accent hover:text-accent-foreground",
+                        "border-border bg-input flex h-9 w-full min-w-0 items-center rounded-md border px-3 py-1 text-base outline-none",
                         "focus-visible:ring-ring focus-visible:ring-1 focus-visible:outline-none",
                         "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
                         "cursor-pointer justify-start text-left text-sm font-normal",
@@ -142,37 +141,56 @@ export function DateTimePicker({
                     autoFocus={false}
                     locale={ptBR}
                 />
-                <div className="dark:border-border flex items-center justify-center gap-2 border-t-2 border-black/10 p-2">
-                    <label className="text-sm font-medium">Hora:</label>
-                    <Input
-                        type="text"
-                        inputMode="numeric"
-                        value={hours.toString().padStart(2, "0")}
-                        onChange={e => {
-                            const value = e.target.value.replace(/\D/g, "");
-                            const num = Number(value);
-                            if (!isNaN(num)) {
-                                setHoursState(Math.min(num, 23));
-                            }
-                        }}
-                        className="h-8 w-12 px-2 text-center"
-                        placeholder="HH"
-                    />
-                    <span className="text-lg font-medium">:</span>
-                    <Input
-                        type="text"
-                        inputMode="numeric"
-                        value={minutes.toString().padStart(2, "0")}
-                        onChange={e => {
-                            const value = e.target.value.replace(/\D/g, "");
-                            const num = Number(value);
-                            if (!isNaN(num)) {
-                                setMinutesState(Math.min(num, 59));
-                            }
-                        }}
-                        className="h-8 w-12 px-2 text-center"
-                        placeholder="MM"
-                    />
+                <div className="p-2">
+                    <div className="flex items-start justify-center gap-3">
+                        <div className="flex flex-col items-center gap-1">
+                            <Input
+                                type="text"
+                                inputMode="numeric"
+                                value={hours.toString().padStart(2, "0")}
+                                onChange={e => {
+                                    const value = e.target.value.replace(
+                                        /\D/g,
+                                        "",
+                                    );
+                                    const num = Number(value);
+                                    if (!isNaN(num)) {
+                                        setHoursState(Math.min(num, 23));
+                                    }
+                                }}
+                                className="h-8 w-16 px-1 text-center text-lg"
+                                placeholder="HH"
+                            />
+                            <span className="text-muted-foreground text-xs">
+                                Horas
+                            </span>
+                        </div>
+                        <span className="text-muted-foreground pt-1 text-xl font-bold">
+                            :
+                        </span>
+                        <div className="flex flex-col items-center gap-1">
+                            <Input
+                                type="text"
+                                inputMode="numeric"
+                                value={minutes.toString().padStart(2, "0")}
+                                onChange={e => {
+                                    const value = e.target.value.replace(
+                                        /\D/g,
+                                        "",
+                                    );
+                                    const num = Number(value);
+                                    if (!isNaN(num)) {
+                                        setMinutesState(Math.min(num, 59));
+                                    }
+                                }}
+                                className="h-8 w-16 px-1 text-center text-lg"
+                                placeholder="MM"
+                            />
+                            <span className="text-muted-foreground text-xs">
+                                Minutos
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 {isTimeInPast && (
@@ -183,10 +201,10 @@ export function DateTimePicker({
                     </div>
                 )}
 
-                <div className="dark:border-border flex items-center justify-between gap-2 border-t-2 border-black/10 p-3">
+                <div className="flex items-center justify-between gap-2 p-3">
                     <Button
-                        variant="outline"
-                        size="xs"
+                        variant="ghost"
+                        size="sm"
                         onClick={handleClear}
                         disabled={!tempDate}
                         type="button"
@@ -195,15 +213,15 @@ export function DateTimePicker({
                     </Button>
                     <div className="flex gap-2">
                         <Button
-                            variant="outline"
-                            size="xs"
+                            variant="ghost"
+                            size="sm"
                             onClick={handleCancel}
                             type="button"
                         >
                             Cancelar
                         </Button>
                         <Button
-                            size="xs"
+                            size="sm"
                             onClick={handleConfirm}
                             disabled={!tempDate || isTimeInPast}
                             type="button"

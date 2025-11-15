@@ -125,7 +125,7 @@ export default function PostPage() {
 
                             <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-4 text-sm">
                                 <div className="flex items-center gap-2">
-                                    <Avatar className="h-10 w-10">
+                                    <Avatar className="h-10 w-10 ring-2 ring-background">
                                         <AvatarImage
                                             src={
                                                 post.author.avatar || undefined
@@ -188,7 +188,7 @@ export default function PostPage() {
                             </CardHeader>
                             <CardContent>
                                 <div className="mb-3 flex items-center gap-3">
-                                    <Avatar className="h-12 w-12">
+                                    <Avatar className="h-12 w-12 ring-2 ring-background">
                                         <AvatarImage
                                             src={
                                                 post.author.avatar || undefined

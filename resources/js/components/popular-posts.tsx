@@ -11,7 +11,7 @@ interface PopularPostsProps {
 export function PopularPosts({ posts, loading }: PopularPostsProps) {
     if (loading) {
         return (
-            <Card className="border-border border-2">
+            <Card className="border-border border">
                 <CardHeader>
                     <CardTitle>Posts Populares</CardTitle>
                 </CardHeader>
@@ -46,7 +46,7 @@ export function PopularPosts({ posts, loading }: PopularPostsProps) {
                             <div className="min-w-0 flex-1">
                                 <Link
                                     to={`/post/${post.uuid}`}
-                                    className="hover:text-primary transition-colors"
+                                    className="hover:text-primary"
                                 >
                                     <h4 className="mb-1 line-clamp-2 text-sm font-semibold">
                                         {post.title}

@@ -24,12 +24,16 @@
     --color-accent: light-dark(#f2f0e4, #545751);
     --color-accent-foreground: light-dark(#545751, #f2f0e4);
 
-    --color-border: light-dark(transparent, #1a1a1a);
-    --color-input: light-dark(#e0dcc8, #1a1a1a);
+    --color-border: light-dark(#a6ada2, #333333);
+    --color-input: light-dark(#ffffff, #1a1a1a);
     --color-ring: #ff4800;
 
     --color-destructive: #ef4444;
     --color-destructive-foreground: #ffffff;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -37,9 +41,18 @@ body {
     color: var(--color-foreground);
 }
 
+::placeholder {
+    color: light-dark(#545751, #a6ada2);
+    opacity: 0.6;
+}
+
 .prose pre {
     background: none;
     padding: 0;
+}
+
+.prose :last-child {
+    margin: 0 !important;
 }
 
 .prose h1 {
