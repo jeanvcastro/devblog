@@ -1,131 +1,203 @@
-import "@/css/app.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import { ThemeProvider } from "@/contexts/theme-context";
-import { AuthProvider } from "@/contexts/auth-context";
 import { ErrorBoundary } from "@/components/error-boundary";
+import { PageLoader } from "@/components/page-loader";
 import { ProtectedRoute } from "@/components/protected-route";
-import HomePage from "./pages/home";
-import PostPage from "./pages/post-page";
-import LoginPage from "./pages/login-page";
-import SearchPage from "./pages/search-page";
-import TagPage from "./pages/tag-page";
-import ErrorPage from "./pages/error-page";
-import NotFoundPage from "./pages/not-found";
-import { DashboardPage } from "./pages/admin/dashboard-page";
-import { PostsPage } from "./pages/admin/posts-page";
-import { PostsNewPage } from "./pages/admin/posts-new-page";
-import { PostsEditPage } from "./pages/admin/posts-edit-page";
-import { CommentsPage } from "./pages/admin/comments-page";
-import { AnalyticsPage } from "./pages/admin/analytics-page";
-import { MediaPage } from "./pages/admin/media-page";
+import { AuthProvider } from "@/contexts/auth-context";
+import { ThemeProvider } from "@/contexts/theme-context";
+import "@/css/app.css";
+import { lazy, ReactNode, Suspense } from "react";
+import { HelmetProvider } from "react-helmet-async";
+import { Toaster } from "react-hot-toast";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+const HomePage = lazy(() => import("./pages/home"));
+const PostPage = lazy(() => import("./pages/post-page"));
+const LoginPage = lazy(() => import("./pages/login-page"));
+const SearchPage = lazy(() => import("./pages/search-page"));
+const TagPage = lazy(() => import("./pages/tag-page"));
+const ErrorPage = lazy(() => import("./pages/error-page"));
+const NotFoundPage = lazy(() => import("./pages/not-found"));
+const DashboardPage = lazy(() =>
+    import("./pages/admin/dashboard-page").then(m => ({
+        default: m.DashboardPage,
+    })),
+);
+const PostsPage = lazy(() =>
+    import("./pages/admin/posts-page").then(m => ({ default: m.PostsPage })),
+);
+const PostsNewPage = lazy(() =>
+    import("./pages/admin/posts-new-page").then(m => ({
+        default: m.PostsNewPage,
+    })),
+);
+const PostsEditPage = lazy(() =>
+    import("./pages/admin/posts-edit-page").then(m => ({
+        default: m.PostsEditPage,
+    })),
+);
+const CommentsPage = lazy(() =>
+    import("./pages/admin/comments-page").then(m => ({
+        default: m.CommentsPage,
+    })),
+);
+const AnalyticsPage = lazy(() =>
+    import("./pages/admin/analytics-page").then(m => ({
+        default: m.AnalyticsPage,
+    })),
+);
+const MediaPage = lazy(() =>
+    import("./pages/admin/media-page").then(m => ({ default: m.MediaPage })),
+);
+
+const SuspenseWrapper = ({ children }: { children: ReactNode }) => (
+    <Suspense fallback={<PageLoader />}>{children}</Suspense>
+);
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <HomePage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/post/:uuid",
-    element: <PostPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/tag/:slug",
-    element: <TagPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/search",
-    element: <SearchPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/admin/dashboard",
-    element: (
-      <ProtectedRoute requireAdmin>
-        <DashboardPage />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/admin/posts",
-    element: (
-      <ProtectedRoute requireAdmin>
-        <PostsPage />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/admin/posts/new",
-    element: (
-      <ProtectedRoute requireAdmin>
-        <PostsNewPage />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/admin/posts/:uuid/edit",
-    element: (
-      <ProtectedRoute requireAdmin>
-        <PostsEditPage />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/admin/comments",
-    element: (
-      <ProtectedRoute requireAdmin>
-        <CommentsPage />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/admin/analytics",
-    element: (
-      <ProtectedRoute requireAdmin>
-        <AnalyticsPage />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/admin/media",
-    element: (
-      <ProtectedRoute requireAdmin>
-        <MediaPage />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "*",
-    element: <NotFoundPage />,
-  },
+    {
+        path: "/",
+        element: (
+            <SuspenseWrapper>
+                <HomePage />
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/post/:uuid",
+        element: (
+            <SuspenseWrapper>
+                <PostPage />
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/tag/:slug",
+        element: (
+            <SuspenseWrapper>
+                <TagPage />
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/login",
+        element: (
+            <SuspenseWrapper>
+                <LoginPage />
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/search",
+        element: (
+            <SuspenseWrapper>
+                <SearchPage />
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/admin/dashboard",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute requireAdmin>
+                    <DashboardPage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/admin/posts",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute requireAdmin>
+                    <PostsPage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/admin/posts/new",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute requireAdmin>
+                    <PostsNewPage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/admin/posts/:uuid/edit",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute requireAdmin>
+                    <PostsEditPage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/admin/comments",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute requireAdmin>
+                    <CommentsPage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/admin/analytics",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute requireAdmin>
+                    <AnalyticsPage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/admin/media",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute requireAdmin>
+                    <MediaPage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "*",
+        element: (
+            <SuspenseWrapper>
+                <NotFoundPage />
+            </SuspenseWrapper>
+        ),
+    },
 ]);
 
 const App = () => {
-  return (
-    <ErrorBoundary>
-      <ThemeProvider>
-        <AuthProvider>
-          <RouterProvider router={router} />
-          <Toaster position="top-right" />
-        </AuthProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
+    return (
+        <ErrorBoundary>
+            <HelmetProvider>
+                <ThemeProvider>
+                    <AuthProvider>
+                        <RouterProvider router={router} />
+                        <Toaster position="top-right" />
+                    </AuthProvider>
+                </ThemeProvider>
+            </HelmetProvider>
+        </ErrorBoundary>
+    );
 };
 
 export default App;

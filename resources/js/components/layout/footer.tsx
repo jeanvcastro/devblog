@@ -6,8 +6,8 @@ export function Footer() {
             <div className="container mx-auto max-w-7xl px-4 py-12">
                 <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
                     <div className="flex flex-col items-center gap-2 md:items-start">
-                        <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">
-                            TechBlog
+                        <span className="from-primary to-secondary bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
+                            DevBlog
                         </span>
                         <p className="text-sm text-white/60">
                             © {currentYear} Todos os direitos reservados.

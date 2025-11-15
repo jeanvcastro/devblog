@@ -1,6 +1,7 @@
 import type { Post, Tag } from "@/@types";
 import { Layout } from "@/components/layout";
 import { PostList } from "@/components/post-list";
+import { SEO } from "@/components/seo";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -91,8 +92,22 @@ export default function SearchPage() {
         );
     };
 
+    const pageTitle = query
+        ? `Busca: ${query}`
+        : selectedTags.length > 0
+        ? "Artigos Filtrados"
+        : "Artigos";
+    const pageDescription = query
+        ? `Resultados de busca para "${query}"`
+        : "Explore todos os artigos sobre desenvolvimento de software, arquitetura, frontend e backend.";
+
     return (
         <Layout>
+            <SEO
+                title={pageTitle}
+                description={pageDescription}
+                url="/search"
+            />
             <div className="container mx-auto max-w-7xl px-4 py-12">
                 <div className="mx-auto max-w-4xl">
                     <h1 className="mb-8 text-center text-4xl font-bold">

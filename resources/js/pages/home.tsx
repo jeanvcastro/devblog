@@ -2,6 +2,7 @@ import type { Post, Tag } from "@/@types";
 import { Layout } from "@/components/layout";
 import { PopularPosts } from "@/components/popular-posts";
 import { PostList } from "@/components/post-list";
+import { SEO } from "@/components/seo";
 import { TagCloud } from "@/components/tag-cloud";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import api from "@/services/api";
@@ -39,13 +40,18 @@ export default function HomePage() {
 
     return (
         <Layout>
+            <SEO
+                title="Home"
+                description="Artigos técnicos sobre desenvolvimento de software, arquitetura de sistemas, design patterns, performance e boas práticas."
+                url="/"
+            />
             <div className="container mx-auto max-w-7xl px-4 py-8">
                 {/* Hero Section */}
                 <section className="mb-12 py-12 text-center">
                     <h1 className="text-5xl font-bold tracking-tight md:text-6xl">
                         Bem-vindo ao{" "}
-                        <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">
-                            TechBlog
+                        <span className="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent">
+                            DevBlog
                         </span>
                     </h1>
                     <p className="text-foreground/80 mx-auto mt-6 max-w-2xl text-lg">

@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout";
 import { PostList } from "@/components/post-list";
+import { SEO } from "@/components/seo";
 import api from "@/services/api";
 import type { Post, Tag } from "@/@types";
 import { useEffect, useState } from "react";
@@ -64,6 +65,11 @@ export default function TagPage() {
 
     return (
         <Layout>
+            <SEO
+                title={tag.name}
+                description={`Artigos sobre ${tag.name}. ${posts.length} post${posts.length !== 1 ? "s" : ""} disponível${posts.length !== 1 ? "is" : ""}.`}
+                url={`/tag/${tag.slug}`}
+            />
             <div className="container mx-auto max-w-4xl px-4 py-12">
                 {/* Breadcrumb */}
                 <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-8">

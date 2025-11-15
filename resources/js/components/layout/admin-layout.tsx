@@ -1,11 +1,17 @@
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/contexts/auth-context";
+import {
+    BarChart3,
+    FileText,
+    Image,
+    LayoutDashboard,
+    MessageSquare,
+} from "lucide-react";
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, FileText, MessageSquare, Image, BarChart3 } from "lucide-react";
 
 type AdminLayoutProps = {
     children: ReactNode;
@@ -73,7 +79,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 <div className="border-border flex h-16 items-center border-b px-6">
                     <Link to="/admin/dashboard">
                         <span className="text-primary text-xl font-bold">
-                            TechBlog Admin
+                            DevBlog Admin
                         </span>
                     </Link>
                 </div>
@@ -117,7 +123,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                                         onClick={() => setOpen(false)}
                                     >
                                         <span className="text-primary text-xl font-bold">
-                                            TechBlog Admin
+                                            DevBlog Admin
                                         </span>
                                     </Link>
                                 </div>

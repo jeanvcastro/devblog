@@ -4,6 +4,7 @@ import { Layout } from "@/components/layout";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { PopularPosts } from "@/components/popular-posts";
 import { ReadingTime } from "@/components/reading-time";
+import { SEO } from "@/components/seo";
 import { TagBadge } from "@/components/tag-badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -104,6 +105,15 @@ export default function PostPage() {
 
     return (
         <Layout>
+            <SEO
+                title={post.title}
+                description={post.excerpt}
+                url={`/post/${post.uuid}`}
+                type="article"
+                author={post.author.name}
+                publishedTime={post.published_at || post.created_at}
+                tags={post.tags?.map(tag => tag.name)}
+            />
             <article className="container mx-auto max-w-7xl px-4 pt-12 pb-6">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                     {/* Main Content */}

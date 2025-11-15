@@ -1,5 +1,6 @@
 import GoogleIcon from "@/assets/google.svg?react";
 import { Layout } from "@/components/layout";
+import { SEO } from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -43,6 +44,11 @@ export default function LoginPage() {
 
     return (
         <Layout>
+            <SEO
+                title="Login"
+                description="Faça login para acessar o painel administrativo ou comentar nos artigos."
+                url="/login"
+            />
             <div className="container mx-auto flex max-w-7xl items-center justify-center px-4 py-8">
                 <div className="w-full max-w-md space-y-6">
                     <div className="text-center">
