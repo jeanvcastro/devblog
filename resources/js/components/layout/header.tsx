@@ -46,7 +46,7 @@ export function Header() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <ThemeToggle />
+                        <ThemeToggle className="bg-black text-white/60 hover:bg-white/10 hover:text-white/60" />
 
                         <div className="hidden items-center gap-4 md:flex">
                             {isAuthenticated ? (
@@ -58,7 +58,9 @@ export function Header() {
                                                 alt={user?.name}
                                             />
                                             <AvatarFallback className="bg-primary text-primary-foreground">
-                                                {user?.name.charAt(0).toUpperCase()}
+                                                {user?.name
+                                                    .charAt(0)
+                                                    .toUpperCase()}
                                             </AvatarFallback>
                                         </Avatar>
                                         <span className="text-sm text-white/60">

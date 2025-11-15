@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/theme-context";
+import { cn } from "@/lib/utils";
 import { Moon, Sun } from "lucide-react";
 
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string }) {
     const { theme, setTheme, actualTheme } = useTheme();
 
     const toggleTheme = () => {
@@ -17,7 +18,8 @@ export function ThemeToggle() {
         <Button
             variant="ghost"
             size="icon"
-            className="bg-black text-white/60 hover:bg-white/10 hover:text-white/60"
+            className={cn("hover:bg-black/10", className)}
+            // className="bg-black text-white/60 hover:bg-white/10 hover:text-white/60"
             onClick={toggleTheme}
         >
             {actualTheme === "dark" ? (
