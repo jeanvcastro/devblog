@@ -88,7 +88,7 @@ class PostController extends Controller
             }
         }
 
-        return $query->orderBy("published_at", "desc")->paginate(3);
+        return $query->orderBy("published_at", "desc")->paginate(10);
     }
 
     public function store(StorePostRequest $request)
