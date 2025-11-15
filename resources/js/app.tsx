@@ -18,6 +18,7 @@ import { PostsNewPage } from "./pages/admin/posts-new-page";
 import { PostsEditPage } from "./pages/admin/posts-edit-page";
 import { CommentsPage } from "./pages/admin/comments-page";
 import { AnalyticsPage } from "./pages/admin/analytics-page";
+import { MediaPage } from "./pages/admin/media-page";
 
 const router = createBrowserRouter([
   {
@@ -95,6 +96,15 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute requireAdmin>
         <AnalyticsPage />
+      </ProtectedRoute>
+    ),
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin/media",
+    element: (
+      <ProtectedRoute requireAdmin>
+        <MediaPage />
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,

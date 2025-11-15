@@ -167,7 +167,7 @@ export function PostEditor({
                                             content: e.target.value,
                                         }))
                                     }
-                                    placeholder="Escreva o conteúdo do post em Markdown..."
+                                    placeholder="Escreva o conteúdo do post em Markdown... Use a página Mídia para fazer upload de imagens."
                                     rows={20}
                                     className="font-mono"
                                     required
@@ -175,7 +175,7 @@ export function PostEditor({
                             </TabsContent>
                             <TabsContent value="preview">
                                 <Card>
-                                    <CardContent>
+                                    <CardContent className="p-6">
                                         {formData.content ? (
                                             <MarkdownRenderer
                                                 content={formData.content}

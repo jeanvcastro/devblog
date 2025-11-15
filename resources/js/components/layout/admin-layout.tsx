@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/contexts/auth-context";
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, FileText, MessageSquare, BarChart3 } from "lucide-react";
+import { LayoutDashboard, FileText, MessageSquare, Image, BarChart3 } from "lucide-react";
 
 type AdminLayoutProps = {
     children: ReactNode;
@@ -47,6 +47,14 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             >
                 <MessageSquare className="h-5 w-5" />
                 Comentários
+            </Link>
+            <Link
+                to="/admin/media"
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive("/admin/media")}`}
+                onClick={() => setOpen(false)}
+            >
+                <Image className="h-5 w-5" />
+                Mídia
             </Link>
             <Link
                 to="/admin/analytics"

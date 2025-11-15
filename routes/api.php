@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/comments/{comment:uuid}/reject', [CommentController::class, 'reject']);
         Route::delete('/comments/{comment:uuid}', [CommentController::class, 'destroy']);
 
+        Route::get('/images', [ImageUploadController::class, 'index']);
         Route::post('/images/upload', [ImageUploadController::class, 'upload']);
         Route::delete('/images/{filename}', [ImageUploadController::class, 'delete']);
     });

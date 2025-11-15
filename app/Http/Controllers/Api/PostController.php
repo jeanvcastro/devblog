@@ -58,7 +58,7 @@ class PostController extends Controller
     {
         return Post::with(["author", "tags"])
             ->published()
-            ->recent(10)
+            ->recent(5)
             ->get();
     }
 

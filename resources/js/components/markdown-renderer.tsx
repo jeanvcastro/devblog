@@ -65,6 +65,16 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                             </code>
                         );
                     },
+                    img({ src, alt }) {
+                        return (
+                            <img
+                                src={src}
+                                alt={alt || ''}
+                                className="rounded-lg max-w-full h-auto"
+                                loading="lazy"
+                            />
+                        );
+                    },
                 }}
             >
                 {content}
