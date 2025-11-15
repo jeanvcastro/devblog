@@ -64,7 +64,6 @@ export default function SearchPage() {
                 }
 
                 const res = await api.get<any>("/posts/search", { params });
-                console.log("API Response:", res.data);
                 setResults(res.data.data || []);
                 setTotalPages(res.data.last_page || 1);
                 setTotal(res.data.total || 0);

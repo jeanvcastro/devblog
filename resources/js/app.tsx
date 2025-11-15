@@ -8,33 +8,34 @@ import PostPage from "./pages/post-page";
 import LoginPage from "./pages/login-page";
 import SearchPage from "./pages/search-page";
 import TagPage from "./pages/tag-page";
+import ErrorPage from "./pages/error-page";
 import NotFoundPage from "./pages/not-found";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
-    errorElement: <NotFoundPage />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/post/:uuid",
     element: <PostPage />,
-    errorElement: <NotFoundPage />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/tag/:slug",
     element: <TagPage />,
-    errorElement: <NotFoundPage />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/login",
     element: <LoginPage />,
-    errorElement: <NotFoundPage />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/search",
     element: <SearchPage />,
-    errorElement: <NotFoundPage />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "*",
