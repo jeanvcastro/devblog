@@ -52,7 +52,7 @@ export function PopularPosts({ posts, loading }: PopularPostsProps) {
                                         {post.title}
                                     </h4>
                                 </Link>
-                                <ViewCounter count={post.viewsCount} />
+                                <ViewCounter count={post.views_count} />
                             </div>
                         </div>
                     ))

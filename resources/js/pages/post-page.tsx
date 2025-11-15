@@ -109,7 +109,7 @@ export default function PostPage() {
                     {/* Main Content */}
                     <div className="lg:col-span-2">
                         <header className="mb-8">
-                            <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+                            <h1 className="mb-4 text-4xl font-bold text-black md:text-5xl dark:text-white">
                                 {post.title}
                             </h1>
 

@@ -26,8 +26,8 @@ export function TagCloud({ tags, loading }: TagCloudProps) {
             {tags.map((tag) => (
                 <div key={tag.uuid} className="flex items-center gap-1">
                     <TagBadge tag={tag} />
-                    {tag.postsCount !== undefined && (
-                        <span className="text-xs text-muted-foreground">({tag.postsCount})</span>
+                    {tag.posts_count !== undefined && (
+                        <span className="text-xs text-muted-foreground">({tag.posts_count})</span>
                     )}
                 </div>
             ))}

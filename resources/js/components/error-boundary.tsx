@@ -45,6 +45,7 @@ export class ErrorBoundary extends Component<Props, State> {
                                 Desculpe, ocorreu um erro inesperado. Nossa equipe foi
                                 notificada e estamos trabalhando para resolver o problema.
                             </p>
+                            {/* eslint-disable-next-line no-undef */}
                             {process.env.NODE_ENV === "development" && this.state.error && (
                                 <div className="rounded-md bg-muted p-4">
                                     <p className="text-sm font-mono text-destructive">

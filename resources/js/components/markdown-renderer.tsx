@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark, oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useTheme } from "@/contexts/theme-context";
@@ -10,12 +11,12 @@ interface MarkdownRendererProps {
     content: string;
 }
 
-function CodeBlock({ language, children }: { language: string; children: string }) {
+function CodeBlock({ language, code }: { language: string; code: string }) {
     const { actualTheme } = useTheme();
     const [copied, setCopied] = useState(false);
 
     const handleCopy = async () => {
-        await navigator.clipboard.writeText(children);
+        await navigator.clipboard.writeText(code);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -35,11 +36,11 @@ function CodeBlock({ language, children }: { language: string; children: string 
                 )}
             </Button>
             <SyntaxHighlighter
-                style={actualTheme === "dark" ? oneDark as any : oneLight as any}
+                style={actualTheme === "dark" ? oneDark : oneLight}
                 language={language}
                 PreTag="div"
             >
-                {children}
+                {code}
             </SyntaxHighlighter>
         </div>
     );
@@ -49,6 +50,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     return (
         <div className="prose prose-neutral dark:prose-invert max-w-none">
             <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
                 components={{
                     code({ className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || "");
@@ -56,7 +58,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                         const code = String(children).replace(/\n$/, "");
 
                         return !isInline ? (
-                            <CodeBlock language={match[1]} children={code} />
+                            <CodeBlock language={match[1]} code={code} />
                         ) : (
                             <code className={className} {...props}>
                                 {children}

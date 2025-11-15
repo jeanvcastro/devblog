@@ -66,8 +66,16 @@ class PostController extends Controller
     {
         $search = $request->get("q");
         $tags = $request->get("tags");
+        $status = $request->get("status");
+        $includeDrafts = $request->get("include_drafts", false);
 
-        $query = Post::with(["author", "tags"])->published();
+        $query = Post::with(["author", "tags"]);
+
+        if (!$includeDrafts) {
+            $query->published();
+        } elseif ($status && $status !== "all") {
+            $query->where("status", $status);
+        }
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -88,7 +96,7 @@ class PostController extends Controller
             }
         }
 
-        return $query->orderBy("published_at", "desc")->paginate(10);
+        return $query->orderBy("created_at", "desc")->paginate(10);
     }
 
     public function store(StorePostRequest $request)

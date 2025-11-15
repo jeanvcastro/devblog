@@ -1,4 +1,4 @@
-import type { ApiResponse, Post, Tag } from "@/@types";
+import type { Post, Tag } from "@/@types";
 import { Layout } from "@/components/layout";
 import { PostList } from "@/components/post-list";
 import { Input } from "@/components/ui/input";
@@ -63,7 +63,7 @@ export default function SearchPage() {
                     params.tags = selectedTags.join(',');
                 }
 
-                const res = await api.get<any>("/posts/search", { params });
+                const res = await api.get<{ data: Post[]; last_page: number; total: number }>("/posts/search", { params });
                 setResults(res.data.data || []);
                 setTotalPages(res.data.last_page || 1);
                 setTotal(res.data.total || 0);

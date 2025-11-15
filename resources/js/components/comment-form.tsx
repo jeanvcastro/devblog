@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 interface CommentFormProps {
     postUuid: string;
     parentUuid?: string;
-    onSubmit: () => Promise<void>;
+    onSubmit: (content: string) => Promise<void>;
     onCancel?: () => void;
 }
 
@@ -33,7 +33,7 @@ export function CommentForm({
         setSuccess(false);
 
         try {
-            await onSubmit();
+            await onSubmit(content);
             setContent("");
             setSuccess(true);
             setTimeout(() => setSuccess(false), 3000);

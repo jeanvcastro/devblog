@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import React from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import type { Tag } from "@/@types";
 

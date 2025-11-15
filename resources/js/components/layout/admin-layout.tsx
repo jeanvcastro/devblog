@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/contexts/auth-context";
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { LayoutDashboard, FileText, MessageSquare, BarChart3 } from "lucide-react";
 
 type AdminLayoutProps = {
     children: ReactNode;
@@ -28,6 +29,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive("/admin/dashboard")}`}
                 onClick={() => setOpen(false)}
             >
+                <LayoutDashboard className="h-5 w-5" />
                 Dashboard
             </Link>
             <Link
@@ -35,6 +37,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive("/admin/posts")}`}
                 onClick={() => setOpen(false)}
             >
+                <FileText className="h-5 w-5" />
                 Posts
             </Link>
             <Link
@@ -42,6 +45,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive("/admin/comments")}`}
                 onClick={() => setOpen(false)}
             >
+                <MessageSquare className="h-5 w-5" />
                 Comentários
             </Link>
             <Link
@@ -49,6 +53,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive("/admin/analytics")}`}
                 onClick={() => setOpen(false)}
             >
+                <BarChart3 className="h-5 w-5" />
                 Analytics
             </Link>
         </>
