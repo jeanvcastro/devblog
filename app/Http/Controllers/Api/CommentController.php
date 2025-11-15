@@ -15,7 +15,12 @@ class CommentController extends Controller
     {
         return $post
             ->comments()
-            ->with(["user", "replies.user"])
+            ->with([
+                "user",
+                "replies" => function ($query) {
+                    $query->where("approved", true)->with("user");
+                },
+            ])
             ->whereNull("parent_id")
             ->approved()
             ->orderBy("created_at", "desc")

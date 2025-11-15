@@ -9,32 +9,39 @@ use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\VisitorAuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/posts', [PostController::class, 'index']);
-Route::get('/posts/most-viewed', [PostController::class, 'mostViewed']);
-Route::get('/posts/recent', [PostController::class, 'recent']);
-Route::get('/posts/search', [PostController::class, 'search']);
-Route::get('/posts/{post:uuid}', [PostController::class, 'show']);
+Route::middleware('throttle:api')->group(function () {
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::get('/posts/most-viewed', [PostController::class, 'mostViewed']);
+    Route::get('/posts/recent', [PostController::class, 'recent']);
+    Route::get('/posts/search', [PostController::class, 'search']);
+    Route::get('/posts/{post:uuid}', [PostController::class, 'show']);
 
-Route::post('/posts/{post:uuid}/track-view', [PostViewController::class, 'track']);
+    Route::get('/tags', [TagController::class, 'index']);
+    Route::get('/tags/{tag:uuid}', [TagController::class, 'show']);
 
-Route::get('/tags', [TagController::class, 'index']);
-Route::get('/tags/{tag:uuid}', [TagController::class, 'show']);
+    Route::get('/posts/{post:uuid}/comments', [CommentController::class, 'index']);
+});
 
-Route::get('/posts/{post:uuid}/comments', [CommentController::class, 'index']);
+Route::middleware('throttle:views')->group(function () {
+    Route::post('/posts/{post:uuid}/track-view', [PostViewController::class, 'track']);
+});
 
-Route::post('/admin/login', [AdminAuthController::class, 'login']);
+Route::middleware('throttle:auth')->group(function () {
+    Route::post('/admin/login', [AdminAuthController::class, 'login']);
+    Route::get('/auth/google', [VisitorAuthController::class, 'redirect']);
+    Route::get('/auth/google/callback', [VisitorAuthController::class, 'callback']);
+});
 
-Route::get('/auth/google', [VisitorAuthController::class, 'redirect']);
-Route::get('/auth/google/callback', [VisitorAuthController::class, 'callback']);
-
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function () {
     Route::post('/admin/logout', [AdminAuthController::class, 'logout']);
     Route::get('/admin/me', [AdminAuthController::class, 'me']);
 
     Route::post('/auth/logout', [VisitorAuthController::class, 'logout']);
     Route::get('/auth/me', [VisitorAuthController::class, 'me']);
 
-    Route::post('/comments', [CommentController::class, 'store']);
+    Route::middleware('throttle:comments')->group(function () {
+        Route::post('/comments', [CommentController::class, 'store']);
+    });
 
     Route::middleware('admin')->group(function () {
         Route::post('/posts', [PostController::class, 'store']);
@@ -50,8 +57,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/comments/{comment:uuid}/reject', [CommentController::class, 'reject']);
         Route::delete('/comments/{comment:uuid}', [CommentController::class, 'destroy']);
 
+        Route::middleware('throttle:uploads')->group(function () {
+            Route::post('/images/upload', [ImageUploadController::class, 'upload']);
+        });
+
         Route::get('/images', [ImageUploadController::class, 'index']);
-        Route::post('/images/upload', [ImageUploadController::class, 'upload']);
         Route::delete('/images/{filename}', [ImageUploadController::class, 'delete']);
     });
 });

@@ -14,8 +14,8 @@ interface SEOProps {
 const DEFAULT_TITLE = "DevBlog - Blog de Tecnologia";
 const DEFAULT_DESCRIPTION =
   "Artigos sobre desenvolvimento de software, arquitetura de sistemas, frontend, backend e performance.";
-const DEFAULT_IMAGE = "https://devbroder.com/images/og-default.jpg";
-const SITE_URL = "https://devbroder.com";
+const DEFAULT_IMAGE = "https://blog.devbroder.com/images/og-default.jpg";
+const SITE_URL = "https://blog.devbroder.com";
 
 export const SEO = ({
   title,
