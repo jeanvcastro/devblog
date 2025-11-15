@@ -13,7 +13,7 @@ class CommentPolicy
      */
     public function viewAny(?User $user): bool
     {
-        return true;
+        return $user && $user->is_admin;
     }
 
     public function view(?User $user, Comment $comment): bool

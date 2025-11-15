@@ -1,5 +1,6 @@
 import "@/css/app.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { AuthProvider } from "@/contexts/auth-context";
 import { ErrorBoundary } from "@/components/error-boundary";
@@ -110,6 +111,7 @@ const App = () => {
       <ThemeProvider>
         <AuthProvider>
           <RouterProvider router={router} />
+          <Toaster position="top-right" />
         </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>

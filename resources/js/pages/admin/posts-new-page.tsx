@@ -4,6 +4,7 @@ import type { Tag } from "@/@types";
 import api from "@/services/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export function PostsNewPage() {
   const [tags, setTags] = useState<Tag[]>([]);
@@ -37,9 +38,11 @@ export function PostsNewPage() {
         tags: data.tags,
       });
 
+      toast.success("Post criado com sucesso!");
       navigate("/admin/posts");
     } catch (error) {
       console.error("Erro ao criar post:", error);
+      toast.error("Erro ao criar post");
     } finally {
       setIsLoading(false);
     }

@@ -45,7 +45,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/tags/{tag:uuid}', [TagController::class, 'update']);
         Route::delete('/tags/{tag:uuid}', [TagController::class, 'destroy']);
 
-        Route::post('/comments/{comment:uuid}/approve', [CommentController::class, 'approve']);
+        Route::get('/admin/comments', [CommentController::class, 'adminIndex']);
+        Route::put('/comments/{comment:uuid}/approve', [CommentController::class, 'approve']);
+        Route::put('/comments/{comment:uuid}/reject', [CommentController::class, 'reject']);
         Route::delete('/comments/{comment:uuid}', [CommentController::class, 'destroy']);
 
         Route::post('/images/upload', [ImageUploadController::class, 'upload']);

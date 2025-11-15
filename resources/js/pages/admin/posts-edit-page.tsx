@@ -4,6 +4,7 @@ import type { Post, Tag } from "@/@types";
 import api from "@/services/api";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export function PostsEditPage() {
   const { uuid } = useParams<{ uuid: string }>();
@@ -54,9 +55,11 @@ export function PostsEditPage() {
         tags: data.tags,
       });
 
+      toast.success("Post atualizado com sucesso!");
       navigate("/admin/posts");
     } catch (error) {
       console.error("Erro ao atualizar post:", error);
+      toast.error("Erro ao atualizar post");
     } finally {
       setIsLoading(false);
     }

@@ -3,6 +3,7 @@ import { DataTable, type DataTableColumn } from "@/components/data-table";
 import type { Post, Tag } from "@/@types";
 import api from "@/services/api";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -99,8 +100,10 @@ export function PostsPage() {
       setPosts((prev) => prev.filter((p) => p.uuid !== postToDelete.uuid));
       setDeleteDialogOpen(false);
       setPostToDelete(null);
+      toast.success("Post excluído com sucesso!");
     } catch (error) {
       console.error("Erro ao deletar post:", error);
+      toast.error("Erro ao excluir post");
     } finally {
       setIsDeleting(false);
     }

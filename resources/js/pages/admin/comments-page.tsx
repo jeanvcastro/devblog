@@ -3,6 +3,7 @@ import { CommentModerator } from "@/components/comment-moderator";
 import type { Comment } from "@/@types";
 import api from "@/services/api";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import {
   Select,
   SelectContent,
@@ -60,22 +61,42 @@ export function CommentsPage() {
   const handleApprove = async (uuid: string) => {
     try {
       await api.put(`/comments/${uuid}/approve`);
-      setComments((prev) =>
-        prev.map((comment) =>
-          comment.uuid === uuid ? { ...comment, approved: true } : comment
-        )
-      );
+
+      if (filter === "pending") {
+        setComments((prev) => prev.filter((comment) => comment.uuid !== uuid));
+      } else {
+        setComments((prev) =>
+          prev.map((comment) =>
+            comment.uuid === uuid ? { ...comment, approved: true } : comment
+          )
+        );
+      }
+
+      toast.success("Comentário aprovado com sucesso!");
     } catch (error) {
       console.error("Erro ao aprovar comentário:", error);
+      toast.error("Erro ao aprovar comentário");
     }
   };
 
   const handleReject = async (uuid: string) => {
     try {
       await api.put(`/comments/${uuid}/reject`);
-      setComments((prev) => prev.filter((comment) => comment.uuid !== uuid));
+
+      if (filter === "approved" || filter === "pending") {
+        setComments((prev) => prev.filter((comment) => comment.uuid !== uuid));
+      } else {
+        setComments((prev) =>
+          prev.map((comment) =>
+            comment.uuid === uuid ? { ...comment, approved: false } : comment
+          )
+        );
+      }
+
+      toast.success("Comentário reprovado com sucesso!");
     } catch (error) {
       console.error("Erro ao rejeitar comentário:", error);
+      toast.error("Erro ao reprovar comentário");
     }
   };
 
@@ -95,8 +116,10 @@ export function CommentsPage() {
       );
       setDeleteDialogOpen(false);
       setCommentToDelete(null);
+      toast.success("Comentário excluído com sucesso!");
     } catch (error) {
       console.error("Erro ao excluir comentário:", error);
+      toast.error("Erro ao excluir comentário");
     } finally {
       setIsDeleting(false);
     }

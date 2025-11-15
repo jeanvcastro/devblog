@@ -22,6 +22,25 @@ class CommentController extends Controller
             ->get();
     }
 
+    public function adminIndex(Request $request)
+    {
+        $this->authorize("viewAny", Comment::class);
+
+        $query = Comment::with(["user", "post:id,uuid,title", "replies.user"])
+            ->whereNull("parent_id")
+            ->orderBy("created_at", "desc");
+
+        $filter = $request->query("filter", "pending");
+
+        if ($filter === "pending") {
+            $query->where("approved", false);
+        } elseif ($filter === "approved") {
+            $query->where("approved", true);
+        }
+
+        return $query->get();
+    }
+
     public function store(StoreCommentRequest $request)
     {
         $userId = Auth::id();
@@ -48,6 +67,14 @@ class CommentController extends Controller
         $this->authorize("approve", Comment::class);
 
         $comment->update(["approved" => true]);
+        return $comment;
+    }
+
+    public function reject(Comment $comment)
+    {
+        $this->authorize("approve", Comment::class);
+
+        $comment->update(["approved" => false]);
         return $comment;
     }
 
