@@ -13,7 +13,6 @@ Plataforma para compartilhar conhecimento sobre design de sistemas, arquitetura 
 - Laravel 11
 - MySQL
 - Laravel Socialite (OAuth Google)
-- Filament (painel admin)
 
 ### Frontend
 

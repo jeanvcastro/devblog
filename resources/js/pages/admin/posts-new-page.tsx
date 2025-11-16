@@ -36,6 +36,7 @@ export function PostsNewPage() {
         status: data.status,
         published_at: data.published_at,
         tags: data.tags,
+        reading_time: data.reading_time,
       });
 
       toast.success("Post criado com sucesso!");

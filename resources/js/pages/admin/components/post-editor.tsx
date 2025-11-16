@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { calculateReadingTime } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 
 interface PostEditorProps {
@@ -26,6 +27,7 @@ interface PostEditorProps {
         status: "draft" | "published";
         published_at: string | null;
         tags: string[];
+        reading_time: number;
     };
     availableTags: Tag[];
     onSave: (data: PostFormData) => void;
@@ -41,6 +43,7 @@ export interface PostFormData {
     status: "draft" | "published";
     published_at: string | null;
     tags: string[];
+    reading_time: number;
 }
 
 export function PostEditor({
@@ -58,6 +61,7 @@ export function PostEditor({
         status: initialData?.status || "draft",
         published_at: initialData?.published_at || null,
         tags: initialData?.tags || [],
+        reading_time: initialData?.reading_time || 0,
     });
 
     const slugify = (text: string): string => {
@@ -79,6 +83,18 @@ export function PostEditor({
             }));
         }
     }, [formData.title, formData.slug, initialData]);
+
+    useEffect(() => {
+        if (formData.content) {
+            const calculatedTime = calculateReadingTime(formData.content);
+            if (formData.reading_time !== calculatedTime) {
+                setFormData(prev => ({
+                    ...prev,
+                    reading_time: calculatedTime,
+                }));
+            }
+        }
+    }, [formData.content]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -239,6 +255,28 @@ export function PostEditor({
                                     }
                                     placeholder="Selecione a data de publicação"
                                 />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="reading_time">
+                                    Tempo de Leitura (minutos)
+                                </Label>
+                                <Input
+                                    id="reading_time"
+                                    type="number"
+                                    min="0"
+                                    value={formData.reading_time}
+                                    onChange={e =>
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            reading_time: parseInt(e.target.value) || 0,
+                                        }))
+                                    }
+                                    placeholder="5"
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    Calculado automaticamente baseado no conteúdo
+                                </p>
                             </div>
                         </CardContent>
                     </Card>

@@ -53,6 +53,7 @@ export function PostsEditPage() {
         status: data.status,
         published_at: data.published_at,
         tags: data.tags,
+        reading_time: data.reading_time,
       });
 
       toast.success("Post atualizado com sucesso!");
@@ -108,6 +109,7 @@ export function PostsEditPage() {
             status: post.status,
             published_at: post.published_at,
             tags: post.tags?.map((tag) => tag.uuid) || [],
+            reading_time: post.reading_time,
           }}
           availableTags={tags}
           onSave={handleSave}

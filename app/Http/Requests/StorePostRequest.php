@@ -21,6 +21,7 @@ class StorePostRequest extends FormRequest
             'excerpt' => 'nullable|string|max:500',
             'status' => 'required|in:draft,published',
             'published_at' => 'nullable|date',
+            'reading_time' => 'nullable|integer|min:0',
             'tags' => 'nullable|array',
             'tags.*' => 'uuid|exists:tags,uuid',
         ];
