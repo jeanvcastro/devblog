@@ -1,7 +1,7 @@
-import { AdminLayout } from "@/components/layout/admin-layout";
-import { StatsCard } from "@/components/stats-card";
+import { AdminLayout } from "@/layout/admin-layout";
+import { StatsCard } from "./components/stats-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DataTable, type DataTableColumn } from "@/components/data-table";
+import { DataTable, type DataTableColumn } from "./components/data-table";
 import type { Post, Tag, Comment } from "@/@types";
 import api from "@/services/api";
 import { useEffect, useState } from "react";

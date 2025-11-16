@@ -1,6 +1,6 @@
-import { Layout } from "@/components/layout";
-import { PostList } from "@/components/post-list";
-import { SEO } from "@/components/seo";
+import { Layout } from "@/layout";
+import { PostList } from "@/components/common/post-list";
+import { SEO } from "@/components/common/seo";
 import api from "@/services/api";
 import type { Post, Tag } from "@/@types";
 import { useEffect, useState } from "react";

@@ -1,4 +1,4 @@
-import { TagBadge } from "@/components/tag-badge";
+import { TagBadge } from "./tag-badge";
 import type { Tag } from "@/@types";
 
 interface TagCloudProps {

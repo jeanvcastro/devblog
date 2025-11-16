@@ -1,4 +1,4 @@
-import { Layout } from "@/components/layout";
+import { Layout } from "@/layout";
 import { Helmet } from "react-helmet-async";
 
 export default function TermsPage() {

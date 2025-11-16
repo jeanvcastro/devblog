@@ -1,5 +1,5 @@
-import { AdminLayout } from "@/components/layout/admin-layout";
-import { CommentModerator } from "@/components/comment-moderator";
+import { AdminLayout } from "@/layout/admin-layout";
+import { CommentModerator } from "./components/comment-moderator";
 import type { Comment } from "@/@types";
 import api from "@/services/api";
 import { useEffect, useState } from "react";

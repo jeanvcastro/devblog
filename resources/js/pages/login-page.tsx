@@ -1,6 +1,6 @@
 import GoogleIcon from "@/assets/google.svg?react";
-import { Layout } from "@/components/layout";
-import { SEO } from "@/components/seo";
+import { Layout } from "@/layout";
+import { SEO } from "@/components/common/seo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

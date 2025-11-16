@@ -1,6 +1,6 @@
-import { ErrorBoundary } from "@/components/error-boundary";
-import { PageLoader } from "@/components/page-loader";
-import { ProtectedRoute } from "@/components/protected-route";
+import { ErrorBoundary } from "@/components/common/error-boundary";
+import { PageLoader } from "@/components/common/page-loader";
+import { ProtectedRoute } from "@/components/common/protected-route";
 import { AuthProvider } from "@/contexts/auth-context";
 import { ThemeProvider } from "@/contexts/theme-context";
 import "@/css/app.css";
@@ -10,7 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const HomePage = lazy(() => import("./pages/home"));
-const PostPage = lazy(() => import("./pages/post-page"));
+const PostPage = lazy(() => import("./pages/post-page/index"));
 const LoginPage = lazy(() => import("./pages/login-page"));
 const PostsListPage = lazy(() => import("./pages/posts-page"));
 const TagPage = lazy(() => import("./pages/tag-page"));
@@ -36,7 +36,7 @@ const PostsEditPage = lazy(() =>
     })),
 );
 const CommentsPage = lazy(() =>
-    import("./pages/admin/comments-page").then(m => ({
+    import("./pages/admin/comments-page/index").then(m => ({
         default: m.CommentsPage,
     })),
 );

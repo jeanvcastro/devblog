@@ -1,9 +1,9 @@
 import type { Post, Tag } from "@/@types";
-import { Layout } from "@/components/layout";
-import { PopularPosts } from "@/components/popular-posts";
-import { PostList } from "@/components/post-list";
-import { SEO } from "@/components/seo";
-import { TagCloud } from "@/components/tag-cloud";
+import { Layout } from "@/layout";
+import { PopularPosts } from "@/components/common/popular-posts";
+import { PostList } from "@/components/common/post-list";
+import { SEO } from "@/components/common/seo";
+import { TagCloud } from "@/components/common/tag-cloud";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import api from "@/services/api";
 import { ChevronRight } from "lucide-react";

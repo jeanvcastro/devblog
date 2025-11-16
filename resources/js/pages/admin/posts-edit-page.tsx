@@ -1,5 +1,5 @@
-import { AdminLayout } from "@/components/layout/admin-layout";
-import { PostEditor, PostFormData } from "@/components/post-editor";
+import { AdminLayout } from "@/layout/admin-layout";
+import { PostEditor, PostFormData } from "./components/post-editor";
 import type { Post, Tag } from "@/@types";
 import api from "@/services/api";
 import { useEffect, useState } from "react";

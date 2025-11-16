@@ -1,5 +1,5 @@
 import type { Comment } from "@/@types";
-import { CommentForm } from "@/components/comment-form";
+import { CommentForm } from "./comment-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";

@@ -1,7 +1,7 @@
 import type { Post, Tag } from "@/@types";
-import { Layout } from "@/components/layout";
-import { PostList } from "@/components/post-list";
-import { SEO } from "@/components/seo";
+import { Layout } from "@/layout";
+import { PostList } from "@/components/common/post-list";
+import { SEO } from "@/components/common/seo";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

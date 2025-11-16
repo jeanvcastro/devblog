@@ -1,6 +1,6 @@
 import type { Post } from "@/@types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ViewCounter } from "@/components/view-counter";
+import { ViewCounter } from "./view-counter";
 import { Link } from "react-router-dom";
 
 interface PopularPostsProps {

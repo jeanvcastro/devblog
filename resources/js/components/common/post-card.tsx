@@ -1,6 +1,6 @@
 import type { Post } from "@/@types";
-import { ReadingTime } from "@/components/reading-time";
-import { TagBadge } from "@/components/tag-badge";
+import { ReadingTime } from "./reading-time";
+import { TagBadge } from "./tag-badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     Card,
@@ -8,7 +8,7 @@ import {
     CardFooter,
     CardHeader,
 } from "@/components/ui/card";
-import { ViewCounter } from "@/components/view-counter";
+import { ViewCounter } from "./view-counter";
 import { formatDate } from "@/lib/date";
 import { useNavigate } from "react-router-dom";
 
