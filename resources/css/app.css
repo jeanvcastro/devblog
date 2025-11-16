@@ -51,6 +51,10 @@ body {
     padding: 0;
 }
 
+.prose pre code {
+    color: light-dark(#545751, #f2f0e4);
+}
+
 .prose :last-child {
     margin: 0 !important;
 }
