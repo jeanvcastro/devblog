@@ -51,7 +51,7 @@ export default function HomePage() {
                     <h1 className="text-5xl font-bold tracking-tight md:text-6xl">
                         Bem-vindo ao{" "}
                         <span className="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent">
-                            DevBlog
+                            BroderLab
                         </span>
                     </h1>
                     <p className="text-foreground/80 mx-auto mt-6 max-w-2xl text-lg">
