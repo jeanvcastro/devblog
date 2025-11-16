@@ -25,6 +25,9 @@
     content="Artigos sobre desenvolvimento de software, arquitetura de sistemas, frontend, backend e performance.">
   <meta name="twitter:image" content="https://lab.devbroder.com/images/og-default.jpg">
 
+  <meta name="theme-color" content="#f2f0e4">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <link rel="canonical" href="https://lab.devbroder.com">
   <link rel="shortcut icon" href="{{ asset("favicon.ico") }}" />
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset("/img/apple-touch-icon.png") }}" />

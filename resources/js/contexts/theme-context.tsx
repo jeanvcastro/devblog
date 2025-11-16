@@ -46,6 +46,8 @@ export function ThemeProvider({
 
         root.classList.remove("light", "dark");
 
+        let currentTheme: "light" | "dark";
+
         if (theme === "system") {
             const systemTheme = window.matchMedia(
                 "(prefers-color-scheme: dark)",
@@ -56,10 +58,20 @@ export function ThemeProvider({
             root.classList.add(systemTheme);
             root.style.colorScheme = systemTheme;
             setActualTheme(systemTheme);
+            currentTheme = systemTheme;
         } else {
             root.classList.add(theme);
             root.style.colorScheme = theme;
             setActualTheme(theme);
+            currentTheme = theme;
+        }
+
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+            metaThemeColor.setAttribute(
+                "content",
+                currentTheme === "dark" ? "#000000" : "#f2f0e4"
+            );
         }
     }, [theme]);
 
@@ -74,6 +86,14 @@ export function ThemeProvider({
                 root.classList.add(systemTheme);
                 root.style.colorScheme = systemTheme;
                 setActualTheme(systemTheme);
+
+                const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+                if (metaThemeColor) {
+                    metaThemeColor.setAttribute(
+                        "content",
+                        systemTheme === "dark" ? "#000000" : "#f2f0e4"
+                    );
+                }
             }
         };
 
