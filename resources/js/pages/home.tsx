@@ -6,7 +6,7 @@ import { SEO } from "@/components/seo";
 import { TagCloud } from "@/components/tag-cloud";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import api from "@/services/api";
-import { Search } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -47,24 +47,22 @@ export default function HomePage() {
             />
             <div className="container mx-auto max-w-7xl px-4 py-8">
                 {/* Hero Section */}
-                <section className="mb-12 py-12 text-center">
-                    <h1 className="text-5xl font-bold tracking-tight md:text-6xl">
-                        Bem-vindo ao{" "}
+                <section className="mb-16 py-20 text-center">
+                    <h1 className="text-6xl font-bold tracking-tight md:text-7xl">
                         <span className="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent">
                             BroderLab
                         </span>
                     </h1>
-                    <p className="text-foreground/80 mx-auto mt-6 max-w-2xl text-lg">
-                        Artigos técnicos sobre desenvolvimento de software,
-                        arquitetura, performance e muito mais.
+                    <p className="text-foreground mx-auto mt-8 max-w-3xl text-xl md:text-2xl">
+                        Compartilhamos conhecimento sobre desenvolvimento de software, arquitetura de sistemas, performance, boas práticas e tecnologias modernas
                     </p>
-                    <div className="mt-8">
+                    <div className="mt-10">
                         <Link
                             to="/search"
-                            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-8 py-3"
+                            className="bg-primary text-primary-foreground inline-flex items-center gap-2 rounded-md px-8 py-3 text-base font-medium"
                         >
-                            <Search className="h-5 w-5" />
-                            Buscar Artigos
+                            Explorar Conteúdo
+                            <ChevronRight className="h-5 w-5" />
                         </Link>
                     </div>
                 </section>
