@@ -14,6 +14,7 @@ const PostPage = lazy(() => import("./pages/post-page"));
 const LoginPage = lazy(() => import("./pages/login-page"));
 const PostsListPage = lazy(() => import("./pages/posts-page"));
 const TagPage = lazy(() => import("./pages/tag-page"));
+const TermsPage = lazy(() => import("./pages/terms-page"));
 const ErrorPage = lazy(() => import("./pages/error-page"));
 const NotFoundPage = lazy(() => import("./pages/not-found"));
 const DashboardPage = lazy(() =>
@@ -94,6 +95,15 @@ const router = createBrowserRouter([
         element: (
             <SuspenseWrapper>
                 <PostsListPage />
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/terms",
+        element: (
+            <SuspenseWrapper>
+                <TermsPage />
             </SuspenseWrapper>
         ),
         errorElement: <ErrorPage />,

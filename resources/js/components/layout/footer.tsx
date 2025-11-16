@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export function Footer() {
     const currentYear = new Date().getFullYear();
 
@@ -15,23 +17,19 @@ export function Footer() {
                     </div>
                     <div className="flex gap-6">
                         <a
-                            href="#"
+                            href="https://devbroder.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-primary text-sm underline-offset-2 hover:underline"
                         >
-                            Sobre
+                            DevBroder®
                         </a>
-                        <a
-                            href="#"
+                        <Link
+                            to="/terms"
                             className="text-muted-foreground hover:text-primary text-sm underline-offset-2 hover:underline"
                         >
-                            Contato
-                        </a>
-                        <a
-                            href="#"
-                            className="text-muted-foreground hover:text-primary text-sm underline-offset-2 hover:underline"
-                        >
-                            Termos
-                        </a>
+                            Termos de Uso
+                        </Link>
                     </div>
                 </div>
             </div>
