@@ -16,16 +16,16 @@
   <meta property="og:title" content="BroderLab - Blog de Tecnologia">
   <meta property="og:description"
     content="Artigos sobre desenvolvimento de software, arquitetura de sistemas, frontend, backend e performance.">
-  <meta property="og:url" content="https://blog.devbroder.com">
-  <meta property="og:image" content="https://blog.devbroder.com/img/og.jpeg">
+  <meta property="og:url" content="https://lab.devbroder.com">
+  <meta property="og:image" content="https://lab.devbroder.com/img/og.jpeg">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="BroderLab - Blog de Tecnologia">
   <meta name="twitter:description"
     content="Artigos sobre desenvolvimento de software, arquitetura de sistemas, frontend, backend e performance.">
-  <meta name="twitter:image" content="https://blog.devbroder.com/images/og-default.jpg">
+  <meta name="twitter:image" content="https://lab.devbroder.com/images/og-default.jpg">
 
-  <link rel="canonical" href="https://blog.devbroder.com">
+  <link rel="canonical" href="https://lab.devbroder.com">
   <link rel="shortcut icon" href="{{ asset("favicon.ico") }}" />
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset("/img/apple-touch-icon.png") }}" />
   <link rel="icon" type="image/png" sizes="32x32" href="{{ asset("/img/favicon-32x32.png") }}" />
