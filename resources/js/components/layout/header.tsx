@@ -39,9 +39,9 @@ export function Header() {
                                 Home
                             </Link>
                             <Link
-                                to="/search"
+                                to="/posts"
                                 className={
-                                    isActive("/search")
+                                    isActive("/posts")
                                         ? "border-primary text-primary border-b text-sm font-medium"
                                         : "text-foreground hover:text-primary text-sm font-medium"
                                 }
@@ -131,9 +131,9 @@ export function Header() {
                             Home
                         </Link>
                         <Link
-                            to="/search"
+                            to="/posts"
                             className={
-                                isActive("/search")
+                                isActive("/posts")
                                     ? "border-primary text-primary border-b text-sm font-medium"
                                     : "text-foreground hover:text-primary text-sm font-medium"
                             }

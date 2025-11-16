@@ -16,17 +16,17 @@ export function TagBadge({ tag }: TagBadgeProps) {
         e.preventDefault();
         e.stopPropagation();
 
-        if (location.pathname === "/search") {
+        if (location.pathname === "/posts") {
             const currentTags = searchParams.get("tags")?.split(",").filter(Boolean) || [];
 
             if (!currentTags.includes(tag.slug)) {
                 const newTags = [...currentTags, tag.slug];
                 const params = new URLSearchParams(searchParams);
                 params.set("tags", newTags.join(","));
-                navigate(`/search?${params.toString()}`, { replace: true });
+                navigate(`/posts?${params.toString()}`, { replace: true });
             }
         } else {
-            navigate(`/search?tags=${tag.slug}`);
+            navigate(`/posts?tags=${tag.slug}`);
         }
     };
 

@@ -12,7 +12,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 const HomePage = lazy(() => import("./pages/home"));
 const PostPage = lazy(() => import("./pages/post-page"));
 const LoginPage = lazy(() => import("./pages/login-page"));
-const SearchPage = lazy(() => import("./pages/search-page"));
+const PostsListPage = lazy(() => import("./pages/posts-page"));
 const TagPage = lazy(() => import("./pages/tag-page"));
 const ErrorPage = lazy(() => import("./pages/error-page"));
 const NotFoundPage = lazy(() => import("./pages/not-found"));
@@ -90,10 +90,10 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
     },
     {
-        path: "/search",
+        path: "/posts",
         element: (
             <SuspenseWrapper>
-                <SearchPage />
+                <PostsListPage />
             </SuspenseWrapper>
         ),
         errorElement: <ErrorPage />,

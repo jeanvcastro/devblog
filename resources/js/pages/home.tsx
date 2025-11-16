@@ -58,7 +58,7 @@ export default function HomePage() {
                     </p>
                     <div className="mt-10">
                         <Link
-                            to="/search"
+                            to="/posts"
                             className="bg-primary text-primary-foreground inline-flex items-center gap-2 rounded-md px-8 py-3 text-base font-medium"
                         >
                             Explorar Conteúdo
