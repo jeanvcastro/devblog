@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { ScrollRestoration } from "react-router-dom";
 import { Footer } from "./footer";
 import { Header } from "./header";
 
@@ -9,6 +10,7 @@ type LayoutProps = {
 export function Layout({ children }: LayoutProps) {
     return (
         <div className="flex min-h-screen flex-col">
+            <ScrollRestoration />
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
