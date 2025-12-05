@@ -1,10 +1,10 @@
 import type { Post, Tag } from "@/@types";
-import { Layout } from "@/layout";
 import { PopularPosts } from "@/components/common/popular-posts";
 import { PostList } from "@/components/common/post-list";
 import { SEO } from "@/components/common/seo";
 import { TagCloud } from "@/components/common/tag-cloud";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Layout } from "@/layout";
 import api from "@/services/api";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -50,11 +50,13 @@ export default function HomePage() {
                 <section className="mb-16 py-20 text-center">
                     <h1 className="text-6xl font-bold tracking-tight md:text-7xl">
                         <span className="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent">
-                            BroderLab
+                            Devbroder Lab
                         </span>
                     </h1>
                     <p className="text-foreground mx-auto mt-8 max-w-3xl text-xl md:text-2xl">
-                        Compartilhamos conhecimento sobre desenvolvimento de software, arquitetura de sistemas, performance, boas práticas e tecnologias modernas
+                        Compartilhamos conhecimento sobre desenvolvimento de
+                        software, arquitetura de sistemas, performance, boas
+                        práticas e tecnologias modernas
                     </p>
                     <div className="mt-10">
                         <Link

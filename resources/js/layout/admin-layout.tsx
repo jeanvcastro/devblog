@@ -79,7 +79,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 <div className="flex h-16 items-center px-6">
                     <Link to="/admin/dashboard">
                         <span className="text-primary text-xl font-bold">
-                            BroderLab Admin
+                            Devbroder Lab Admin
                         </span>
                     </Link>
                 </div>
@@ -123,7 +123,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                                         onClick={() => setOpen(false)}
                                     >
                                         <span className="text-primary text-xl font-bold">
-                                            BroderLab Admin
+                                            Devbroder Lab Admin
                                         </span>
                                     </Link>
                                 </div>

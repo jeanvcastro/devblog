@@ -11,7 +11,7 @@ interface SEOProps {
     tags?: string[];
 }
 
-const DEFAULT_TITLE = "BroderLab - Blog de Tecnologia";
+const DEFAULT_TITLE = "Devbroder Lab - Blog de Tecnologia";
 const DEFAULT_DESCRIPTION =
     "Artigos sobre desenvolvimento de software, arquitetura de sistemas, frontend, backend e performance.";
 const DEFAULT_IMAGE = "https://lab.devbroder.com/images/og-default.jpg";
@@ -27,7 +27,7 @@ export const SEO = ({
     publishedTime,
     tags,
 }: SEOProps) => {
-    const fullTitle = title ? `${title} | BroderLab` : DEFAULT_TITLE;
+    const fullTitle = title ? `${title} | Devbroder Lab` : DEFAULT_TITLE;
     const fullUrl = url.startsWith("http") ? url : `${SITE_URL}${url}`;
 
     return (
