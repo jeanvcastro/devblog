@@ -2,24 +2,33 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $joao = \App\Models\User::create([
-            'name' => 'João Silva',
-            'email' => 'joao@example.com',
-            'password' => bcrypt('password'),
+        $admin = User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@devbroder.com',
+            'password' => Hash::make('password'),
         ]);
-        $joao->assignRole('reader');
+        $admin->assignRole('admin');
 
-        $maria = \App\Models\User::create([
-            'name' => 'Maria Santos',
-            'email' => 'maria@example.com',
-            'password' => bcrypt('password'),
+        $editor = User::create([
+            'name' => 'Editor User',
+            'email' => 'editor@devbroder.com',
+            'password' => Hash::make('password'),
         ]);
-        $maria->assignRole('reader');
+        $editor->assignRole('editor');
+
+        $reader = User::create([
+            'name' => 'Reader User',
+            'email' => 'reader@devbroder.com',
+            'password' => Hash::make('password'),
+        ]);
+        $reader->assignRole('reader');
     }
 }
