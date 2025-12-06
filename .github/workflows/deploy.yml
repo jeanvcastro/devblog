@@ -15,7 +15,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          debug: true
           script: |
             cd /var/www/devblog
             git pull origin main
