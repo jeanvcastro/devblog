@@ -10,9 +10,11 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import api from "@/services/api";
-import { Check, Copy, Trash2, Upload } from "lucide-react";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { Check, Copy, Loader2, Trash2, Upload } from "lucide-react";
+import { ChangeEvent, SyntheticEvent, useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 interface Image {
     filename: string;
@@ -20,6 +22,15 @@ interface Image {
     path: string;
     size: number;
     modified: number;
+}
+
+function centerAspectCrop(mediaWidth: number, mediaHeight: number) {
+    const aspect = mediaWidth / mediaHeight;
+    return centerCrop(
+        makeAspectCrop({ unit: "%", width: 100 }, aspect, mediaWidth, mediaHeight),
+        mediaWidth,
+        mediaHeight,
+    );
 }
 
 export function MediaPage() {
@@ -31,6 +42,12 @@ export function MediaPage() {
     const [isDeleting, setIsDeleting] = useState(false);
     const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const [cropDialogOpen, setCropDialogOpen] = useState(false);
+    const [imgSrc, setImgSrc] = useState("");
+    const [crop, setCrop] = useState<Crop>();
+    const [originalFile, setOriginalFile] = useState<File | null>(null);
+    const imgRef = useRef<HTMLImageElement>(null);
 
     useEffect(() => {
         fetchImages();
@@ -49,30 +66,104 @@ export function MediaPage() {
         }
     };
 
-    const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        setOriginalFile(file);
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            setImgSrc(reader.result?.toString() || "");
+            setCropDialogOpen(true);
+        });
+        reader.readAsDataURL(file);
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
+    const onImageLoad = useCallback((e: SyntheticEvent<HTMLImageElement>) => {
+        const { width, height } = e.currentTarget;
+        setCrop(centerAspectCrop(width, height));
+    }, []);
+
+    const getCroppedImg = async (): Promise<Blob | null> => {
+        const image = imgRef.current;
+        if (!image || !crop) return null;
+
+        const canvas = document.createElement("canvas");
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+
+        const pixelCrop = {
+            x: (crop.x / 100) * image.width * scaleX,
+            y: (crop.y / 100) * image.height * scaleY,
+            width: (crop.width / 100) * image.width * scaleX,
+            height: (crop.height / 100) * image.height * scaleY,
+        };
+
+        canvas.width = pixelCrop.width;
+        canvas.height = pixelCrop.height;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return null;
+
+        ctx.drawImage(
+            image,
+            pixelCrop.x,
+            pixelCrop.y,
+            pixelCrop.width,
+            pixelCrop.height,
+            0,
+            0,
+            pixelCrop.width,
+            pixelCrop.height,
+        );
+
+        return new Promise(resolve => {
+            canvas.toBlob(blob => resolve(blob), "image/jpeg", 0.9);
+        });
+    };
+
+    const handleUpload = async () => {
+        if (!originalFile) return;
+
         try {
             setUploading(true);
+            const croppedBlob = await getCroppedImg();
+
             const formData = new FormData();
-            formData.append("image", file);
+            if (croppedBlob) {
+                const ext = originalFile.name.split(".").pop() || "jpg";
+                const filename = originalFile.name.replace(/\.[^/.]+$/, "") + "_cropped." + ext;
+                formData.append("image", croppedBlob, filename);
+            } else {
+                formData.append("image", originalFile);
+            }
 
             await api.post("/images/upload", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
             toast.success("Imagem enviada com sucesso!");
+            setCropDialogOpen(false);
+            setImgSrc("");
+            setOriginalFile(null);
             fetchImages();
         } catch (error) {
             console.error("Erro ao fazer upload:", error);
             toast.error("Erro ao enviar imagem");
         } finally {
             setUploading(false);
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
-            }
         }
+    };
+
+    const handleCancelCrop = () => {
+        setCropDialogOpen(false);
+        setImgSrc("");
+        setOriginalFile(null);
+        setCrop(undefined);
     };
 
     const handleCopyUrl = async (url: string) => {
@@ -153,7 +244,7 @@ export function MediaPage() {
                         <input
                             type="file"
                             ref={fileInputRef}
-                            onChange={handleUpload}
+                            onChange={handleFileSelect}
                             accept="image/*"
                             className="hidden"
                         />
@@ -162,7 +253,7 @@ export function MediaPage() {
                             disabled={uploading}
                         >
                             <Upload className="mr-2 h-4 w-4" />
-                            {uploading ? "Enviando..." : "Upload Imagem"}
+                            Upload Imagem
                         </Button>
                     </div>
                 </div>
@@ -286,6 +377,45 @@ export function MediaPage() {
                             disabled={isDeleting}
                         >
                             {isDeleting ? "Excluindo..." : "Excluir"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={cropDialogOpen} onOpenChange={setCropDialogOpen}>
+                <DialogContent className="max-w-[95vw] sm:max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>Recortar imagem</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex justify-center">
+                        {imgSrc && (
+                            <ReactCrop
+                                crop={crop}
+                                onChange={(_, percentCrop) => setCrop(percentCrop)}
+                            >
+                                <img
+                                    ref={imgRef}
+                                    src={imgSrc}
+                                    alt="Crop"
+                                    onLoad={onImageLoad}
+                                    style={{ maxHeight: "60vh", maxWidth: "100%" }}
+                                />
+                            </ReactCrop>
+                        )}
+                    </div>
+                    <DialogFooter>
+                        <Button
+                            variant="outline"
+                            onClick={handleCancelCrop}
+                            disabled={uploading}
+                        >
+                            Cancelar
+                        </Button>
+                        <Button onClick={handleUpload} disabled={uploading}>
+                            {uploading && (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            Enviar
                         </Button>
                     </DialogFooter>
                 </DialogContent>
