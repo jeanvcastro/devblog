@@ -126,7 +126,7 @@ export function CommentSection({
     }
 
     return (
-        <div className="space-y-8">
+        <div id="comments" className="space-y-8">
             <div>
                 <h3 className="mb-6 text-2xl font-bold">
                     Comentários ({comments.length})

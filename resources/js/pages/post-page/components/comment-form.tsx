@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/auth-context";
 import { FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface CommentFormProps {
     postUuid: string;
@@ -19,6 +19,7 @@ export function CommentForm({
     const [content, setContent] = useState("");
     const [submitting, setSubmitting] = useState(false);
     const { isAuthenticated } = useAuth();
+    const location = useLocation();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -36,13 +37,14 @@ export function CommentForm({
     };
 
     if (!isAuthenticated) {
+        const loginUrl = `/login?from=${encodeURIComponent(location.pathname + "#comments")}`;
         return (
             <div className="bg-muted rounded-lg p-6 text-center">
                 <p className="text-muted-foreground mb-4">
                     Você precisa estar logado para comentar.
                 </p>
                 <Button asChild>
-                    <Link to="/login">Fazer Login</Link>
+                    <Link to={loginUrl}>Fazer Login</Link>
                 </Button>
             </div>
         );

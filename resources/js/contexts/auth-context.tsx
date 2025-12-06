@@ -46,7 +46,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
             if (token && userJson) {
                 tokenService.set(token);
                 setUser(JSON.parse(userJson));
-                window.history.replaceState({}, '', '/');
+                const redirectUrl = sessionStorage.getItem('loginRedirect') || '/';
+                sessionStorage.removeItem('loginRedirect');
+                if (redirectUrl !== '/') {
+                    window.location.replace(redirectUrl);
+                } else {
+                    window.history.replaceState({}, '', '/');
+                }
                 setLoading(false);
                 return true;
             }

@@ -6,9 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/auth-context";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -22,6 +22,15 @@ export default function LoginPage() {
     const [error, setError] = useState("");
     const { loginAdmin, loginGoogle } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const from = params.get("from");
+        if (from) {
+            sessionStorage.setItem("loginRedirect", from);
+        }
+    }, [location.search]);
 
     const {
         register,
@@ -54,11 +63,31 @@ export default function LoginPage() {
                     <div className="text-center">
                         <h1 className="text-3xl font-bold">Login</h1>
                         <p className="text-muted-foreground mt-2">
-                            Entre com suas credenciais ou Google
+                            Use sua conta Google para comentar nos artigos
                         </p>
                     </div>
 
                     <div className="space-y-4">
+                        <Button
+                            variant="outline"
+                            onClick={loginGoogle}
+                            className="w-full gap-2"
+                        >
+                            <GoogleIcon />
+                            Google
+                        </Button>
+
+                        <div className="relative">
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="border-border w-full border-t" />
+                            </div>
+                            <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-background text-muted-foreground px-2">
+                                    Acesso administrativo
+                                </span>
+                            </div>
+                        </div>
+
                         <form
                             onSubmit={handleSubmit(onSubmit)}
                             className="space-y-4"
@@ -107,26 +136,6 @@ export default function LoginPage() {
                                 {isSubmitting ? "Entrando..." : "Entrar"}
                             </Button>
                         </form>
-
-                        <div className="relative">
-                            <div className="absolute inset-0 flex items-center">
-                                <span className="border-border w-full border-t" />
-                            </div>
-                            <div className="relative flex justify-center text-xs uppercase">
-                                <span className="bg-background text-muted-foreground px-2">
-                                    Ou continue com
-                                </span>
-                            </div>
-                        </div>
-
-                        <Button
-                            variant="outline"
-                            onClick={loginGoogle}
-                            className="w-full gap-2"
-                        >
-                            <GoogleIcon />
-                            Google
-                        </Button>
                     </div>
                 </div>
             </div>
