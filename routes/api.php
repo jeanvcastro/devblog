@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
 
     Route::put('/profile', [ProfileController::class, 'update']);
     Route::post('/profile/avatar', [ProfileController::class, 'uploadAvatar']);
+    Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar']);
     Route::put('/profile/password', [ProfileController::class, 'changePassword']);
     Route::delete('/profile/google', [ProfileController::class, 'unlinkGoogle']);
 

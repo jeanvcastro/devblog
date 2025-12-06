@@ -5,103 +5,93 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $users = User::with('roles')
-            ->orderBy('name')
-            ->get()
-            ->map(fn ($user) => [
-                'uuid' => $user->uuid,
-                'name' => $user->name,
-                'email' => $user->email,
-                'avatar' => $user->avatar,
-                'role' => $user->roles->first()?->name,
-                'created_at' => $user->created_at,
-            ]);
+        $query = User::with("roles")->orderBy("name");
 
-        return response()->json($users);
+        if ($search = $request->input("q")) {
+            $query->where(function ($q) use ($search) {
+                $q->where("name", "like", "%{$search}%")->orWhere(
+                    "email",
+                    "like",
+                    "%{$search}%",
+                );
+            });
+        }
+
+        if ($role = $request->input("role")) {
+            $query->whereHas("roles", fn($q) => $q->where("name", $role));
+        }
+
+        return UserResource::collection($query->paginate(10));
     }
 
-    public function store(StoreUserRequest $request): JsonResponse
+    public function store(StoreUserRequest $request): UserResource
     {
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => Hash::make($request->password),
         ]);
 
         $user->assignRole($request->role);
+        $user->load("roles");
 
-        return response()->json([
-            'uuid' => $user->uuid,
-            'name' => $user->name,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'role' => $request->role,
-        ], 201);
+        return new UserResource($user);
     }
 
-    public function show(User $user): JsonResponse
+    public function show(User $user): UserResource
     {
-        return response()->json([
-            'uuid' => $user->uuid,
-            'name' => $user->name,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'role' => $user->roles->first()?->name,
-            'created_at' => $user->created_at,
-        ]);
+        $user->load("roles");
+
+        return new UserResource($user);
     }
 
-    public function update(UpdateUserRequest $request, User $user): JsonResponse
+    public function update(UpdateUserRequest $request, User $user): UserResource
     {
-        $data = $request->only(['name', 'email']);
+        $user->update($request->only(["name", "email"]));
 
-        $user->update($data);
-
-        if ($request->filled('role')) {
+        if ($request->filled("role")) {
             $user->syncRoles([$request->role]);
         }
 
-        return response()->json([
-            'uuid' => $user->uuid,
-            'name' => $user->name,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'role' => $user->roles->first()?->name,
-        ]);
+        $user->load("roles");
+
+        return new UserResource($user);
     }
 
     public function destroy(User $user): JsonResponse
     {
-        $this->authorize('delete', $user);
+        $this->authorize("delete", $user);
 
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully']);
+        return response()->json(["message" => "User deleted successfully"]);
     }
 
     public function resetPassword(Request $request, User $user): JsonResponse
     {
-        $this->authorize('update', $user);
+        $this->authorize("update", $user);
 
         $request->validate([
-            'password' => 'required|string|min:8',
+            "password" => "required|string|min:8",
         ]);
 
         $user->update([
-            'password' => Hash::make($request->password),
+            "password" => Hash::make($request->password),
         ]);
 
         return response()->json([
-            'message' => 'Password reset successfully',
+            "message" => "Password reset successfully",
         ]);
     }
 }

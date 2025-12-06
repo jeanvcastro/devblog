@@ -1,14 +1,20 @@
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 import { useAuth } from "@/contexts/auth-context";
-import { Menu, X } from "lucide-react";
+import { getAvatarUrl } from "@/utils/avatar";
+import { ChevronDown, LayoutDashboard, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/logo.svg?react";
 
 export function Header() {
-    const { user, isAuthenticated, logout } = useAuth();
+    const { user, isAuthenticated, logout, canManagePosts } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
 
@@ -23,7 +29,7 @@ export function Header() {
                 <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center gap-8">
                         <Link to="/" className="flex items-center">
-                            <Logo className="text-foreground h-6" />
+                            <Logo className="h-6 text-black dark:text-white" />
                         </Link>
 
                         <nav className="hidden items-center gap-6 md:flex">
@@ -47,53 +53,65 @@ export function Header() {
                             >
                                 Artigos
                             </Link>
-                            {user?.is_admin && (
-                                <Link
-                                    to="/admin/dashboard"
-                                    className={
-                                        isActive("/admin")
-                                            ? "border-primary text-primary border-b text-sm font-medium"
-                                            : "text-foreground hover:text-primary text-sm font-medium"
-                                    }
-                                >
-                                    Dashboard
-                                </Link>
-                            )}
                         </nav>
                     </div>
 
                     <div className="flex items-center gap-4">
                         <ThemeToggle />
 
-                        <div className="hidden items-center gap-4 md:flex">
+                        <div className="hidden items-center md:flex">
                             {isAuthenticated ? (
-                                <>
-                                    <div className="flex items-center gap-2">
-                                        <Avatar className="ring-background h-8 w-8 ring-2">
-                                            <AvatarImage
-                                                src={user?.avatar || undefined}
-                                                alt={user?.name}
-                                            />
-                                            <AvatarFallback className="bg-primary text-primary-foreground">
-                                                {user?.name
-                                                    .charAt(0)
-                                                    .toUpperCase()}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <span className="text-muted-foreground text-sm">
-                                            {user?.name}
-                                        </span>
-                                    </div>
-
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => logout()}
-                                        className="hover:text-primary"
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            className="flex h-12 items-center gap-2 px-2"
+                                        >
+                                            <Avatar className="h-8 w-8">
+                                                <AvatarImage
+                                                    src={
+                                                        user
+                                                            ? getAvatarUrl(
+                                                                  user.name,
+                                                                  user.avatar,
+                                                              )
+                                                            : undefined
+                                                    }
+                                                />
+                                                <AvatarFallback className="bg-primary text-primary-foreground">
+                                                    {user?.name
+                                                        ?.charAt(0)
+                                                        .toUpperCase()}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <span className="text-muted-foreground text-sm">
+                                                {user?.name}
+                                            </span>
+                                            <ChevronDown className="text-muted-foreground h-4 w-4" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent
+                                        align="end"
+                                        className="w-48 p-2"
                                     >
-                                        Sair
-                                    </Button>
-                                </>
+                                        {canManagePosts && (
+                                            <Link
+                                                to="/admin/dashboard"
+                                                className="hover:bg-accent flex items-center gap-2 rounded-md px-3 py-2 text-sm"
+                                            >
+                                                <LayoutDashboard className="h-4 w-4" />
+                                                Dashboard
+                                            </Link>
+                                        )}
+                                        <button
+                                            onClick={() => logout()}
+                                            className="hover:bg-accent flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-500"
+                                        >
+                                            <LogOut className="h-4 w-4" />
+                                            Sair
+                                        </button>
+                                    </PopoverContent>
+                                </Popover>
                             ) : (
                                 <Button asChild>
                                     <Link to="/login">Login</Link>
@@ -117,61 +135,59 @@ export function Header() {
                 </div>
 
                 {mobileMenuOpen && (
-                    <nav className="border-border flex flex-col items-center gap-4 border-t py-6 md:hidden">
+                    <nav className="border-border flex flex-col gap-2 border-t py-4 md:hidden">
                         <Link
                             to="/"
-                            className={
+                            className={`px-3 py-2 text-sm font-medium ${
                                 isActive("/")
-                                    ? "border-primary text-primary border-b text-sm font-medium"
-                                    : "text-foreground hover:text-primary text-sm font-medium"
-                            }
+                                    ? "text-primary border-primary border-l-2"
+                                    : "hover:text-primary"
+                            }`}
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             Home
                         </Link>
                         <Link
                             to="/posts"
-                            className={
+                            className={`px-3 py-2 text-sm font-medium ${
                                 isActive("/posts")
-                                    ? "border-primary text-primary border-b text-sm font-medium"
-                                    : "text-foreground hover:text-primary text-sm font-medium"
-                            }
+                                    ? "text-primary border-primary border-l-2"
+                                    : "hover:text-primary"
+                            }`}
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             Artigos
                         </Link>
-                        {user?.is_admin && (
-                            <Link
-                                to="/admin/dashboard"
-                                className={
-                                    isActive("/admin")
-                                        ? "border-primary text-primary border-b text-sm font-medium"
-                                        : "text-foreground hover:text-primary text-sm font-medium"
-                                }
-                            >
-                                Dashboard
-                            </Link>
-                        )}
+                        <div className="border-border my-2 border-t" />
                         {isAuthenticated ? (
-                            <Button
-                                size="sm"
-                                onClick={() => {
-                                    logout();
-                                    setMobileMenuOpen(false);
-                                }}
-                                className="hover:text-primary"
-                            >
-                                Sair
-                            </Button>
-                        ) : (
-                            <Button size="sm" asChild>
-                                <Link
-                                    to="/login"
-                                    onClick={() => setMobileMenuOpen(false)}
+                            <>
+                                {canManagePosts && (
+                                    <Link
+                                        to="/admin/dashboard"
+                                        className="hover:bg-accent rounded-md px-3 py-2 text-sm font-medium"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        Dashboard
+                                    </Link>
+                                )}
+                                <button
+                                    onClick={() => {
+                                        logout();
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="rounded-md px-3 py-2 text-left text-sm font-medium text-red-500"
                                 >
-                                    Login
-                                </Link>
-                            </Button>
+                                    Sair
+                                </button>
+                            </>
+                        ) : (
+                            <Link
+                                to="/login"
+                                className="hover:bg-accent rounded-md px-3 py-2 text-sm font-medium"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                Login
+                            </Link>
                         )}
                     </nav>
                 )}

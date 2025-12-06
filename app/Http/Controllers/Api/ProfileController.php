@@ -19,11 +19,13 @@ class ProfileController extends Controller
         $user->update($request->only(['name']));
 
         return response()->json([
-            'uuid' => $user->uuid,
-            'name' => $user->name,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'role' => $user->roles->first()?->name,
+            'user' => [
+                'uuid' => $user->uuid,
+                'name' => $user->name,
+                'email' => $user->email,
+                'avatar' => $user->avatar,
+                'role' => $user->roles->first()?->name,
+            ],
         ]);
     }
 
@@ -51,11 +53,13 @@ class ProfileController extends Controller
         $user->update(['avatar' => $url]);
 
         return response()->json([
-            'uuid' => $user->uuid,
-            'name' => $user->name,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'role' => $user->roles->first()?->name,
+            'user' => [
+                'uuid' => $user->uuid,
+                'name' => $user->name,
+                'email' => $user->email,
+                'avatar' => $user->avatar,
+                'role' => $user->roles->first()?->name,
+            ],
         ]);
     }
 
@@ -105,6 +109,31 @@ class ProfileController extends Controller
 
         return response()->json([
             'message' => 'Google account unlinked successfully.',
+        ]);
+    }
+
+    public function deleteAvatar(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user->avatar && str_contains($user->avatar, 'images/avatars/')) {
+            $oldPath = parse_url($user->avatar, PHP_URL_PATH);
+            $oldPath = ltrim(str_replace('/storage/', '', $oldPath), '/');
+            if (Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
+        }
+
+        $user->update(['avatar' => null]);
+
+        return response()->json([
+            'user' => [
+                'uuid' => $user->uuid,
+                'name' => $user->name,
+                'email' => $user->email,
+                'avatar' => null,
+                'role' => $user->roles->first()?->name,
+            ],
         ]);
     }
 }

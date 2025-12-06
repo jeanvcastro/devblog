@@ -9,7 +9,7 @@ export function Footer() {
             <div className="container mx-auto max-w-7xl px-4 py-12">
                 <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
                     <div className="flex flex-col items-center gap-2 md:items-start">
-                        <Logo className="text-foreground h-6" />
+                        <Logo className="h-6 text-black dark:text-white" />
                         <p className="text-muted-foreground text-sm">
                             © {currentYear} Todos os direitos reservados.
                         </p>

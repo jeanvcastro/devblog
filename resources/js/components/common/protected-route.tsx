@@ -1,17 +1,18 @@
+import { Role } from "@/@types";
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/auth-context";
 
 type ProtectedRouteProps = {
   children: ReactNode;
-  requireAdmin?: boolean;
+  allowedRoles?: Role[];
 };
 
 export function ProtectedRoute({
   children,
-  requireAdmin = false,
+  allowedRoles,
 }: ProtectedRouteProps) {
-  const { isAuthenticated, is_admin, loading } = useAuth();
+  const { isAuthenticated, role, loading } = useAuth();
 
   if (loading) {
     return (
@@ -28,7 +29,7 @@ export function ProtectedRoute({
     return <Navigate to="/login" replace />;
   }
 
-  if (requireAdmin && !is_admin) {
+  if (allowedRoles && role && !allowedRoles.includes(role)) {
     return <Navigate to="/" replace />;
   }
 

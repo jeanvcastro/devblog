@@ -49,7 +49,7 @@ export default function HomePage() {
             <div className="container mx-auto max-w-7xl px-4 py-8">
                 {/* Hero Section */}
                 <section className="mb-16 py-20 text-center">
-                    <Logo className="text-foreground ml-4 inline-block sm:h-12 md:h-16" />
+                    <Logo className="ml-4 inline-block text-black sm:h-12 md:h-16 dark:text-white" />
                     <p className="text-foreground mx-auto mt-8 max-w-3xl text-xl md:text-2xl">
                         Compartilhamos conhecimento sobre desenvolvimento de
                         software, arquitetura de sistemas, performance, boas

@@ -48,6 +48,14 @@ const AnalyticsPage = lazy(() =>
 const MediaPage = lazy(() =>
     import("./pages/admin/media-page").then(m => ({ default: m.MediaPage })),
 );
+const ProfilePage = lazy(() =>
+    import("./pages/admin/profile-page").then(m => ({
+        default: m.ProfilePage,
+    })),
+);
+const UsersPage = lazy(() =>
+    import("./pages/admin/users-page").then(m => ({ default: m.UsersPage })),
+);
 
 const SuspenseWrapper = ({ children }: { children: ReactNode }) => (
     <Suspense fallback={<PageLoader />}>{children}</Suspense>
@@ -112,7 +120,7 @@ const router = createBrowserRouter([
         path: "/admin/dashboard",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                     <DashboardPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -123,7 +131,7 @@ const router = createBrowserRouter([
         path: "/admin/posts",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute allowedRoles={['editor', 'admin', 'superadmin']}>
                     <PostsPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -134,7 +142,7 @@ const router = createBrowserRouter([
         path: "/admin/posts/new",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute allowedRoles={['editor', 'admin', 'superadmin']}>
                     <PostsNewPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -145,7 +153,7 @@ const router = createBrowserRouter([
         path: "/admin/posts/:uuid/edit",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute allowedRoles={['editor', 'admin', 'superadmin']}>
                     <PostsEditPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -156,7 +164,7 @@ const router = createBrowserRouter([
         path: "/admin/comments",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                     <CommentsPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -167,7 +175,7 @@ const router = createBrowserRouter([
         path: "/admin/analytics",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                     <AnalyticsPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -178,8 +186,30 @@ const router = createBrowserRouter([
         path: "/admin/media",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
                     <MediaPage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/admin/profile",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute allowedRoles={['editor', 'admin', 'superadmin']}>
+                    <ProfilePage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/admin/users",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute allowedRoles={['superadmin']}>
+                    <UsersPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
         ),

@@ -1,10 +1,11 @@
-import { User } from "@/@types";
+import { Role, User } from "@/@types";
 import api, { tokenService } from "@/services/api";
 import {
     createContext,
     ReactNode,
     useContext,
     useEffect,
+    useMemo,
     useState,
 } from "react";
 
@@ -14,8 +15,16 @@ type AuthContextType = {
     loginAdmin: (email: string, password: string) => Promise<void>;
     loginGoogle: () => void;
     logout: () => Promise<void>;
+    updateUser: (user: User) => void;
     isAuthenticated: boolean;
-    is_admin: boolean;
+    role: Role | null;
+    isReader: boolean;
+    isEditor: boolean;
+    isAdmin: boolean;
+    isSuperAdmin: boolean;
+    canManagePosts: boolean;
+    canApproveComments: boolean;
+    canManageUsers: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -99,15 +108,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     };
 
-    const value = {
-        user,
-        loading,
-        loginAdmin,
-        loginGoogle,
-        logout,
-        isAuthenticated: !!user,
-        is_admin: user?.is_admin ?? false,
+    const updateUser = (updatedUser: User) => {
+        setUser(updatedUser);
     };
+
+    const value = useMemo(() => {
+        const role = user?.role ?? null;
+        return {
+            user,
+            loading,
+            loginAdmin,
+            loginGoogle,
+            logout,
+            updateUser,
+            isAuthenticated: !!user,
+            role,
+            isReader: role === 'reader',
+            isEditor: role === 'editor',
+            isAdmin: role === 'admin',
+            isSuperAdmin: role === 'superadmin',
+            canManagePosts: ['editor', 'admin', 'superadmin'].includes(role ?? ''),
+            canApproveComments: ['admin', 'superadmin'].includes(role ?? ''),
+            canManageUsers: role === 'superadmin',
+        };
+    }, [user, loading]);
 
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

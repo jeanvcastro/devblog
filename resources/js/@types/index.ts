@@ -1,9 +1,12 @@
+export type Role = 'reader' | 'editor' | 'admin' | 'superadmin';
+
 export type User = {
   uuid: string;
   name: string;
   email: string;
   avatar: string | null;
-  is_admin: boolean;
+  role: Role;
+  created_at?: string;
 };
 
 export type Tag = {
