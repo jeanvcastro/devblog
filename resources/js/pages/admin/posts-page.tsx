@@ -65,14 +65,13 @@ export function PostsPage() {
         setLoading(true);
 
         const params = new URLSearchParams();
-        params.append("include_drafts", "true");
         if (searchQuery) params.append("q", searchQuery);
         if (statusFilter !== "all") params.append("status", statusFilter);
         if (tagFilter !== "all") params.append("tags", tagFilter);
         params.append("page", currentPage.toString());
 
         const response = await api.get<{ data: Post[]; last_page: number }>(
-          `/posts/search?${params.toString()}`
+          `/admin/posts?${params.toString()}`
         );
 
         setPosts(response.data.data || []);

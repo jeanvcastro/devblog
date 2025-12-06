@@ -14,7 +14,7 @@ import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/logo.svg?react";
 
 export function Header() {
-    const { user, isAuthenticated, logout, canManagePosts } = useAuth();
+    const { user, isAuthenticated, logout, canManagePosts, isAdmin, isSuperAdmin } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
 
@@ -96,11 +96,11 @@ export function Header() {
                                     >
                                         {canManagePosts && (
                                             <Link
-                                                to="/admin/dashboard"
+                                                to={isAdmin || isSuperAdmin ? "/admin/dashboard" : "/admin/posts"}
                                                 className="hover:bg-accent flex items-center gap-2 rounded-md px-3 py-2 text-sm"
                                             >
                                                 <LayoutDashboard className="h-4 w-4" />
-                                                Dashboard
+                                                Admin
                                             </Link>
                                         )}
                                         <button
@@ -163,11 +163,11 @@ export function Header() {
                             <>
                                 {canManagePosts && (
                                     <Link
-                                        to="/admin/dashboard"
-                                        className="hover:bg-accent rounded-md px-3 py-2 text-sm font-medium"
+                                        to={isAdmin || isSuperAdmin ? "/admin/dashboard" : "/admin/posts"}
+                                        className="hover:text-primary px-3 py-2 text-sm font-medium"
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
-                                        Dashboard
+                                        Admin
                                     </Link>
                                 )}
                                 <button

@@ -50,6 +50,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     });
 
     Route::middleware('admin')->group(function () {
+        Route::get('/admin/posts', [PostController::class, 'adminIndex']);
         Route::post('/posts', [PostController::class, 'store']);
         Route::put('/posts/{post:uuid}', [PostController::class, 'update']);
         Route::delete('/posts/{post:uuid}', [PostController::class, 'destroy']);

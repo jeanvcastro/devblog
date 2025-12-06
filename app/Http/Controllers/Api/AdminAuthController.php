@@ -23,7 +23,7 @@ class AdminAuthController extends Controller
             ]);
         }
 
-        if (! $user->hasAnyRole(['admin', 'superadmin'])) {
+        if (! $user->hasAnyRole(['editor', 'admin', 'superadmin'])) {
             throw ValidationException::withMessages([
                 'email' => ['Access denied. Admin privileges required.'],
             ]);

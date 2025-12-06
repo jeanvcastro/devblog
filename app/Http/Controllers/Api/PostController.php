@@ -62,6 +62,40 @@ class PostController extends Controller
             ->get();
     }
 
+    public function adminIndex(Request $request)
+    {
+        $query = Post::with(["author", "tags"]);
+
+        $user = Auth::user();
+        if ($user->hasRole("editor")) {
+            $query->where("author_id", $user->id);
+        }
+
+        if ($search = $request->get("q")) {
+            $query->where(function ($q) use ($search) {
+                $q->where("title", "like", "%{$search}%")
+                  ->orWhere("content", "like", "%{$search}%");
+            });
+        }
+
+        if ($status = $request->get("status")) {
+            if ($status !== "all") {
+                $query->where("status", $status);
+            }
+        }
+
+        if ($tags = $request->get("tags")) {
+            $tagSlugs = explode(",", $tags);
+            foreach ($tagSlugs as $slug) {
+                $query->whereHas("tags", function ($q) use ($slug) {
+                    $q->where("slug", trim($slug));
+                });
+            }
+        }
+
+        return $query->orderBy("created_at", "desc")->paginate(10);
+    }
+
     public function search(Request $request)
     {
         $search = $request->get("q");
@@ -120,6 +154,8 @@ class PostController extends Controller
 
     public function update(UpdatePostRequest $request, Post $post)
     {
+        $this->authorize("update", $post);
+
         $validated = $request->validated();
 
         $tagUuids = $validated["tags"] ?? null;
