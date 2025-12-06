@@ -63,6 +63,7 @@ export function PostEditor({
         tags: initialData?.tags || [],
         reading_time: initialData?.reading_time || 0,
     });
+    const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!initialData?.slug);
 
     const slugify = (text: string): string => {
         return text
@@ -76,13 +77,13 @@ export function PostEditor({
     };
 
     useEffect(() => {
-        if (!initialData && formData.title && !formData.slug) {
+        if (!slugManuallyEdited && formData.title) {
             setFormData(prev => ({
                 ...prev,
                 slug: slugify(prev.title),
             }));
         }
-    }, [formData.title, formData.slug, initialData]);
+    }, [formData.title, slugManuallyEdited]);
 
     useEffect(() => {
         if (formData.content) {
@@ -135,12 +136,13 @@ export function PostEditor({
                         <Input
                             id="slug"
                             value={formData.slug}
-                            onChange={e =>
+                            onChange={e => {
+                                setSlugManuallyEdited(true);
                                 setFormData(prev => ({
                                     ...prev,
                                     slug: e.target.value,
-                                }))
-                            }
+                                }));
+                            }}
                             placeholder="slug-do-post"
                             required
                         />
