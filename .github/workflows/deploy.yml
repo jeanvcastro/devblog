@@ -16,6 +16,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            export PATH="/root/.local/share/pnpm:/root/.nvm/versions/node/v20.19.1/bin:$PATH"
             cd /var/www/devblog
             git pull origin main
             /root/.local/share/pnpm/pnpm install
