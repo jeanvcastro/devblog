@@ -23,7 +23,7 @@ class Post extends Model
         'reading_time',
     ];
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id', 'author_id'];
 
     protected $casts = [
         'published_at' => 'datetime',

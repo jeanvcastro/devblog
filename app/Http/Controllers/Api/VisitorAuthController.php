@@ -58,13 +58,17 @@ class VisitorAuthController extends Controller
             $userData
         );
 
+        if (!$user->hasAnyRole(['reader', 'editor', 'admin', 'superadmin'])) {
+            $user->assignRole('reader');
+        }
+
         $token = $user->createToken('visitor-token')->plainTextToken;
         $userData = [
             'uuid' => $user->uuid,
             'name' => $user->name,
             'email' => $user->email,
             'avatar' => $user->avatar,
-            'is_admin' => $user->is_admin,
+            'role' => $user->roles->first()?->name,
         ];
 
         $redirectUrl = sprintf(
@@ -96,7 +100,7 @@ class VisitorAuthController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'avatar' => $user->avatar,
-            'is_admin' => $user->is_admin,
+            'role' => $user->roles->first()?->name,
         ]);
     }
 }

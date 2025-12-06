@@ -18,7 +18,7 @@ class PostView extends Model
         'visited_at',
     ];
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id', 'post_id', 'user_id', 'visitor_hash'];
 
     protected $casts = [
         'visited_at' => 'datetime',

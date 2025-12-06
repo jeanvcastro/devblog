@@ -11,7 +11,7 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = \App\Models\User::where('is_admin', true)->first();
+        $admin = \App\Models\User::role('superadmin')->first();
 
         $arquitetura = \App\Models\Tag::where('slug', 'arquitetura')->first();
         $frontend = \App\Models\Tag::where('slug', 'frontend')->first();

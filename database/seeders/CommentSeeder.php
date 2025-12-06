@@ -12,7 +12,7 @@ class CommentSeeder extends Seeder
     public function run(): void
     {
         $posts = \App\Models\Post::all();
-        $users = \App\Models\User::where('is_admin', false)->get();
+        $users = \App\Models\User::role('reader')->get();
 
         foreach ($posts->take(5) as $post) {
             foreach ($users as $user) {

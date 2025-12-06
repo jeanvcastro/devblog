@@ -5,7 +5,9 @@ use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\ImageUploadController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PostViewController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\TagController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VisitorAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +39,11 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::post('/auth/logout', [VisitorAuthController::class, 'logout']);
     Route::get('/auth/me', [VisitorAuthController::class, 'me']);
 
+    Route::put('/profile', [ProfileController::class, 'update']);
+    Route::post('/profile/avatar', [ProfileController::class, 'uploadAvatar']);
+    Route::put('/profile/password', [ProfileController::class, 'changePassword']);
+    Route::delete('/profile/google', [ProfileController::class, 'unlinkGoogle']);
+
     Route::middleware('throttle:comments')->group(function () {
         Route::post('/comments', [CommentController::class, 'store']);
     });
@@ -61,5 +68,14 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
 
         Route::get('/images', [ImageUploadController::class, 'index']);
         Route::delete('/images/{filename}', [ImageUploadController::class, 'delete']);
+    });
+
+    Route::middleware('role:superadmin')->group(function () {
+        Route::get('/admin/users', [UserController::class, 'index']);
+        Route::post('/admin/users', [UserController::class, 'store']);
+        Route::get('/admin/users/{user:uuid}', [UserController::class, 'show']);
+        Route::put('/admin/users/{user:uuid}', [UserController::class, 'update']);
+        Route::delete('/admin/users/{user:uuid}', [UserController::class, 'destroy']);
+        Route::put('/admin/users/{user:uuid}/password', [UserController::class, 'resetPassword']);
     });
 });

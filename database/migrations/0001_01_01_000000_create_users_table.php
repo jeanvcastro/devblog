@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->string("password")->nullable();
             $table->string("avatar")->nullable();
             $table->string("google_id")->nullable()->unique();
-            $table->boolean("is_admin")->default(false);
             $table->string("utm_source")->nullable();
             $table->string("utm_medium")->nullable();
             $table->string("utm_campaign")->nullable();

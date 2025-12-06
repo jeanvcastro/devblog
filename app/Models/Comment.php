@@ -19,7 +19,7 @@ class Comment extends Model
         'approved',
     ];
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id', 'post_id', 'user_id', 'parent_id'];
 
     protected $casts = [
         'approved' => 'boolean',

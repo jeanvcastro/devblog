@@ -10,12 +10,12 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
+        $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@techblog.com',
             'password' => Hash::make('password'),
-            'is_admin' => true,
-            'avatar' => 'https://ui-avatars.com/api/?name=Admin&background=FF4800&color=fff',
         ]);
+
+        $admin->assignRole('superadmin');
     }
 }

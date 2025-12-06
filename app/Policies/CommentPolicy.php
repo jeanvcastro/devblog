@@ -13,7 +13,7 @@ class CommentPolicy
      */
     public function viewAny(?User $user): bool
     {
-        return $user && $user->is_admin;
+        return $user && $user->canApproveComments();
     }
 
     public function view(?User $user, Comment $comment): bool
@@ -28,26 +28,26 @@ class CommentPolicy
 
     public function update(User $user, Comment $comment): bool
     {
-        return $user->is_admin || $user->id === $comment->user_id;
+        return $user->canApproveComments() || $user->id === $comment->user_id;
     }
 
     public function delete(User $user, Comment $comment): bool
     {
-        return $user->is_admin || $user->id === $comment->user_id;
+        return $user->canApproveComments() || $user->id === $comment->user_id;
     }
 
     public function restore(User $user, Comment $comment): bool
     {
-        return $user->is_admin;
+        return $user->canApproveComments();
     }
 
     public function forceDelete(User $user, Comment $comment): bool
     {
-        return $user->is_admin;
+        return $user->canApproveComments();
     }
 
     public function approve(User $user): bool
     {
-        return $user->is_admin;
+        return $user->canApproveComments();
     }
 }

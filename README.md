@@ -12,7 +12,9 @@ Plataforma para compartilhar conhecimento sobre design de sistemas, arquitetura 
 
 - Laravel 11
 - MySQL
+- Laravel Sanctum (autenticação API)
 - Laravel Socialite (OAuth Google)
+- Spatie Laravel Permission (roles e permissões)
 
 ### Frontend
 
@@ -33,6 +35,16 @@ Plataforma para compartilhar conhecimento sobre design de sistemas, arquitetura 
 - Painel administrativo completo
 - Syntax highlighting para código
 - Design responsivo
+- Sistema de roles e permissões
+
+## Roles e Permissões
+
+| Role       | Comentar | Criar Post | Editar Post | Aprovar Comentários | Gerenciar Usuários |
+| ---------- | -------- | ---------- | ----------- | ------------------- | ------------------ |
+| reader     | ✅       | ❌         | ❌          | ❌                  | ❌                 |
+| editor     | ✅       | ✅         | Próprios    | ❌                  | ❌                 |
+| admin      | ✅       | ✅         | ✅          | ✅                  | ❌                 |
+| superadmin | ✅       | ✅         | ✅          | ✅                  | ✅                 |
 
 ## Requisitos
 

@@ -8,7 +8,7 @@ class UploadImageRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() && $this->user()->is_admin;
+        return $this->user() && $this->user()->hasAnyRole(['admin', 'superadmin']);
     }
 
     public function rules(): array

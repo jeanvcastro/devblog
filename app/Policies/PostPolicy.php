@@ -23,26 +23,34 @@ class PostPolicy
 
     public function create(User $user): bool
     {
-        return $user->is_admin;
+        return $user->canManagePosts();
     }
 
     public function update(User $user, Post $post): bool
     {
-        return $user->is_admin;
+        if ($user->hasAnyRole(['admin', 'superadmin'])) {
+            return true;
+        }
+
+        return $user->isEditor() && $post->author_id === $user->id;
     }
 
     public function delete(User $user, Post $post): bool
     {
-        return $user->is_admin;
+        if ($user->hasAnyRole(['admin', 'superadmin'])) {
+            return true;
+        }
+
+        return $user->isEditor() && $post->author_id === $user->id;
     }
 
     public function restore(User $user, Post $post): bool
     {
-        return $user->is_admin;
+        return $user->hasAnyRole(['admin', 'superadmin']);
     }
 
     public function forceDelete(User $user, Post $post): bool
     {
-        return $user->is_admin;
+        return $user->hasAnyRole(['admin', 'superadmin']);
     }
 }

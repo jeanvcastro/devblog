@@ -6,25 +6,20 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        \App\Models\User::create([
+        $joao = \App\Models\User::create([
             'name' => 'João Silva',
             'email' => 'joao@example.com',
             'password' => bcrypt('password'),
-            'is_admin' => false,
-            'avatar' => 'https://ui-avatars.com/api/?name=Joao+Silva',
         ]);
+        $joao->assignRole('reader');
 
-        \App\Models\User::create([
+        $maria = \App\Models\User::create([
             'name' => 'Maria Santos',
             'email' => 'maria@example.com',
             'password' => bcrypt('password'),
-            'is_admin' => false,
-            'avatar' => 'https://ui-avatars.com/api/?name=Maria+Santos',
         ]);
+        $maria->assignRole('reader');
     }
 }

@@ -18,7 +18,7 @@ class AdminMiddleware
     {
         $user = Auth::user();
 
-        if (!$user || !$user->is_admin) {
+        if (!$user || !$user->hasAnyRole(['admin', 'superadmin'])) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
