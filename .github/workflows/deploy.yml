@@ -15,7 +15,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /var/www/seu-projeto
+            cd /var/www/devblog
             git pull origin main
             pnpm install
             pnpm build
