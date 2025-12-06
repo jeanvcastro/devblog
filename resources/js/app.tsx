@@ -5,6 +5,24 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { ThemeProvider } from "@/contexts/theme-context";
 import "@/css/app.css";
 import { lazy, ReactNode, Suspense } from "react";
+
+console.log(`
+%c
+    ____             ____                  __
+   / __ \\___  _   __/ __ )_________  ____/ /__  _____
+  / / / / _ \\| | / / __  / ___/ __ \\/ __  / _ \\/ ___/
+ / /_/ /  __/| |/ / /_/ / /  / /_/ / /_/ /  __/ /
+/_____/\\___/ |___/_____/_/   \\____/\\__,_/\\___/_/
+
+%cO que você tá procurando aqui? 👀
+
+Acesse %cdevbroder.com%c, lá tem os contatos. Bora trocar uma ideia!
+`,
+"color: #ff4800; font-weight: bold;",
+"color: inherit; font-size: 14px;",
+"color: #ff4800; font-weight: bold; font-size: 14px;",
+"color: inherit; font-size: 14px;"
+);
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
