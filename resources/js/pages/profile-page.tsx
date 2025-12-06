@@ -304,7 +304,7 @@ export default function ProfilePage() {
             </div>
 
             <Dialog open={cropDialogOpen} onOpenChange={setCropDialogOpen}>
-                <DialogContent className="max-w-lg">
+                <DialogContent className="max-w-[95vw] sm:max-w-lg">
                     <DialogHeader>
                         <DialogTitle>Ajustar foto</DialogTitle>
                     </DialogHeader>
@@ -321,7 +321,7 @@ export default function ProfilePage() {
                                     src={imgSrc}
                                     alt="Crop"
                                     onLoad={onImageLoad}
-                                    className="max-h-96"
+                                    style={{ maxHeight: "60vh", maxWidth: "100%" }}
                                 />
                             </ReactCrop>
                         )}

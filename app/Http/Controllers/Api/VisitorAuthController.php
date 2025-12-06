@@ -35,46 +35,38 @@ class VisitorAuthController extends Controller
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
 
-        $utmParams = [];
-        $cacheKey = $request->cookie('oauth_utm_key');
-        if ($cacheKey) {
-            $utmParams = cache()->get($cacheKey, []);
-            cache()->forget($cacheKey);
-        }
+        $user = User::where('google_id', $googleUser->id)->first();
 
-        $userData = [
-            'name' => $googleUser->name,
-            'email' => $googleUser->email,
-            'avatar' => $googleUser->avatar,
-            'google_id' => $googleUser->id,
-        ];
+        if (!$user) {
+            $utmParams = [];
+            $cacheKey = $request->cookie('oauth_utm_key');
+            if ($cacheKey) {
+                $utmParams = cache()->get($cacheKey, []);
+                cache()->forget($cacheKey);
+            }
 
-        if (!empty($utmParams) && !User::where('google_id', $googleUser->id)->exists()) {
-            $userData = array_merge($userData, $utmParams);
-        }
+            $user = User::create(array_merge([
+                'name' => $googleUser->name,
+                'email' => $googleUser->email,
+                'avatar' => $googleUser->avatar,
+                'google_id' => $googleUser->id,
+            ], $utmParams));
 
-        $user = User::updateOrCreate(
-            ['google_id' => $googleUser->id],
-            $userData
-        );
-
-        if (!$user->hasAnyRole(['reader', 'editor', 'admin', 'superadmin'])) {
             $user->assignRole('reader');
         }
 
         $token = $user->createToken('visitor-token')->plainTextToken;
-        $userData = [
-            'uuid' => $user->uuid,
-            'name' => $user->name,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'role' => $user->roles->first()?->name,
-        ];
 
         $redirectUrl = sprintf(
             '/?token=%s&user=%s',
             urlencode($token),
-            urlencode(json_encode($userData))
+            urlencode(json_encode([
+                'uuid' => $user->uuid,
+                'name' => $user->name,
+                'email' => $user->email,
+                'avatar' => $user->avatar,
+                'role' => $user->roles->first()?->name,
+            ]))
         );
 
         return redirect($redirectUrl);
