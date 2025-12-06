@@ -18,6 +18,6 @@ jobs:
           script: |
             cd /var/www/devblog
             git pull origin main
-            pnpm install
-            pnpm build
+            /root/.local/share/pnpm/pnpm install
+            /root/.local/share/pnpm/pnpm build
             php artisan migrate --force
