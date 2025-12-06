@@ -19,6 +19,8 @@ jobs:
             export PATH="/root/.local/share/pnpm:/root/.nvm/versions/node/v20.19.1/bin:$PATH"
             cd /var/www/devblog
             git pull origin main
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php artisan migrate --force
             /root/.local/share/pnpm/pnpm install
             /root/.local/share/pnpm/pnpm build
             php artisan migrate --force
