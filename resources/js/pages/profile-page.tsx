@@ -22,6 +22,7 @@ import { Layout } from "@/layout";
 import api from "@/services/api";
 import { getAvatarUrl } from "@/utils/avatar";
 import { zodResolver } from "@hookform/resolvers/zod";
+import GoogleIcon from "@/assets/google.svg?react";
 import { Camera, Loader2, Trash2 } from "lucide-react";
 import { ChangeEvent, SyntheticEvent, useCallback, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -201,7 +202,13 @@ export default function ProfilePage() {
         <Layout>
             <div className="container mx-auto max-w-2xl px-4 py-8">
                 <div className="mb-6">
-                    <h1 className="text-3xl font-bold">Meu Perfil</h1>
+                    <div className="flex items-center gap-3">
+                        <h1 className="text-3xl font-bold">Meu Perfil</h1>
+                        <div className="bg-muted text-muted-foreground flex items-center gap-1.5 rounded-full px-3 py-1 text-xs">
+                            <GoogleIcon className="h-3.5 w-3.5" />
+                            Google
+                        </div>
+                    </div>
                     <p className="text-muted-foreground mt-2">
                         Gerencie suas informações pessoais
                     </p>
@@ -300,6 +307,7 @@ export default function ProfilePage() {
                             </form>
                         </CardContent>
                     </Card>
+
                 </div>
             </div>
 
