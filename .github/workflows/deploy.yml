@@ -1,14 +1,13 @@
-name: Remote SSH Command
+name: Deploy
 on:
   push:
     branches: [main]
 jobs:
-  build:
-    name: Build
+  deploy:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: Execute remote SSH commands using password
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
@@ -20,7 +19,9 @@ jobs:
             cd /var/www/devblog
             git pull origin main
             composer install --no-dev --optimize-autoloader --no-interaction
+            pnpm install --frozen-lockfile
+            pnpm build
             php artisan migrate --force
-            /root/.local/share/pnpm/pnpm install
-            /root/.local/share/pnpm/pnpm build
-            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
