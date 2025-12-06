@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/popover";
 import { useAuth } from "@/contexts/auth-context";
 import { getAvatarUrl } from "@/utils/avatar";
-import { ChevronDown, LayoutDashboard, LogOut, Menu, X } from "lucide-react";
+import { ChevronDown, LayoutDashboard, LogOut, Menu, User, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/logo.svg?react";
@@ -94,6 +94,13 @@ export function Header() {
                                         align="end"
                                         className="w-48 p-2"
                                     >
+                                        <Link
+                                            to={canManagePosts ? "/admin/profile" : "/profile"}
+                                            className="hover:bg-accent flex items-center gap-2 rounded-md px-3 py-2 text-sm"
+                                        >
+                                            <User className="h-4 w-4" />
+                                            Meu Perfil
+                                        </Link>
                                         {canManagePosts && (
                                             <Link
                                                 to={isAdmin || isSuperAdmin ? "/admin/dashboard" : "/admin/posts"}
@@ -161,6 +168,13 @@ export function Header() {
                         <div className="border-border my-2 border-t" />
                         {isAuthenticated ? (
                             <>
+                                <Link
+                                    to={canManagePosts ? "/admin/profile" : "/profile"}
+                                    className="hover:text-primary px-3 py-2 text-sm font-medium"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    Meu Perfil
+                                </Link>
                                 {canManagePosts && (
                                     <Link
                                         to={isAdmin || isSuperAdmin ? "/admin/dashboard" : "/admin/posts"}

@@ -42,14 +42,14 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::put('/profile', [ProfileController::class, 'update']);
     Route::post('/profile/avatar', [ProfileController::class, 'uploadAvatar']);
     Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar']);
-    Route::put('/profile/password', [ProfileController::class, 'changePassword']);
-    Route::delete('/profile/google', [ProfileController::class, 'unlinkGoogle']);
 
     Route::middleware('throttle:comments')->group(function () {
         Route::post('/comments', [CommentController::class, 'store']);
     });
 
     Route::middleware('admin')->group(function () {
+        Route::put('/profile/password', [ProfileController::class, 'changePassword']);
+
         Route::get('/admin/posts', [PostController::class, 'adminIndex']);
         Route::post('/posts', [PostController::class, 'store']);
         Route::put('/posts/{post:uuid}', [PostController::class, 'update']);

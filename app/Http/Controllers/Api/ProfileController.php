@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -63,55 +62,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function changePassword(Request $request): JsonResponse
-    {
-        $request->validate([
-            'current_password' => 'required|string',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        $user = $request->user();
-
-        if (!$user->password) {
-            return response()->json([
-                'message' => 'No password set. Please login with Google.',
-            ], 400);
-        }
-
-        if (!Hash::check($request->current_password, $user->password)) {
-            return response()->json([
-                'message' => 'Current password is incorrect.',
-            ], 400);
-        }
-
-        $user->update([
-            'password' => Hash::make($request->password),
-        ]);
-
-        return response()->json([
-            'message' => 'Password changed successfully.',
-        ]);
-    }
-
-    public function unlinkGoogle(Request $request): JsonResponse
-    {
-        $user = $request->user();
-
-        if (!$user->password) {
-            return response()->json([
-                'message' => 'Cannot unlink Google account without a password set.',
-            ], 400);
-        }
-
-        $user->update([
-            'google_id' => null,
-        ]);
-
-        return response()->json([
-            'message' => 'Google account unlinked successfully.',
-        ]);
-    }
-
     public function deleteAvatar(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -134,6 +84,30 @@ class ProfileController extends Controller
                 'avatar' => null,
                 'role' => $user->roles->first()?->name,
             ],
+        ]);
+    }
+
+    public function changePassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'current_password' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = $request->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json([
+                'message' => 'Senha atual incorreta.',
+            ], 400);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return response()->json([
+            'message' => 'Senha alterada com sucesso.',
         ]);
     }
 }

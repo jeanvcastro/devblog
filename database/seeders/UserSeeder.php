@@ -23,12 +23,5 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         $editor->assignRole('editor');
-
-        $reader = User::create([
-            'name' => 'Reader User',
-            'email' => 'reader@devbroder.com',
-            'password' => Hash::make('password'),
-        ]);
-        $reader->assignRole('reader');
     }
 }

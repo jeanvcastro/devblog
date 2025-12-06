@@ -48,11 +48,12 @@ const AnalyticsPage = lazy(() =>
 const MediaPage = lazy(() =>
     import("./pages/admin/media-page").then(m => ({ default: m.MediaPage })),
 );
-const ProfilePage = lazy(() =>
+const AdminProfilePage = lazy(() =>
     import("./pages/admin/profile-page").then(m => ({
         default: m.ProfilePage,
     })),
 );
+const ProfilePage = lazy(() => import("./pages/profile-page"));
 const UsersPage = lazy(() =>
     import("./pages/admin/users-page").then(m => ({ default: m.UsersPage })),
 );
@@ -194,11 +195,22 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
     },
     {
+        path: "/profile",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute>
+                    <ProfilePage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
         path: "/admin/profile",
         element: (
             <SuspenseWrapper>
                 <ProtectedRoute allowedRoles={['editor', 'admin', 'superadmin']}>
-                    <ProfilePage />
+                    <AdminProfilePage />
                 </ProtectedRoute>
             </SuspenseWrapper>
         ),
