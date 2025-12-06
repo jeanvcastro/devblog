@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Logo from "../../assets/logo.svg?react";
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -8,9 +9,7 @@ export function Footer() {
             <div className="container mx-auto max-w-7xl px-4 py-12">
                 <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
                     <div className="flex flex-col items-center gap-2 md:items-start">
-                        <span className="from-primary to-secondary bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
-                            Devbroder Lab
-                        </span>
+                        <Logo className="text-foreground h-6" />
                         <p className="text-muted-foreground text-sm">
                             © {currentYear} Todos os direitos reservados.
                         </p>

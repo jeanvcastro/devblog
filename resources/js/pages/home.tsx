@@ -9,6 +9,7 @@ import api from "@/services/api";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Logo from "../../assets/logo.svg?react";
 
 export default function HomePage() {
     const [recentPosts, setRecentPosts] = useState<Post[]>([]);
@@ -48,11 +49,7 @@ export default function HomePage() {
             <div className="container mx-auto max-w-7xl px-4 py-8">
                 {/* Hero Section */}
                 <section className="mb-16 py-20 text-center">
-                    <h1 className="text-6xl font-bold tracking-tight md:text-7xl">
-                        <span className="from-primary to-secondary bg-linear-to-r bg-clip-text text-transparent">
-                            Devbroder Lab
-                        </span>
-                    </h1>
+                    <Logo className="text-foreground ml-4 inline-block sm:h-12 md:h-16" />
                     <p className="text-foreground mx-auto mt-8 max-w-3xl text-xl md:text-2xl">
                         Compartilhamos conhecimento sobre desenvolvimento de
                         software, arquitetura de sistemas, performance, boas

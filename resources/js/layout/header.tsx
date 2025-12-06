@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Logo from "../../assets/logo.svg?react";
 
 export function Header() {
     const { user, isAuthenticated, logout } = useAuth();
@@ -22,9 +23,7 @@ export function Header() {
                 <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center gap-8">
                         <Link to="/" className="flex items-center">
-                            <span className="from-primary to-secondary bg-linear-to-r bg-clip-text text-2xl font-bold text-transparent">
-                                Devbroder Lab
-                            </span>
+                            <Logo className="text-foreground h-6" />
                         </Link>
 
                         <nav className="hidden items-center gap-6 md:flex">

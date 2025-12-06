@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Logo from "../../assets/logo.svg?react";
 
 type AdminLayoutProps = {
     children: ReactNode;
@@ -78,9 +79,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             <aside className="border-border bg-card hidden w-64 border-r lg:block">
                 <div className="flex h-16 items-center px-6">
                     <Link to="/admin/dashboard">
-                        <span className="text-primary text-xl font-bold">
-                            Devbroder Lab Admin
-                        </span>
+                        <Logo className="text-foreground h-6" />
                     </Link>
                 </div>
 
@@ -122,9 +121,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                                         to="/admin/dashboard"
                                         onClick={() => setOpen(false)}
                                     >
-                                        <span className="text-primary text-xl font-bold">
-                                            Devbroder Lab Admin
-                                        </span>
+                                        <Logo className="text-foreground h-6" />
                                     </Link>
                                 </div>
                                 <nav className="space-y-1 p-4">
