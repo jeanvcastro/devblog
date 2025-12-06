@@ -17,7 +17,7 @@
   <meta property="og:description"
     content="Artigos sobre desenvolvimento de software, arquitetura de sistemas, frontend, backend e performance.">
   <meta property="og:url" content="https://lab.devbroder.com">
-  <meta property="og:image" content="https://lab.devbroder.com/img/og.jpeg">
+  <meta property="og:image" content="https://lab.devbroder.com/img/open-graph.jpg">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Devbroder Lab - Blog de Tecnologia">
