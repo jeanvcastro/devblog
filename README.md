@@ -42,3 +42,5 @@ Plataforma para compartilhar conhecimento sobre design de sistemas, arquitetura 
 - pnpm
 - MySQL 8.0+
 - Google Cloud Console (OAuth credentials)
+
+.
