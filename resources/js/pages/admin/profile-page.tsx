@@ -465,6 +465,7 @@ export function ProfilePage() {
                                             id="current_password"
                                             type="password"
                                             placeholder="********"
+                                            aria-invalid={!!passwordErrors.current_password}
                                             {...registerPassword(
                                                 "current_password",
                                             )}
@@ -487,6 +488,7 @@ export function ProfilePage() {
                                             id="password"
                                             type="password"
                                             placeholder="********"
+                                            aria-invalid={!!passwordErrors.password}
                                             {...registerPassword("password")}
                                         />
                                         {passwordErrors.password && (
@@ -506,6 +508,7 @@ export function ProfilePage() {
                                             id="password_confirmation"
                                             type="password"
                                             placeholder="********"
+                                            aria-invalid={!!passwordErrors.password_confirmation}
                                             {...registerPassword(
                                                 "password_confirmation",
                                             )}
