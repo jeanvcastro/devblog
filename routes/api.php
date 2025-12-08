@@ -67,6 +67,7 @@ Route::middleware(["auth:sanctum", "throttle:authenticated"])->group(
             ]);
 
             Route::get("/admin/posts", [PostController::class, "adminIndex"]);
+            Route::get("/admin/tags", [TagController::class, "adminIndex"]);
             Route::post("/posts", [PostController::class, "store"]);
             Route::put("/posts/{post:uuid}", [PostController::class, "update"]);
             Route::delete("/posts/{post:uuid}", [

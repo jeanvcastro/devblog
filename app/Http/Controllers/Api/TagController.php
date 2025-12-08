@@ -13,6 +13,23 @@ class TagController extends Controller
         return Tag::withCount("posts")->get();
     }
 
+    public function adminIndex(Request $request)
+    {
+        $query = Tag::withCount("posts");
+
+        if ($search = $request->get("q")) {
+            $query->where(function ($q) use ($search) {
+                $q->where("name", "like", "%{$search}%")->orWhere(
+                    "slug",
+                    "like",
+                    "%{$search}%",
+                );
+            });
+        }
+
+        return $query->orderBy("name")->paginate(10);
+    }
+
     public function show(Tag $tag)
     {
         return $tag->load([
@@ -48,6 +65,13 @@ class TagController extends Controller
 
     public function destroy(Tag $tag)
     {
+        if ($tag->posts()->exists()) {
+            return response()->json(
+                ["message" => "Não é possível excluir uma tag que está em uso"],
+                422,
+            );
+        }
+
         $tag->delete();
         return response()->json(["message" => "Tag deleted successfully"]);
     }

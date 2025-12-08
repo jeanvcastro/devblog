@@ -76,6 +76,9 @@ const ProfilePage = lazy(() => import("./pages/profile-page"));
 const UsersPage = lazy(() =>
     import("./pages/admin/users-page").then(m => ({ default: m.UsersPage })),
 );
+const TagsPage = lazy(() =>
+    import("./pages/admin/tags-page").then(m => ({ default: m.TagsPage })),
+);
 
 const SuspenseWrapper = ({ children }: { children: ReactNode }) => (
     <Suspense fallback={<PageLoader />}>{children}</Suspense>
@@ -249,6 +252,17 @@ const router = createBrowserRouter([
             <SuspenseWrapper>
                 <ProtectedRoute allowedRoles={["superadmin"]}>
                     <UsersPage />
+                </ProtectedRoute>
+            </SuspenseWrapper>
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "/admin/tags",
+        element: (
+            <SuspenseWrapper>
+                <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
+                    <TagsPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
         ),

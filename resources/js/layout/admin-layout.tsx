@@ -18,6 +18,7 @@ import {
     LayoutDashboard,
     LogOut,
     MessageSquare,
+    Tag,
     User,
     Users,
 } from "lucide-react";
@@ -70,6 +71,16 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 <FileText className="h-5 w-5" />
                 Posts
             </Link>
+            {canApproveComments && (
+                <Link
+                    to="/admin/tags"
+                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${isActive("/admin/tags")}`}
+                    onClick={() => setOpen(false)}
+                >
+                    <Tag className="h-5 w-5" />
+                    Tags
+                </Link>
+            )}
             {canApproveComments && (
                 <>
                     <Link
