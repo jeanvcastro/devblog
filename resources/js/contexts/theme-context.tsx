@@ -66,11 +66,13 @@ export function ThemeProvider({
             currentTheme = theme;
         }
 
-        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        const metaThemeColor = document.querySelector(
+            'meta[name="theme-color"]',
+        );
         if (metaThemeColor) {
             metaThemeColor.setAttribute(
                 "content",
-                currentTheme === "dark" ? "#000000" : "#f2f0e4"
+                currentTheme === "dark" ? "#000000" : "#f2f0e4",
             );
         }
     }, [theme]);
@@ -87,11 +89,13 @@ export function ThemeProvider({
                 root.style.colorScheme = systemTheme;
                 setActualTheme(systemTheme);
 
-                const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+                const metaThemeColor = document.querySelector(
+                    'meta[name="theme-color"]',
+                );
                 if (metaThemeColor) {
                     metaThemeColor.setAttribute(
                         "content",
-                        systemTheme === "dark" ? "#000000" : "#f2f0e4"
+                        systemTheme === "dark" ? "#000000" : "#f2f0e4",
                     );
                 }
             }

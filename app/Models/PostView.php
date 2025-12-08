@@ -11,17 +11,17 @@ class PostView extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'uuid',
-        'post_id',
-        'visitor_hash',
-        'user_id',
-        'visited_at',
+        "uuid",
+        "post_id",
+        "visitor_hash",
+        "user_id",
+        "visited_at",
     ];
 
-    protected $hidden = ['id', 'post_id', 'user_id', 'visitor_hash'];
+    protected $hidden = ["id", "post_id", "user_id", "visitor_hash"];
 
     protected $casts = [
-        'visited_at' => 'datetime',
+        "visited_at" => "datetime",
     ];
 
     protected static function boot()
@@ -35,13 +35,13 @@ class PostView extends Model
         });
 
         static::created(function ($model) {
-            $model->post()->increment('views_count');
+            $model->post()->increment("views_count");
         });
     }
 
     public function getRouteKeyName()
     {
-        return 'uuid';
+        return "uuid";
     }
 
     public function post()

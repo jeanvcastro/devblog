@@ -17,6 +17,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { calculateReadingTime } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
+import { z } from "zod";
+
+const postSchema = z.object({
+    title: z.string().min(1, "Título é obrigatório"),
+    slug: z.string().min(1, "Slug é obrigatório"),
+    content: z.string().min(1, "Conteúdo é obrigatório"),
+    excerpt: z.string().optional(),
+    status: z.enum(["draft", "published"]),
+    published_at: z.string().nullable(),
+    tags: z.array(z.string()),
+    reading_time: z.number(),
+});
+
+type PostErrors = Partial<Record<keyof z.infer<typeof postSchema>, string>>;
 
 interface PostEditorProps {
     initialData?: {
@@ -33,6 +47,7 @@ interface PostEditorProps {
     onSave: (data: PostFormData) => void;
     onCancel: () => void;
     isLoading?: boolean;
+    canPublish?: boolean;
 }
 
 export interface PostFormData {
@@ -52,6 +67,7 @@ export function PostEditor({
     onSave,
     onCancel,
     isLoading = false,
+    canPublish = true,
 }: PostEditorProps) {
     const [formData, setFormData] = useState<PostFormData>({
         title: initialData?.title || "",
@@ -63,7 +79,10 @@ export function PostEditor({
         tags: initialData?.tags || [],
         reading_time: initialData?.reading_time || 0,
     });
-    const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!initialData?.slug);
+    const [slugManuallyEdited, setSlugManuallyEdited] = useState(
+        !!initialData?.slug,
+    );
+    const [errors, setErrors] = useState<PostErrors>({});
 
     const slugify = (text: string): string => {
         return text
@@ -99,6 +118,21 @@ export function PostEditor({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setErrors({});
+
+        const result = postSchema.safeParse(formData);
+        if (!result.success) {
+            const newErrors: PostErrors = {};
+            result.error.issues.forEach(issue => {
+                const field = issue.path[0] as keyof PostErrors;
+                if (!newErrors[field]) {
+                    newErrors[field] = issue.message;
+                }
+            });
+            setErrors(newErrors);
+            return;
+        }
+
         onSave(formData);
     };
 
@@ -127,8 +161,13 @@ export function PostEditor({
                                 }))
                             }
                             placeholder="Digite o título do post"
-                            required
+                            aria-invalid={!!errors.title}
                         />
+                        {errors.title && (
+                            <p className="text-destructive text-sm">
+                                {errors.title}
+                            </p>
+                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -144,8 +183,13 @@ export function PostEditor({
                                 }));
                             }}
                             placeholder="slug-do-post"
-                            required
+                            aria-invalid={!!errors.slug}
                         />
+                        {errors.slug && (
+                            <p className="text-destructive text-sm">
+                                {errors.slug}
+                            </p>
+                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -161,7 +205,6 @@ export function PostEditor({
                             }
                             placeholder="Resumo curto do post"
                             rows={3}
-                            required
                         />
                     </div>
 
@@ -186,10 +229,15 @@ export function PostEditor({
                                         }))
                                     }
                                     placeholder="Escreva o conteúdo do post em Markdown... Use a página Mídia para fazer upload de imagens."
-                                    rows={20}
+                                    rows={16}
                                     className="font-mono"
-                                    required
+                                    aria-invalid={!!errors.content}
                                 />
+                                {errors.content && (
+                                    <p className="text-destructive text-sm">
+                                        {errors.content}
+                                    </p>
+                                )}
                             </TabsContent>
                             <TabsContent value="preview">
                                 <Card>
@@ -228,6 +276,10 @@ export function PostEditor({
                                             status: value,
                                         }))
                                     }
+                                    disabled={
+                                        !canPublish &&
+                                        formData.status === "draft"
+                                    }
                                 >
                                     <SelectTrigger id="status">
                                         <SelectValue />
@@ -236,11 +288,20 @@ export function PostEditor({
                                         <SelectItem value="draft">
                                             Rascunho
                                         </SelectItem>
-                                        <SelectItem value="published">
+                                        <SelectItem
+                                            value="published"
+                                            disabled={!canPublish}
+                                        >
                                             Publicado
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
+                                {!canPublish && (
+                                    <p className="text-muted-foreground text-xs">
+                                        Apenas administradores podem publicar
+                                        posts
+                                    </p>
+                                )}
                             </div>
 
                             <div className="space-y-2">
@@ -271,13 +332,15 @@ export function PostEditor({
                                     onChange={e =>
                                         setFormData(prev => ({
                                             ...prev,
-                                            reading_time: parseInt(e.target.value) || 0,
+                                            reading_time:
+                                                parseInt(e.target.value) || 0,
                                         }))
                                     }
                                     placeholder="5"
                                 />
-                                <p className="text-xs text-muted-foreground">
-                                    Calculado automaticamente baseado no conteúdo
+                                <p className="text-muted-foreground text-xs">
+                                    Calculado automaticamente baseado no
+                                    conteúdo
                                 </p>
                             </div>
                         </CardContent>

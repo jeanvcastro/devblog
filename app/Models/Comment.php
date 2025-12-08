@@ -11,18 +11,18 @@ class Comment extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'uuid',
-        'post_id',
-        'user_id',
-        'parent_id',
-        'content',
-        'approved',
+        "uuid",
+        "post_id",
+        "user_id",
+        "parent_id",
+        "content",
+        "approved",
     ];
 
-    protected $hidden = ['id', 'post_id', 'user_id', 'parent_id'];
+    protected $hidden = ["id", "post_id", "user_id", "parent_id"];
 
     protected $casts = [
-        'approved' => 'boolean',
+        "approved" => "boolean",
     ];
 
     protected static function boot()
@@ -38,7 +38,7 @@ class Comment extends Model
 
     public function getRouteKeyName()
     {
-        return 'uuid';
+        return "uuid";
     }
 
     public function post()
@@ -53,16 +53,16 @@ class Comment extends Model
 
     public function replies()
     {
-        return $this->hasMany(Comment::class, 'parent_id');
+        return $this->hasMany(Comment::class, "parent_id");
     }
 
     public function parent()
     {
-        return $this->belongsTo(Comment::class, 'parent_id');
+        return $this->belongsTo(Comment::class, "parent_id");
     }
 
     public function scopeApproved($query)
     {
-        return $query->where('approved', true);
+        return $query->where("approved", true);
     }
 }

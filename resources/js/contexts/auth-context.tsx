@@ -40,18 +40,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     useEffect(() => {
         const handleOAuthCallback = () => {
             const params = new URLSearchParams(window.location.search);
-            const token = params.get('token');
-            const userJson = params.get('user');
+            const token = params.get("token");
+            const userJson = params.get("user");
 
             if (token && userJson) {
                 tokenService.set(token);
                 setUser(JSON.parse(userJson));
-                const redirectUrl = sessionStorage.getItem('loginRedirect') || '/';
-                sessionStorage.removeItem('loginRedirect');
-                if (redirectUrl !== '/') {
+                const redirectUrl =
+                    sessionStorage.getItem("loginRedirect") || "/";
+                sessionStorage.removeItem("loginRedirect");
+                if (redirectUrl !== "/") {
                     window.location.replace(redirectUrl);
                 } else {
-                    window.history.replaceState({}, '', '/');
+                    window.history.replaceState({}, "", "/");
                 }
                 setLoading(false);
                 return true;
@@ -96,13 +97,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
         const params = new URLSearchParams(window.location.search);
         const utmParams = new URLSearchParams();
 
-        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(key => {
+        [
+            "utm_source",
+            "utm_medium",
+            "utm_campaign",
+            "utm_term",
+            "utm_content",
+        ].forEach(key => {
             const value = params.get(key);
             if (value) utmParams.append(key, value);
         });
 
         const queryString = utmParams.toString();
-        window.location.href = `/auth/google${queryString ? '?' + queryString : ''}`;
+        window.location.href = `/auth/google${queryString ? "?" + queryString : ""}`;
     };
 
     const logout = async () => {
@@ -129,13 +136,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
             updateUser,
             isAuthenticated: !!user,
             role,
-            isReader: role === 'reader',
-            isEditor: role === 'editor',
-            isAdmin: role === 'admin',
-            isSuperAdmin: role === 'superadmin',
-            canManagePosts: ['editor', 'admin', 'superadmin'].includes(role ?? ''),
-            canApproveComments: ['admin', 'superadmin'].includes(role ?? ''),
-            canManageUsers: role === 'superadmin',
+            isReader: role === "reader",
+            isEditor: role === "editor",
+            isAdmin: role === "admin",
+            isSuperAdmin: role === "superadmin",
+            canManagePosts: ["editor", "admin", "superadmin"].includes(
+                role ?? "",
+            ),
+            canApproveComments: ["admin", "superadmin"].includes(role ?? ""),
+            canManageUsers: role === "superadmin",
         };
     }, [user, loading]);
 

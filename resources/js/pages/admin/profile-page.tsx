@@ -18,13 +18,20 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/auth-context";
 import { AdminLayout } from "@/layout/admin-layout";
 import api from "@/services/api";
 import { getAvatarUrl } from "@/utils/avatar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Camera, Loader2, Trash2 } from "lucide-react";
-import { ChangeEvent, SyntheticEvent, useCallback, useRef, useState } from "react";
+import {
+    ChangeEvent,
+    SyntheticEvent,
+    useCallback,
+    useRef,
+    useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ReactCrop, {
@@ -37,13 +44,23 @@ import { z } from "zod";
 
 const profileSchema = z.object({
     name: z.string().min(1, "Nome é obrigatório"),
+    job_title: z
+        .string()
+        .max(100, "Máximo 100 caracteres")
+        .nullable()
+        .optional(),
+    bio: z.string().max(500, "Máximo 500 caracteres").nullable().optional(),
 });
 
 const passwordSchema = z
     .object({
         current_password: z.string().min(1, "Senha atual é obrigatória"),
-        password: z.string().min(8, "A nova senha deve ter pelo menos 8 caracteres"),
-        password_confirmation: z.string().min(1, "Confirmação de senha é obrigatória"),
+        password: z
+            .string()
+            .min(8, "A nova senha deve ter pelo menos 8 caracteres"),
+        password_confirmation: z
+            .string()
+            .min(1, "Confirmação de senha é obrigatória"),
     })
     .refine(data => data.password === data.password_confirmation, {
         message: "As senhas não coincidem",
@@ -85,7 +102,7 @@ function centerAspectCrop(
 }
 
 export function ProfilePage() {
-    const { user, updateUser } = useAuth();
+    const { user, updateUser, canManagePosts } = useAuth();
     const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
     const [isRemovingAvatar, setIsRemovingAvatar] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -101,7 +118,11 @@ export function ProfilePage() {
         formState: { errors: profileErrors, isSubmitting: isUpdatingProfile },
     } = useForm<ProfileFormData>({
         resolver: zodResolver(profileSchema),
-        defaultValues: { name: user?.name ?? "" },
+        defaultValues: {
+            name: user?.name ?? "",
+            job_title: user?.job_title ?? "",
+            bio: user?.bio ?? "",
+        },
     });
 
     const {
@@ -332,7 +353,11 @@ export function ProfilePage() {
                     <Card>
                         <CardHeader>
                             <CardTitle>Informações</CardTitle>
-                            <CardDescription>Atualize seu nome</CardDescription>
+                            <CardDescription>
+                                {canManagePosts
+                                    ? "Atualize suas informações de autor"
+                                    : "Atualize seu nome"}
+                            </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <form
@@ -344,6 +369,7 @@ export function ProfilePage() {
                                     <Input
                                         id="name"
                                         placeholder="Seu nome"
+                                        aria-invalid={!!profileErrors.name}
                                         {...registerProfile("name")}
                                     />
                                     {profileErrors.name && (
@@ -361,6 +387,50 @@ export function ProfilePage() {
                                         className="bg-muted"
                                     />
                                 </div>
+                                {canManagePosts && (
+                                    <>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="job_title">
+                                                Cargo
+                                            </Label>
+                                            <Input
+                                                id="job_title"
+                                                placeholder="Ex: Desenvolvedor Full Stack"
+                                                aria-invalid={
+                                                    !!profileErrors.job_title
+                                                }
+                                                {...registerProfile(
+                                                    "job_title",
+                                                )}
+                                            />
+                                            {profileErrors.job_title && (
+                                                <p className="text-destructive text-sm">
+                                                    {
+                                                        profileErrors.job_title
+                                                            .message
+                                                    }
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="bio">Bio</Label>
+                                            <Textarea
+                                                id="bio"
+                                                placeholder="Uma breve descrição sobre você"
+                                                rows={3}
+                                                aria-invalid={
+                                                    !!profileErrors.bio
+                                                }
+                                                {...registerProfile("bio")}
+                                            />
+                                            {profileErrors.bio && (
+                                                <p className="text-destructive text-sm">
+                                                    {profileErrors.bio.message}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
                                 <Button
                                     type="submit"
                                     disabled={isUpdatingProfile}
@@ -381,7 +451,9 @@ export function ProfilePage() {
                         </CardHeader>
                         <CardContent>
                             <form
-                                onSubmit={handleSubmitPassword(onChangePassword)}
+                                onSubmit={handleSubmitPassword(
+                                    onChangePassword,
+                                )}
                                 className="space-y-4"
                             >
                                 <div className="grid gap-4 sm:grid-cols-3">
@@ -393,11 +465,17 @@ export function ProfilePage() {
                                             id="current_password"
                                             type="password"
                                             placeholder="********"
-                                            {...registerPassword("current_password")}
+                                            {...registerPassword(
+                                                "current_password",
+                                            )}
                                         />
                                         {passwordErrors.current_password && (
                                             <p className="text-destructive text-sm">
-                                                {passwordErrors.current_password.message}
+                                                {
+                                                    passwordErrors
+                                                        .current_password
+                                                        .message
+                                                }
                                             </p>
                                         )}
                                     </div>
@@ -413,7 +491,10 @@ export function ProfilePage() {
                                         />
                                         {passwordErrors.password && (
                                             <p className="text-destructive text-sm">
-                                                {passwordErrors.password.message}
+                                                {
+                                                    passwordErrors.password
+                                                        .message
+                                                }
                                             </p>
                                         )}
                                     </div>
@@ -425,11 +506,17 @@ export function ProfilePage() {
                                             id="password_confirmation"
                                             type="password"
                                             placeholder="********"
-                                            {...registerPassword("password_confirmation")}
+                                            {...registerPassword(
+                                                "password_confirmation",
+                                            )}
                                         />
                                         {passwordErrors.password_confirmation && (
                                             <p className="text-destructive text-sm">
-                                                {passwordErrors.password_confirmation.message}
+                                                {
+                                                    passwordErrors
+                                                        .password_confirmation
+                                                        .message
+                                                }
                                             </p>
                                         )}
                                     </div>
@@ -469,7 +556,10 @@ export function ProfilePage() {
                                     src={imgSrc}
                                     alt="Crop"
                                     onLoad={onImageLoad}
-                                    style={{ maxHeight: "60vh", maxWidth: "100%" }}
+                                    style={{
+                                        maxHeight: "60vh",
+                                        maxWidth: "100%",
+                                    }}
                                 />
                             </ReactCrop>
                         )}

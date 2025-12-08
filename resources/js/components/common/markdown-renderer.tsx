@@ -1,7 +1,10 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark, oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import {
+    oneDark,
+    oneLight,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useTheme } from "@/contexts/theme-context";
 import { Button } from "@/components/ui/button";
 import { Check, Copy } from "lucide-react";
@@ -22,11 +25,11 @@ function CodeBlock({ language, code }: { language: string; code: string }) {
     };
 
     return (
-        <div className="relative group border border-border rounded-lg overflow-hidden">
+        <div className="group border-border relative overflow-hidden rounded-lg border">
             <Button
                 size="icon"
                 variant="ghost"
-                className="absolute right-2 top-2 h-8 w-8 opacity-0 group-hover:opacity-100 z-10"
+                className="absolute top-2 right-2 z-10 h-8 w-8 opacity-0 group-hover:opacity-100"
                 onClick={handleCopy}
             >
                 {copied ? (
@@ -69,8 +72,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                         return (
                             <img
                                 src={src}
-                                alt={alt || ''}
-                                className="rounded-lg max-w-full h-auto"
+                                alt={alt || ""}
+                                className="h-auto max-w-full rounded-lg"
                                 loading="lazy"
                             />
                         );
@@ -79,7 +82,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                         return (
                             <a
                                 href={href}
-                                className="text-primary hover:underline underline-offset-2"
+                                className="text-primary underline-offset-2 hover:underline"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

@@ -34,8 +34,8 @@ export function DataTable<T extends Record<string, unknown>>({
     if (loading) {
         return (
             <Card className="overflow-hidden py-0">
-                <div className="overflow-x-auto">
-                    <Table>
+                <div className="-mx-px overflow-x-auto">
+                    <Table className="min-w-full table-fixed">
                         <TableHeader>
                             <TableRow>
                                 {columns.map(column => (
@@ -47,7 +47,7 @@ export function DataTable<T extends Record<string, unknown>>({
                                     </TableHead>
                                 ))}
                                 {actions && (
-                                    <TableHead className="w-20">
+                                    <TableHead className="w-20 text-right">
                                         Ações
                                     </TableHead>
                                 )}
@@ -57,13 +57,16 @@ export function DataTable<T extends Record<string, unknown>>({
                             {[...Array(5)].map((_, i) => (
                                 <TableRow key={i}>
                                     {columns.map(column => (
-                                        <TableCell key={column.key}>
-                                            <div className="bg-muted h-4 w-24 animate-pulse rounded" />
+                                        <TableCell
+                                            key={column.key}
+                                            className={column.className}
+                                        >
+                                            <div className="bg-muted h-4 max-w-24 animate-pulse rounded" />
                                         </TableCell>
                                     ))}
                                     {actions && (
-                                        <TableCell>
-                                            <div className="bg-muted h-4 w-16 animate-pulse rounded" />
+                                        <TableCell className="text-right">
+                                            <div className="bg-muted ml-auto h-4 w-16 animate-pulse rounded" />
                                         </TableCell>
                                     )}
                                 </TableRow>
@@ -85,8 +88,8 @@ export function DataTable<T extends Record<string, unknown>>({
 
     return (
         <Card className="overflow-hidden py-0">
-            <div className="overflow-x-auto">
-                <Table>
+            <div className="-mx-px overflow-x-auto">
+                <Table className="min-w-full table-fixed">
                     <TableHeader>
                         <TableRow>
                             {columns.map(column => (

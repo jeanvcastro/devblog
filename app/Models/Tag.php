@@ -10,13 +10,9 @@ class Tag extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [
-        'uuid',
-        'name',
-        'slug',
-    ];
+    protected $fillable = ["uuid", "name", "slug"];
 
-    protected $hidden = ['id'];
+    protected $hidden = ["id"];
 
     protected static function boot()
     {
@@ -31,7 +27,7 @@ class Tag extends Model
 
     public function getRouteKeyName()
     {
-        return 'uuid';
+        return "uuid";
     }
 
     public function posts()

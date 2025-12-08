@@ -33,26 +33,28 @@ export class ErrorBoundary extends Component<Props, State> {
     public render() {
         if (this.state.hasError) {
             return (
-                <div className="flex min-h-screen items-center justify-center bg-background p-4">
+                <div className="bg-background flex min-h-screen items-center justify-center p-4">
                     <Card className="w-full max-w-md">
                         <CardHeader>
-                            <CardTitle className="text-center text-2xl text-destructive">
+                            <CardTitle className="text-destructive text-center text-2xl">
                                 Algo deu errado
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <p className="text-center text-muted-foreground">
-                                Desculpe, ocorreu um erro inesperado. Nossa equipe foi
-                                notificada e estamos trabalhando para resolver o problema.
+                            <p className="text-muted-foreground text-center">
+                                Desculpe, ocorreu um erro inesperado. Nossa
+                                equipe foi notificada e estamos trabalhando para
+                                resolver o problema.
                             </p>
                             {/* eslint-disable-next-line no-undef */}
-                            {process.env.NODE_ENV === "development" && this.state.error && (
-                                <div className="rounded-md bg-muted p-4">
-                                    <p className="text-sm font-mono text-destructive">
-                                        {this.state.error.message}
-                                    </p>
-                                </div>
-                            )}
+                            {process.env.NODE_ENV === "development" &&
+                                this.state.error && (
+                                    <div className="bg-muted rounded-md p-4">
+                                        <p className="text-destructive font-mono text-sm">
+                                            {this.state.error.message}
+                                        </p>
+                                    </div>
+                                )}
                             <div className="flex justify-center gap-2">
                                 <Button onClick={this.handleReset}>
                                     Voltar para Home

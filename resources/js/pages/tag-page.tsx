@@ -21,7 +21,7 @@ export default function TagPage() {
             try {
                 // Find tag by slug
                 const tagsRes = await api.get<Tag[]>("/tags");
-                const foundTag = tagsRes.data.find((t) => t.slug === slug);
+                const foundTag = tagsRes.data.find(t => t.slug === slug);
 
                 if (!foundTag) {
                     navigate("/");
@@ -31,7 +31,9 @@ export default function TagPage() {
                 setTag(foundTag);
 
                 // Fetch posts for this tag
-                const postsRes = await api.get<{ posts: Post[] }>(`/tags/${foundTag.uuid}`);
+                const postsRes = await api.get<{ posts: Post[] }>(
+                    `/tags/${foundTag.uuid}`,
+                );
                 setPosts(postsRes.data.posts);
             } catch (error) {
                 console.error("Erro ao carregar tag:", error);
@@ -48,10 +50,13 @@ export default function TagPage() {
         return (
             <Layout>
                 <div className="container mx-auto max-w-4xl px-4 py-12">
-                    <div className="h-12 bg-muted animate-pulse rounded mb-8" />
+                    <div className="bg-muted mb-8 h-12 animate-pulse rounded" />
                     <div className="space-y-6">
                         {[...Array(3)].map((_, i) => (
-                            <div key={i} className="h-64 bg-muted animate-pulse rounded-lg" />
+                            <div
+                                key={i}
+                                className="bg-muted h-64 animate-pulse rounded-lg"
+                            />
                         ))}
                     </div>
                 </div>
@@ -72,21 +77,27 @@ export default function TagPage() {
             />
             <div className="container mx-auto max-w-4xl px-4 py-12">
                 {/* Breadcrumb */}
-                <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
-                    <Link to="/" className="hover:text-primary transition-colors">
+                <nav className="text-muted-foreground mb-8 flex items-center gap-2 text-sm">
+                    <Link
+                        to="/"
+                        className="hover:text-primary transition-colors"
+                    >
                         Home
                     </Link>
                     <ChevronRight className="h-4 w-4" />
                     <span>Tags</span>
                     <ChevronRight className="h-4 w-4" />
-                    <span className="text-foreground font-semibold">{tag.name}</span>
+                    <span className="text-foreground font-semibold">
+                        {tag.name}
+                    </span>
                 </nav>
 
                 {/* Header */}
                 <header className="mb-12">
-                    <h1 className="text-4xl font-bold mb-2">{tag.name}</h1>
+                    <h1 className="mb-2 text-4xl font-bold">{tag.name}</h1>
                     <p className="text-muted-foreground">
-                        {posts.length} post{posts.length !== 1 ? "s" : ""} com esta tag
+                        {posts.length} post{posts.length !== 1 ? "s" : ""} com
+                        esta tag
                     </p>
                 </header>
 

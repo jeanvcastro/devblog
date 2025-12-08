@@ -11,24 +11,24 @@ class Post extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'uuid',
-        'title',
-        'slug',
-        'content',
-        'excerpt',
-        'status',
-        'published_at',
-        'author_id',
-        'views_count',
-        'reading_time',
+        "uuid",
+        "title",
+        "slug",
+        "content",
+        "excerpt",
+        "status",
+        "published_at",
+        "author_id",
+        "views_count",
+        "reading_time",
     ];
 
-    protected $hidden = ['id', 'author_id'];
+    protected $hidden = ["id", "author_id"];
 
     protected $casts = [
-        'published_at' => 'datetime',
-        'views_count' => 'integer',
-        'reading_time' => 'integer',
+        "published_at" => "datetime",
+        "views_count" => "integer",
+        "reading_time" => "integer",
     ];
 
     protected static function boot()
@@ -44,12 +44,12 @@ class Post extends Model
 
     public function getRouteKeyName()
     {
-        return 'uuid';
+        return "uuid";
     }
 
     public function author()
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $this->belongsTo(User::class, "author_id");
     }
 
     public function comments()
@@ -69,18 +69,19 @@ class Post extends Model
 
     public function scopePublished($query)
     {
-        return $query->where('status', 'published')
-                     ->whereNotNull('published_at')
-                     ->where('published_at', '<=', now());
+        return $query
+            ->where("status", "published")
+            ->whereNotNull("published_at")
+            ->where("published_at", "<=", now());
     }
 
     public function scopeMostViewed($query, $limit = 5)
     {
-        return $query->orderBy('views_count', 'desc')->limit($limit);
+        return $query->orderBy("views_count", "desc")->limit($limit);
     }
 
     public function scopeRecent($query, $limit = 10)
     {
-        return $query->orderBy('published_at', 'desc')->limit($limit);
+        return $query->orderBy("published_at", "desc")->limit($limit);
     }
 }

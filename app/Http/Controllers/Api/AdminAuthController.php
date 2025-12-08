@@ -14,32 +14,33 @@ class AdminAuthController extends Controller
 {
     public function login(LoginRequest $request)
     {
+        $user = User::where("email", $request->email)->first();
 
-        $user = User::where('email', $request->email)->first();
-
-        if (! $user || ! Hash::check($request->password, $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                "email" => ["The provided credentials are incorrect."],
             ]);
         }
 
-        if (! $user->hasAnyRole(['editor', 'admin', 'superadmin'])) {
+        if (!$user->hasAnyRole(["editor", "admin", "superadmin"])) {
             throw ValidationException::withMessages([
-                'email' => ['Access denied. Admin privileges required.'],
+                "email" => ["Access denied. Admin privileges required."],
             ]);
         }
 
-        $token = $user->createToken('admin-token')->plainTextToken;
+        $token = $user->createToken("admin-token")->plainTextToken;
 
         return response()->json([
-            'user' => [
-                'uuid' => $user->uuid,
-                'name' => $user->name,
-                'email' => $user->email,
-                'avatar' => $user->avatar,
-                'role' => $user->roles->first()?->name,
+            "user" => [
+                "uuid" => $user->uuid,
+                "name" => $user->name,
+                "email" => $user->email,
+                "avatar" => $user->avatar,
+                "job_title" => $user->job_title,
+                "bio" => $user->bio,
+                "role" => $user->roles->first()?->name,
             ],
-            'token' => $token,
+            "token" => $token,
         ]);
     }
 
@@ -50,7 +51,7 @@ class AdminAuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message' => 'Logged out successfully',
+            "message" => "Logged out successfully",
         ]);
     }
 
@@ -59,11 +60,13 @@ class AdminAuthController extends Controller
         $user = $request->user();
 
         return response()->json([
-            'uuid' => $user->uuid,
-            'name' => $user->name,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'role' => $user->roles->first()?->name,
+            "uuid" => $user->uuid,
+            "name" => $user->name,
+            "email" => $user->email,
+            "avatar" => $user->avatar,
+            "job_title" => $user->job_title,
+            "bio" => $user->bio,
+            "role" => $user->roles->first()?->name,
         ]);
     }
 }

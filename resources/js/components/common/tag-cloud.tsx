@@ -11,23 +11,32 @@ export function TagCloud({ tags, loading }: TagCloudProps) {
         return (
             <div className="flex flex-wrap gap-2">
                 {[...Array(6)].map((_, i) => (
-                    <div key={i} className="h-6 w-20 bg-muted animate-pulse rounded-md" />
+                    <div
+                        key={i}
+                        className="bg-muted h-6 w-20 animate-pulse rounded-md"
+                    />
                 ))}
             </div>
         );
     }
 
     if (tags.length === 0) {
-        return <p className="text-sm text-muted-foreground">Nenhuma tag disponível.</p>;
+        return (
+            <p className="text-muted-foreground text-sm">
+                Nenhuma tag disponível.
+            </p>
+        );
     }
 
     return (
         <div className="flex flex-wrap gap-2">
-            {tags.map((tag) => (
+            {tags.map(tag => (
                 <div key={tag.uuid} className="flex items-center gap-1">
                     <TagBadge tag={tag} />
                     {tag.posts_count !== undefined && (
-                        <span className="text-xs text-muted-foreground">({tag.posts_count})</span>
+                        <span className="text-muted-foreground text-xs">
+                            ({tag.posts_count})
+                        </span>
                     )}
                 </div>
             ))}

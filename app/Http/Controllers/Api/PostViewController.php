@@ -16,23 +16,23 @@ class PostViewController extends Controller
         $visitorHash = $this->generateVisitorHash($request);
         $today = Carbon::today()->toDateString();
 
-        $existingView = PostView::where('post_id', $post->id)
-            ->where('visitor_hash', $visitorHash)
-            ->whereDate('visited_at', $today)
+        $existingView = PostView::where("post_id", $post->id)
+            ->where("visitor_hash", $visitorHash)
+            ->whereDate("visited_at", $today)
             ->first();
 
         if (!$existingView) {
             PostView::create([
-                'post_id' => $post->id,
-                'visitor_hash' => $visitorHash,
-                'user_id' => Auth::id(),
-                'visited_at' => now(),
+                "post_id" => $post->id,
+                "visitor_hash" => $visitorHash,
+                "user_id" => Auth::id(),
+                "visited_at" => now(),
             ]);
         }
 
         return response()->json([
-            'message' => 'View tracked successfully',
-            'views_count' => $post->fresh()->views_count,
+            "message" => "View tracked successfully",
+            "views_count" => $post->fresh()->views_count,
         ]);
     }
 
@@ -41,6 +41,6 @@ class PostViewController extends Controller
         $ip = $request->ip();
         $userAgent = $request->userAgent();
 
-        return hash('sha256', $ip . $userAgent);
+        return hash("sha256", $ip . $userAgent);
     }
 }

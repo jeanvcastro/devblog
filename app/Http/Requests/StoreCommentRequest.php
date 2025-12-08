@@ -9,15 +9,15 @@ class StoreCommentRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', Comment::class);
+        return $this->user()->can("create", Comment::class);
     }
 
     public function rules(): array
     {
         return [
-            'post_uuid' => 'required|uuid|exists:posts,uuid',
-            'parent_uuid' => 'nullable|uuid|exists:comments,uuid',
-            'content' => 'required|string|max:2000',
+            "post_uuid" => "required|uuid|exists:posts,uuid",
+            "parent_uuid" => "nullable|uuid|exists:comments,uuid",
+            "content" => "required|string|max:2000",
         ];
     }
 }

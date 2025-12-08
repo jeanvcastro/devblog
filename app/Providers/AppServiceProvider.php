@@ -27,28 +27,34 @@ class AppServiceProvider extends ServiceProvider
 
     protected function configureRateLimiting(): void
     {
-        RateLimiter::for('api', function (Request $request) {
+        RateLimiter::for("api", function (Request $request) {
             return Limit::perMinute(120)->by($request->ip());
         });
 
-        RateLimiter::for('auth', function (Request $request) {
+        RateLimiter::for("auth", function (Request $request) {
             return Limit::perMinute(5)->by($request->ip());
         });
 
-        RateLimiter::for('authenticated', function (Request $request) {
-            return Limit::perMinute(300)->by($request->user()?->id ?: $request->ip());
+        RateLimiter::for("authenticated", function (Request $request) {
+            return Limit::perMinute(300)->by(
+                $request->user()?->id ?: $request->ip(),
+            );
         });
 
-        RateLimiter::for('comments', function (Request $request) {
-            return Limit::perMinute(10)->by($request->user()?->id ?: $request->ip());
+        RateLimiter::for("comments", function (Request $request) {
+            return Limit::perMinute(10)->by(
+                $request->user()?->id ?: $request->ip(),
+            );
         });
 
-        RateLimiter::for('views', function (Request $request) {
+        RateLimiter::for("views", function (Request $request) {
             return Limit::perMinute(60)->by($request->ip());
         });
 
-        RateLimiter::for('uploads', function (Request $request) {
-            return Limit::perMinute(20)->by($request->user()?->id ?: $request->ip());
+        RateLimiter::for("uploads", function (Request $request) {
+            return Limit::perMinute(20)->by(
+                $request->user()?->id ?: $request->ip(),
+            );
         });
     }
 }

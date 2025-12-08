@@ -28,7 +28,7 @@ class PostPolicy
 
     public function update(User $user, Post $post): bool
     {
-        if ($user->hasAnyRole(['admin', 'superadmin'])) {
+        if ($user->hasAnyRole(["admin", "superadmin"])) {
             return true;
         }
 
@@ -37,7 +37,7 @@ class PostPolicy
 
     public function delete(User $user, Post $post): bool
     {
-        if ($user->hasAnyRole(['admin', 'superadmin'])) {
+        if ($user->hasAnyRole(["admin", "superadmin"])) {
             return true;
         }
 
@@ -46,11 +46,16 @@ class PostPolicy
 
     public function restore(User $user, Post $post): bool
     {
-        return $user->hasAnyRole(['admin', 'superadmin']);
+        return $user->hasAnyRole(["admin", "superadmin"]);
     }
 
     public function forceDelete(User $user, Post $post): bool
     {
-        return $user->hasAnyRole(['admin', 'superadmin']);
+        return $user->hasAnyRole(["admin", "superadmin"]);
+    }
+
+    public function publish(User $user): bool
+    {
+        return $user->hasAnyRole(["admin", "superadmin"]);
     }
 }

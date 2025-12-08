@@ -1,4 +1,3 @@
-import { AdminLayout } from "@/layout/admin-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -9,11 +8,23 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { AdminLayout } from "@/layout/admin-layout";
 import api from "@/services/api";
 import { Check, Copy, Loader2, Trash2, Upload } from "lucide-react";
-import { ChangeEvent, SyntheticEvent, useCallback, useEffect, useRef, useState } from "react";
+import {
+    ChangeEvent,
+    SyntheticEvent,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import toast from "react-hot-toast";
-import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from "react-image-crop";
+import ReactCrop, {
+    type Crop,
+    centerCrop,
+    makeAspectCrop,
+} from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
 interface Image {
@@ -27,7 +38,12 @@ interface Image {
 function centerAspectCrop(mediaWidth: number, mediaHeight: number) {
     const aspect = mediaWidth / mediaHeight;
     return centerCrop(
-        makeAspectCrop({ unit: "%", width: 100 }, aspect, mediaWidth, mediaHeight),
+        makeAspectCrop(
+            { unit: "%", width: 100 },
+            aspect,
+            mediaWidth,
+            mediaHeight,
+        ),
         mediaWidth,
         mediaHeight,
     );
@@ -136,7 +152,10 @@ export function MediaPage() {
             const formData = new FormData();
             if (croppedBlob) {
                 const ext = originalFile.name.split(".").pop() || "jpg";
-                const filename = originalFile.name.replace(/\.[^/.]+$/, "") + "_cropped." + ext;
+                const filename =
+                    originalFile.name.replace(/\.[^/.]+$/, "") +
+                    "_cropped." +
+                    ext;
                 formData.append("image", croppedBlob, filename);
             } else {
                 formData.append("image", originalFile);
@@ -291,7 +310,7 @@ export function MediaPage() {
                         {images.map(image => (
                             <Card
                                 key={image.filename}
-                                className="flex flex-col overflow-hidden border-0 py-0 shadow-md dark:border"
+                                className="flex flex-col overflow-hidden border py-0"
                             >
                                 <div className="bg-muted relative aspect-square overflow-hidden">
                                     <img
@@ -391,14 +410,19 @@ export function MediaPage() {
                         {imgSrc && (
                             <ReactCrop
                                 crop={crop}
-                                onChange={(_, percentCrop) => setCrop(percentCrop)}
+                                onChange={(_, percentCrop) =>
+                                    setCrop(percentCrop)
+                                }
                             >
                                 <img
                                     ref={imgRef}
                                     src={imgSrc}
                                     alt="Crop"
                                     onLoad={onImageLoad}
-                                    style={{ maxHeight: "60vh", maxWidth: "100%" }}
+                                    style={{
+                                        maxHeight: "60vh",
+                                        maxWidth: "100%",
+                                    }}
                                 />
                             </ReactCrop>
                         )}

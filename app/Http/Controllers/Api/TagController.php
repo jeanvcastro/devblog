@@ -10,21 +10,26 @@ class TagController extends Controller
 {
     public function index()
     {
-        return Tag::withCount('posts')->get();
+        return Tag::withCount("posts")->get();
     }
 
     public function show(Tag $tag)
     {
-        return $tag->load(['posts' => function ($query) {
-            $query->published()->with('author')->orderBy('published_at', 'desc');
-        }]);
+        return $tag->load([
+            "posts" => function ($query) {
+                $query
+                    ->published()
+                    ->with("author")
+                    ->orderBy("published_at", "desc");
+            },
+        ]);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|unique:tags,slug',
+            "name" => "required|string|max:255",
+            "slug" => "required|string|unique:tags,slug",
         ]);
 
         return Tag::create($validated);
@@ -33,8 +38,8 @@ class TagController extends Controller
     public function update(Request $request, Tag $tag)
     {
         $validated = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'slug' => 'sometimes|string|unique:tags,slug,' . $tag->id,
+            "name" => "sometimes|string|max:255",
+            "slug" => "sometimes|string|unique:tags,slug," . $tag->id,
         ]);
 
         $tag->update($validated);
@@ -44,6 +49,6 @@ class TagController extends Controller
     public function destroy(Tag $tag)
     {
         $tag->delete();
-        return response()->json(['message' => 'Tag deleted successfully']);
+        return response()->json(["message" => "Tag deleted successfully"]);
     }
 }

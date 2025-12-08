@@ -11,17 +11,24 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $admin = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@devbroder.com',
-            'password' => Hash::make('password'),
+            "name" => "Admin User",
+            "email" => "admin@devbroder.com",
+            "password" => Hash::make("password"),
         ]);
-        $admin->assignRole('admin');
+        $admin->assignRole("admin");
 
         $editor = User::create([
-            'name' => 'Editor User',
-            'email' => 'editor@devbroder.com',
-            'password' => Hash::make('password'),
+            "name" => "Editor User",
+            "email" => "editor@devbroder.com",
+            "password" => Hash::make("password"),
         ]);
-        $editor->assignRole('editor');
+        $editor->assignRole("editor");
+
+        $reader = User::create([
+            "name" => "Reader User",
+            "email" => "reader@devbroder.com",
+            "password" => Hash::make("password"),
+        ]);
+        $reader->assignRole("reader");
     }
 }

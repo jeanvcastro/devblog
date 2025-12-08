@@ -23,7 +23,7 @@ export function StatsCard({
         <Card>
             <CardHeader>
                 <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                    <CardTitle className="text-muted-foreground text-sm font-medium">
                         {title}
                     </CardTitle>
                     {icon && (

@@ -9,16 +9,16 @@ class StoreUserRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', User::class);
+        return $this->user()->can("create", User::class);
     }
 
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8',
-            'role' => 'required|in:reader,editor,admin',
+            "name" => "required|string|max:255",
+            "email" => "required|email|max:255|unique:users,email",
+            "password" => "required|string|min:8",
+            "role" => "required|in:reader,editor,admin",
         ];
     }
 }

@@ -26,7 +26,7 @@ export function PostCard({ post }: PostCardProps) {
 
     return (
         <Card
-            className="group cursor-pointer hover:border-primary/60"
+            className="group hover:border-primary/60 cursor-pointer"
             onClick={handleCardClick}
         >
             <CardHeader>

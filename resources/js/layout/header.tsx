@@ -8,13 +8,27 @@ import {
 } from "@/components/ui/popover";
 import { useAuth } from "@/contexts/auth-context";
 import { getAvatarUrl } from "@/utils/avatar";
-import { ChevronDown, LayoutDashboard, LogOut, Menu, User, X } from "lucide-react";
+import {
+    ChevronDown,
+    LayoutDashboard,
+    LogOut,
+    Menu,
+    User,
+    X,
+} from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/logo.svg?react";
 
 export function Header() {
-    const { user, isAuthenticated, logout, canManagePosts, isAdmin, isSuperAdmin } = useAuth();
+    const {
+        user,
+        isAuthenticated,
+        logout,
+        canManagePosts,
+        isAdmin,
+        isSuperAdmin,
+    } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
 
@@ -95,7 +109,11 @@ export function Header() {
                                         className="w-48 p-2"
                                     >
                                         <Link
-                                            to={canManagePosts ? "/admin/profile" : "/profile"}
+                                            to={
+                                                canManagePosts
+                                                    ? "/admin/profile"
+                                                    : "/profile"
+                                            }
                                             className="hover:bg-accent flex items-center gap-2 rounded-md px-3 py-2 text-sm"
                                         >
                                             <User className="h-4 w-4" />
@@ -103,7 +121,11 @@ export function Header() {
                                         </Link>
                                         {canManagePosts && (
                                             <Link
-                                                to={isAdmin || isSuperAdmin ? "/admin/dashboard" : "/admin/posts"}
+                                                to={
+                                                    isAdmin || isSuperAdmin
+                                                        ? "/admin/dashboard"
+                                                        : "/admin/posts"
+                                                }
                                                 className="hover:bg-accent flex items-center gap-2 rounded-md px-3 py-2 text-sm"
                                             >
                                                 <LayoutDashboard className="h-4 w-4" />
@@ -169,7 +191,11 @@ export function Header() {
                         {isAuthenticated ? (
                             <>
                                 <Link
-                                    to={canManagePosts ? "/admin/profile" : "/profile"}
+                                    to={
+                                        canManagePosts
+                                            ? "/admin/profile"
+                                            : "/profile"
+                                    }
                                     className="hover:text-primary px-3 py-2 text-sm font-medium"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
@@ -177,7 +203,11 @@ export function Header() {
                                 </Link>
                                 {canManagePosts && (
                                     <Link
-                                        to={isAdmin || isSuperAdmin ? "/admin/dashboard" : "/admin/posts"}
+                                        to={
+                                            isAdmin || isSuperAdmin
+                                                ? "/admin/dashboard"
+                                                : "/admin/posts"
+                                        }
                                         className="hover:text-primary px-3 py-2 text-sm font-medium"
                                         onClick={() => setMobileMenuOpen(false)}
                                     >

@@ -12,23 +12,23 @@ class CommentSeeder extends Seeder
     public function run(): void
     {
         $posts = \App\Models\Post::all();
-        $users = \App\Models\User::role('reader')->get();
+        $users = \App\Models\User::role("reader")->get();
 
         foreach ($posts->take(5) as $post) {
             foreach ($users as $user) {
                 \App\Models\Comment::create([
-                    'post_id' => $post->id,
-                    'user_id' => $user->id,
-                    'content' => 'Excelente artigo! Muito bem explicado.',
-                    'approved' => true,
+                    "post_id" => $post->id,
+                    "user_id" => $user->id,
+                    "content" => "Excelente artigo! Muito bem explicado.",
+                    "approved" => true,
                 ]);
             }
 
             \App\Models\Comment::create([
-                'post_id' => $post->id,
-                'user_id' => $users->first()->id,
-                'content' => 'Aguardando aprovação...',
-                'approved' => false,
+                "post_id" => $post->id,
+                "user_id" => $users->first()->id,
+                "content" => "Aguardando aprovação...",
+                "approved" => false,
             ]);
         }
     }

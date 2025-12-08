@@ -9,21 +9,32 @@ class StorePostRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', Post::class);
+        return $this->user()->can("create", Post::class);
     }
 
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:posts,slug',
-            'content' => 'required|string',
-            'excerpt' => 'nullable|string|max:500',
-            'status' => 'required|in:draft,published',
-            'published_at' => 'nullable|date',
-            'reading_time' => 'nullable|integer|min:0',
-            'tags' => 'nullable|array',
-            'tags.*' => 'uuid|exists:tags,uuid',
+            "title" => "required|string|max:255",
+            "slug" => "required|string|max:255|unique:posts,slug",
+            "content" => "required|string",
+            "excerpt" => "nullable|string|max:500",
+            "status" => "required|in:draft,published",
+            "published_at" => "nullable|date",
+            "reading_time" => "nullable|integer|min:0",
+            "tags" => "nullable|array",
+            "tags.*" => "uuid|exists:tags,uuid",
         ];
+    }
+
+    protected function passedValidation(): void
+    {
+        $user = $this->user();
+        if (
+            $this->status === "published" &&
+            !$user->can("publish", Post::class)
+        ) {
+            $this->merge(["status" => "draft"]);
+        }
     }
 }

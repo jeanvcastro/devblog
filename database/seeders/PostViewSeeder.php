@@ -20,10 +20,13 @@ class PostViewSeeder extends Seeder
 
             for ($i = 0; $i < $viewCount; $i++) {
                 \App\Models\PostView::create([
-                    'post_id' => $post->id,
-                    'visitor_hash' => hash('sha256', 'visitor_' . $i . '_' . $post->id),
-                    'user_id' => null,
-                    'visited_at' => now()->subDays(rand(0, 30)),
+                    "post_id" => $post->id,
+                    "visitor_hash" => hash(
+                        "sha256",
+                        "visitor_" . $i . "_" . $post->id,
+                    ),
+                    "user_id" => null,
+                    "visited_at" => now()->subDays(rand(0, 30)),
                 ]);
             }
         }

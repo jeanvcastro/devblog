@@ -1,13 +1,13 @@
 import type { Post, Tag } from "@/@types";
-import { Layout } from "@/layout";
 import { PostList } from "@/components/common/post-list";
 import { SEO } from "@/components/common/seo";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
+import { Layout } from "@/layout";
 import api from "@/services/api";
-import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -15,7 +15,7 @@ export default function SearchPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [query, setQuery] = useState(searchParams.get("q") || "");
     const [selectedTags, setSelectedTags] = useState<string[]>(
-        searchParams.get("tags")?.split(",").filter(Boolean) || []
+        searchParams.get("tags")?.split(",").filter(Boolean) || [],
     );
     const [allTags, setAllTags] = useState<Tag[]>([]);
     const [results, setResults] = useState<Post[]>([]);
@@ -26,7 +26,8 @@ export default function SearchPage() {
     const debouncedQuery = useDebounce(query, 300);
 
     useEffect(() => {
-        const tagsFromUrl = searchParams.get("tags")?.split(",").filter(Boolean) || [];
+        const tagsFromUrl =
+            searchParams.get("tags")?.split(",").filter(Boolean) || [];
         setSelectedTags(tagsFromUrl);
         setCurrentPage(1);
     }, [searchParams]);
@@ -61,10 +62,14 @@ export default function SearchPage() {
                 }
 
                 if (selectedTags.length > 0) {
-                    params.tags = selectedTags.join(',');
+                    params.tags = selectedTags.join(",");
                 }
 
-                const res = await api.get<{ data: Post[]; last_page: number; total: number }>("/posts/search", { params });
+                const res = await api.get<{
+                    data: Post[];
+                    last_page: number;
+                    total: number;
+                }>("/posts/search", { params });
                 setResults(res.data.data || []);
                 setTotalPages(res.data.last_page || 1);
                 setTotal(res.data.total || 0);
@@ -88,15 +93,17 @@ export default function SearchPage() {
 
     const toggleTag = (slug: string) => {
         setSelectedTags(prev =>
-            prev.includes(slug) ? prev.filter(s => s !== slug) : [...prev, slug]
+            prev.includes(slug)
+                ? prev.filter(s => s !== slug)
+                : [...prev, slug],
         );
     };
 
     const pageTitle = query
         ? `Busca: ${query}`
         : selectedTags.length > 0
-        ? "Artigos Filtrados"
-        : "Artigos";
+          ? "Artigos Filtrados"
+          : "Artigos";
     const pageDescription = query
         ? `Resultados de busca para "${query}"`
         : "Explore todos os artigos sobre desenvolvimento de software, arquitetura, frontend e backend.";
@@ -114,7 +121,7 @@ export default function SearchPage() {
                         Artigos
                     </h1>
 
-                    <div className="space-y-6 mb-12">
+                    <div className="mb-12 space-y-6">
                         <div className="relative">
                             <Search className="text-muted-foreground absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2" />
                             <Input
@@ -128,14 +135,18 @@ export default function SearchPage() {
 
                         {selectedTags.length > 0 && (
                             <div className="flex flex-wrap gap-2">
-                                <span className="text-sm text-muted-foreground self-center">Filtros:</span>
+                                <span className="text-muted-foreground self-center text-sm">
+                                    Filtros:
+                                </span>
                                 {selectedTags.map(slug => {
-                                    const tag = allTags.find(t => t.slug === slug);
+                                    const tag = allTags.find(
+                                        t => t.slug === slug,
+                                    );
                                     return tag ? (
                                         <Badge
                                             key={slug}
                                             variant="default"
-                                            className="gap-1 cursor-pointer hover:bg-primary/90 transition-colors"
+                                            className="hover:bg-primary/90 cursor-pointer gap-1 transition-colors"
                                             onClick={() => toggleTag(slug)}
                                         >
                                             {tag.name}
@@ -147,13 +158,19 @@ export default function SearchPage() {
                         )}
 
                         <div>
-                            <p className="text-sm text-muted-foreground mb-3">Tags populares:</p>
+                            <p className="text-muted-foreground mb-3 text-sm">
+                                Tags populares:
+                            </p>
                             <div className="flex flex-wrap gap-2">
                                 {allTags.slice(0, 8).map(tag => (
                                     <Badge
                                         key={tag.uuid}
-                                        variant={selectedTags.includes(tag.slug) ? "default" : "outline"}
-                                        className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                                        variant={
+                                            selectedTags.includes(tag.slug)
+                                                ? "default"
+                                                : "outline"
+                                        }
+                                        className="hover:bg-primary hover:text-primary-foreground cursor-pointer transition-colors"
                                         onClick={() => toggleTag(tag.slug)}
                                     >
                                         {tag.name}
@@ -172,11 +189,13 @@ export default function SearchPage() {
                         <PostList posts={results} loading={loading} />
 
                         {totalPages > 1 && (
-                            <div className="flex items-center justify-center gap-2 mt-8">
+                            <div className="mt-8 flex items-center justify-center gap-2">
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                    onClick={() =>
+                                        setCurrentPage(p => Math.max(1, p - 1))
+                                    }
                                     disabled={currentPage === 1}
                                 >
                                     <ChevronLeft className="h-4 w-4" />
@@ -184,26 +203,49 @@ export default function SearchPage() {
                                 </Button>
 
                                 <div className="flex items-center gap-1">
-                                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                    {Array.from(
+                                        { length: totalPages },
+                                        (_, i) => i + 1,
+                                    )
                                         .filter(page => {
                                             if (totalPages <= 7) return true;
-                                            if (page === 1 || page === totalPages) return true;
-                                            if (Math.abs(page - currentPage) <= 1) return true;
+                                            if (
+                                                page === 1 ||
+                                                page === totalPages
+                                            )
+                                                return true;
+                                            if (
+                                                Math.abs(page - currentPage) <=
+                                                1
+                                            )
+                                                return true;
                                             return false;
                                         })
                                         .map((page, idx, arr) => {
                                             const prevPage = arr[idx - 1];
-                                            const showEllipsis = prevPage && page - prevPage > 1;
+                                            const showEllipsis =
+                                                prevPage && page - prevPage > 1;
 
                                             return (
-                                                <div key={page} className="flex items-center gap-1">
+                                                <div
+                                                    key={page}
+                                                    className="flex items-center gap-1"
+                                                >
                                                     {showEllipsis && (
-                                                        <span className="px-2 text-muted-foreground">...</span>
+                                                        <span className="text-muted-foreground px-2">
+                                                            ...
+                                                        </span>
                                                     )}
                                                     <Button
-                                                        variant={currentPage === page ? "default" : "outline"}
+                                                        variant={
+                                                            currentPage === page
+                                                                ? "default"
+                                                                : "outline"
+                                                        }
                                                         size="sm"
-                                                        onClick={() => setCurrentPage(page)}
+                                                        onClick={() =>
+                                                            setCurrentPage(page)
+                                                        }
                                                     >
                                                         {page}
                                                     </Button>
@@ -215,7 +257,11 @@ export default function SearchPage() {
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                    onClick={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages, p + 1),
+                                        )
+                                    }
                                     disabled={currentPage === totalPages}
                                 >
                                     Próxima

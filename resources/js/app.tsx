@@ -6,7 +6,8 @@ import { ThemeProvider } from "@/contexts/theme-context";
 import "@/css/app.css";
 import { lazy, ReactNode, Suspense } from "react";
 
-console.log(`
+console.log(
+    `
 %c
     ____             ____                  __
    / __ \\___  _   __/ __ )_________  ____/ /__  _____
@@ -18,10 +19,10 @@ console.log(`
 
 Acesse %cdevbroder.com%c, lá tem os contatos. Bora trocar uma ideia!
 `,
-"color: #ff4800; font-weight: bold;",
-"color: inherit; font-size: 14px;",
-"color: #ff4800; font-weight: bold; font-size: 14px;",
-"color: inherit; font-size: 14px;"
+    "color: #ff4800; font-weight: bold;",
+    "color: inherit; font-size: 14px;",
+    "color: #ff4800; font-weight: bold; font-size: 14px;",
+    "color: inherit; font-size: 14px;",
 );
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "react-hot-toast";
@@ -139,7 +140,7 @@ const router = createBrowserRouter([
         path: "/admin/dashboard",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
+                <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
                     <DashboardPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -150,7 +151,9 @@ const router = createBrowserRouter([
         path: "/admin/posts",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute allowedRoles={['editor', 'admin', 'superadmin']}>
+                <ProtectedRoute
+                    allowedRoles={["editor", "admin", "superadmin"]}
+                >
                     <PostsPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -161,7 +164,9 @@ const router = createBrowserRouter([
         path: "/admin/posts/new",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute allowedRoles={['editor', 'admin', 'superadmin']}>
+                <ProtectedRoute
+                    allowedRoles={["editor", "admin", "superadmin"]}
+                >
                     <PostsNewPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -172,7 +177,9 @@ const router = createBrowserRouter([
         path: "/admin/posts/:uuid/edit",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute allowedRoles={['editor', 'admin', 'superadmin']}>
+                <ProtectedRoute
+                    allowedRoles={["editor", "admin", "superadmin"]}
+                >
                     <PostsEditPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -183,7 +190,7 @@ const router = createBrowserRouter([
         path: "/admin/comments",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
+                <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
                     <CommentsPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -194,7 +201,7 @@ const router = createBrowserRouter([
         path: "/admin/analytics",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
+                <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
                     <AnalyticsPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -205,7 +212,7 @@ const router = createBrowserRouter([
         path: "/admin/media",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
+                <ProtectedRoute allowedRoles={["admin", "superadmin"]}>
                     <MediaPage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -227,7 +234,9 @@ const router = createBrowserRouter([
         path: "/admin/profile",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute allowedRoles={['editor', 'admin', 'superadmin']}>
+                <ProtectedRoute
+                    allowedRoles={["editor", "admin", "superadmin"]}
+                >
                     <AdminProfilePage />
                 </ProtectedRoute>
             </SuspenseWrapper>
@@ -238,7 +247,7 @@ const router = createBrowserRouter([
         path: "/admin/users",
         element: (
             <SuspenseWrapper>
-                <ProtectedRoute allowedRoles={['superadmin']}>
+                <ProtectedRoute allowedRoles={["superadmin"]}>
                     <UsersPage />
                 </ProtectedRoute>
             </SuspenseWrapper>

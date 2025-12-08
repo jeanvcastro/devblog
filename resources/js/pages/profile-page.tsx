@@ -24,7 +24,13 @@ import { getAvatarUrl } from "@/utils/avatar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import GoogleIcon from "@/assets/google.svg?react";
 import { Camera, Loader2, Trash2 } from "lucide-react";
-import { ChangeEvent, SyntheticEvent, useCallback, useRef, useState } from "react";
+import {
+    ChangeEvent,
+    SyntheticEvent,
+    useCallback,
+    useRef,
+    useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ReactCrop, {
@@ -186,7 +192,9 @@ export default function ProfilePage() {
     const handleRemoveAvatar = async () => {
         try {
             setIsRemovingAvatar(true);
-            const response = await api.delete<{ user: User }>("/profile/avatar");
+            const response = await api.delete<{ user: User }>(
+                "/profile/avatar",
+            );
             updateUser(response.data.user);
             toast.success("Avatar removido com sucesso!");
         } catch {
@@ -218,13 +226,18 @@ export default function ProfilePage() {
                     <Card>
                         <CardHeader>
                             <CardTitle>Avatar</CardTitle>
-                            <CardDescription>Sua foto de perfil</CardDescription>
+                            <CardDescription>
+                                Sua foto de perfil
+                            </CardDescription>
                         </CardHeader>
                         <CardContent className="flex flex-col items-center gap-4">
                             <div className="relative">
                                 <Avatar className="h-32 w-32">
                                     <AvatarImage
-                                        src={getAvatarUrl(user.name, user.avatar)}
+                                        src={getAvatarUrl(
+                                            user.name,
+                                            user.avatar,
+                                        )}
                                         alt={user.name}
                                     />
                                     <AvatarFallback className="bg-primary text-primary-foreground text-4xl">
@@ -234,8 +247,12 @@ export default function ProfilePage() {
                                 <Button
                                     size="icon"
                                     className="border-background hover:bg-secondary absolute right-0 bottom-0 h-10 w-10 rounded-full border-2"
-                                    onClick={() => fileInputRef.current?.click()}
-                                    disabled={isUploadingAvatar || isRemovingAvatar}
+                                    onClick={() =>
+                                        fileInputRef.current?.click()
+                                    }
+                                    disabled={
+                                        isUploadingAvatar || isRemovingAvatar
+                                    }
                                 >
                                     <Camera className="h-5 w-5" />
                                 </Button>
@@ -245,7 +262,9 @@ export default function ProfilePage() {
                                     variant="ghost"
                                     size="sm"
                                     onClick={handleRemoveAvatar}
-                                    disabled={isUploadingAvatar || isRemovingAvatar}
+                                    disabled={
+                                        isUploadingAvatar || isRemovingAvatar
+                                    }
                                     className="text-destructive hover:text-destructive"
                                 >
                                     {isRemovingAvatar ? (
@@ -307,7 +326,6 @@ export default function ProfilePage() {
                             </form>
                         </CardContent>
                     </Card>
-
                 </div>
             </div>
 
@@ -320,7 +338,9 @@ export default function ProfilePage() {
                         {imgSrc && (
                             <ReactCrop
                                 crop={crop}
-                                onChange={(_, percentCrop) => setCrop(percentCrop)}
+                                onChange={(_, percentCrop) =>
+                                    setCrop(percentCrop)
+                                }
                                 aspect={1}
                                 circularCrop
                             >
@@ -329,7 +349,10 @@ export default function ProfilePage() {
                                     src={imgSrc}
                                     alt="Crop"
                                     onLoad={onImageLoad}
-                                    style={{ maxHeight: "60vh", maxWidth: "100%" }}
+                                    style={{
+                                        maxHeight: "60vh",
+                                        maxWidth: "100%",
+                                    }}
                                 />
                             </ReactCrop>
                         )}
@@ -342,7 +365,10 @@ export default function ProfilePage() {
                         >
                             Cancelar
                         </Button>
-                        <Button onClick={handleSaveAvatar} disabled={isUploadingAvatar}>
+                        <Button
+                            onClick={handleSaveAvatar}
+                            disabled={isUploadingAvatar}
+                        >
                             {isUploadingAvatar && (
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             )}

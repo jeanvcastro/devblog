@@ -90,11 +90,69 @@ export default function PostPage() {
     if (loading || !post) {
         return (
             <Layout>
-                <div className="container mx-auto max-w-4xl px-4 py-12">
-                    <div className="space-y-4">
-                        <div className="bg-muted h-12 animate-pulse rounded" />
-                        <div className="bg-muted h-6 w-1/3 animate-pulse rounded" />
-                        <div className="bg-muted h-96 animate-pulse rounded" />
+                <div className="container mx-auto max-w-7xl px-4 pt-12 pb-6">
+                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                        <div className="lg:col-span-2">
+                            <header className="mb-8">
+                                <div className="bg-muted mb-4 h-12 w-3/4 animate-pulse rounded" />
+                                <div className="mb-4 flex flex-wrap items-center gap-4">
+                                    <div className="flex items-center gap-2">
+                                        <div className="bg-muted h-10 w-10 animate-pulse rounded-full" />
+                                        <div>
+                                            <div className="bg-muted mb-1 h-4 w-24 animate-pulse rounded" />
+                                            <div className="bg-muted h-3 w-20 animate-pulse rounded" />
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <div className="bg-muted h-4 w-16 animate-pulse rounded" />
+                                        <div className="bg-muted h-4 w-20 animate-pulse rounded" />
+                                    </div>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    <div className="bg-muted h-5 w-16 animate-pulse rounded-full" />
+                                    <div className="bg-muted h-5 w-20 animate-pulse rounded-full" />
+                                </div>
+                            </header>
+                            <div className="mb-12 space-y-4">
+                                <div className="bg-muted h-4 w-full animate-pulse rounded" />
+                                <div className="bg-muted h-4 w-full animate-pulse rounded" />
+                                <div className="bg-muted h-4 w-5/6 animate-pulse rounded" />
+                                <div className="bg-muted h-4 w-full animate-pulse rounded" />
+                                <div className="bg-muted h-4 w-4/5 animate-pulse rounded" />
+                                <div className="bg-muted h-32 w-full animate-pulse rounded" />
+                                <div className="bg-muted h-4 w-full animate-pulse rounded" />
+                                <div className="bg-muted h-4 w-3/4 animate-pulse rounded" />
+                            </div>
+                        </div>
+                        <aside className="space-y-6">
+                            <Card>
+                                <CardHeader>
+                                    <div className="bg-muted h-5 w-32 animate-pulse rounded" />
+                                </CardHeader>
+                                <CardContent className="space-y-3">
+                                    {[...Array(3)].map((_, i) => (
+                                        <div
+                                            key={i}
+                                            className="bg-muted h-4 w-full animate-pulse rounded"
+                                        />
+                                    ))}
+                                </CardContent>
+                            </Card>
+                            <Card>
+                                <CardHeader>
+                                    <div className="bg-muted h-5 w-28 animate-pulse rounded" />
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-muted h-12 w-12 animate-pulse rounded-full" />
+                                        <div>
+                                            <div className="bg-muted mb-1 h-4 w-24 animate-pulse rounded" />
+                                            <div className="bg-muted h-3 w-20 animate-pulse rounded" />
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </aside>
                     </div>
                 </div>
             </Layout>
@@ -125,7 +183,7 @@ export default function PostPage() {
 
                             <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-4 text-sm">
                                 <div className="flex items-center gap-2">
-                                    <Avatar className="h-10 w-10 ring-2 ring-background">
+                                    <Avatar className="ring-background h-10 w-10 ring-2">
                                         <AvatarImage
                                             src={
                                                 post.author.avatar || undefined
@@ -187,8 +245,8 @@ export default function PostPage() {
                                 <CardTitle>Sobre o Autor</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="mb-3 flex items-center gap-3">
-                                    <Avatar className="h-12 w-12 ring-2 ring-background">
+                                <div className="flex items-center gap-3">
+                                    <Avatar className="ring-background h-12 w-12 ring-2">
                                         <AvatarImage
                                             src={
                                                 post.author.avatar || undefined
@@ -206,10 +264,15 @@ export default function PostPage() {
                                             {post.author.name}
                                         </p>
                                         <p className="text-muted-foreground text-sm">
-                                            Autor
+                                            {post.author.job_title || "Autor"}
                                         </p>
                                     </div>
                                 </div>
+                                {post.author.bio && (
+                                    <p className="text-muted-foreground mt-4 text-sm">
+                                        {post.author.bio}
+                                    </p>
+                                )}
                             </CardContent>
                         </Card>
                     </aside>

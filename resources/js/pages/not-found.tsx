@@ -9,7 +9,7 @@ export default function NotFoundPage() {
             <div className="flex min-h-[60vh] items-center justify-center p-4">
                 <Card className="w-full max-w-md">
                     <CardHeader>
-                        <CardTitle className="text-center text-6xl font-bold text-primary">
+                        <CardTitle className="text-primary text-center text-6xl font-bold">
                             404
                         </CardTitle>
                     </CardHeader>
@@ -17,8 +17,9 @@ export default function NotFoundPage() {
                         <p className="text-center text-xl font-semibold">
                             Página não encontrada
                         </p>
-                        <p className="text-center text-muted-foreground">
-                            A página que você está procurando não existe ou foi movida.
+                        <p className="text-muted-foreground text-center">
+                            A página que você está procurando não existe ou foi
+                            movida.
                         </p>
                         <div className="flex justify-center gap-2">
                             <Button asChild>

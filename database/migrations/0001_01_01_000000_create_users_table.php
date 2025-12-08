@@ -18,6 +18,8 @@ return new class extends Migration {
             $table->timestamp("email_verified_at")->nullable();
             $table->string("password")->nullable();
             $table->string("avatar")->nullable();
+            $table->string("job_title")->nullable();
+            $table->text("bio")->nullable();
             $table->string("google_id")->nullable()->unique();
             $table->string("utm_source")->nullable();
             $table->string("utm_medium")->nullable();

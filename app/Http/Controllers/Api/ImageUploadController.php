@@ -14,39 +14,42 @@ class ImageUploadController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user || !$user->hasAnyRole(['admin', 'superadmin'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+        if (!$user || !$user->hasAnyRole(["admin", "superadmin"])) {
+            return response()->json(["message" => "Unauthorized"], 403);
         }
 
-        $files = Storage::disk('public')->files('images/posts');
+        $files = Storage::disk("public")->files("images/posts");
 
-        $images = collect($files)->map(function ($file) {
-            return [
-                'filename' => basename($file),
-                'url' => url(Storage::disk('public')->url($file)),
-                'path' => $file,
-                'size' => Storage::disk('public')->size($file),
-                'modified' => Storage::disk('public')->lastModified($file),
-            ];
-        })->sortByDesc('modified')->values();
+        $images = collect($files)
+            ->map(function ($file) {
+                return [
+                    "filename" => basename($file),
+                    "url" => url(Storage::disk("public")->url($file)),
+                    "path" => $file,
+                    "size" => Storage::disk("public")->size($file),
+                    "modified" => Storage::disk("public")->lastModified($file),
+                ];
+            })
+            ->sortByDesc("modified")
+            ->values();
 
         return response()->json($images);
     }
 
     public function upload(UploadImageRequest $request)
     {
-        $image = $request->file('image');
+        $image = $request->file("image");
 
-        $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
+        $filename = Str::uuid() . "." . $image->getClientOriginalExtension();
 
-        $path = $image->storeAs('images/posts', $filename, 'public');
+        $path = $image->storeAs("images/posts", $filename, "public");
 
-        $url = url(Storage::disk('public')->url($path));
+        $url = url(Storage::disk("public")->url($path));
 
         return response()->json([
-            'url' => $url,
-            'path' => $path,
-            'filename' => $filename,
+            "url" => $url,
+            "path" => $path,
+            "filename" => $filename,
         ]);
     }
 
@@ -54,17 +57,19 @@ class ImageUploadController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user || !$user->hasAnyRole(['admin', 'superadmin'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+        if (!$user || !$user->hasAnyRole(["admin", "superadmin"])) {
+            return response()->json(["message" => "Unauthorized"], 403);
         }
 
-        $path = 'images/posts/' . $filename;
+        $path = "images/posts/" . $filename;
 
-        if (Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
-            return response()->json(['message' => 'Image deleted successfully']);
+        if (Storage::disk("public")->exists($path)) {
+            Storage::disk("public")->delete($path);
+            return response()->json([
+                "message" => "Image deleted successfully",
+            ]);
         }
 
-        return response()->json(['message' => 'Image not found'], 404);
+        return response()->json(["message" => "Image not found"], 404);
     }
 }

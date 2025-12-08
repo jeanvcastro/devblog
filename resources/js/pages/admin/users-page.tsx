@@ -1,4 +1,4 @@
-import type { Role, User } from "@/@types";
+import type { User } from "@/@types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,11 +23,14 @@ import { useAuth } from "@/contexts/auth-context";
 import { AdminLayout } from "@/layout/admin-layout";
 import api from "@/services/api";
 import { getAvatarUrl } from "@/utils/avatar";
+import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import { Key, Loader2, Pencil, Plus, Search, Trash2 } from "lucide-react";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { z } from "zod";
 import { DataTable, type DataTableColumn } from "./components/data-table";
 
 dayjs.locale("pt-br");
@@ -46,18 +49,26 @@ const roleLabels: Record<string, string> = {
     superadmin: "Super Admin",
 };
 
-type CreateUserForm = {
-    name: string;
-    email: string;
-    password: string;
-    role: Exclude<Role, "superadmin">;
-};
+const createUserSchema = z.object({
+    name: z.string().min(1, "Nome é obrigatório"),
+    email: z.string().min(1, "Email é obrigatório").email("Email inválido"),
+    password: z.string().min(8, "Senha deve ter pelo menos 8 caracteres"),
+    role: z.enum(["reader", "editor", "admin"]),
+});
 
-type EditUserForm = {
-    name: string;
-    email: string;
-    role: Exclude<Role, "superadmin">;
-};
+const editUserSchema = z.object({
+    name: z.string().min(1, "Nome é obrigatório"),
+    email: z.string().min(1, "Email é obrigatório").email("Email inválido"),
+    role: z.enum(["reader", "editor", "admin"]),
+});
+
+const resetPasswordSchema = z.object({
+    password: z.string().min(8, "Senha deve ter pelo menos 8 caracteres"),
+});
+
+type CreateUserFormData = z.infer<typeof createUserSchema>;
+type EditUserFormData = z.infer<typeof editUserSchema>;
+type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 export function UsersPage() {
     const { user: currentUser } = useAuth();
@@ -69,34 +80,48 @@ export function UsersPage() {
     const [totalPages, setTotalPages] = useState(1);
 
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
-    const [createForm, setCreateForm] = useState<CreateUserForm>({
-        name: "",
-        email: "",
-        password: "",
-        role: "reader",
-    });
-    const [isCreating, setIsCreating] = useState(false);
-
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [userToEdit, setUserToEdit] = useState<User | null>(null);
-    const [editForm, setEditForm] = useState<EditUserForm>({
-        name: "",
-        email: "",
-        role: "reader",
-    });
-    const [isEditing, setIsEditing] = useState(false);
-
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [userToDelete, setUserToDelete] = useState<User | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
-
     const [resetPasswordDialogOpen, setResetPasswordDialogOpen] =
         useState(false);
     const [userToResetPassword, setUserToResetPassword] = useState<User | null>(
         null,
     );
-    const [newPassword, setNewPassword] = useState("");
-    const [isResettingPassword, setIsResettingPassword] = useState(false);
+
+    const {
+        register: registerCreate,
+        handleSubmit: handleSubmitCreate,
+        control: controlCreate,
+        reset: resetCreate,
+        formState: { errors: createErrors, isSubmitting: isCreating },
+    } = useForm<CreateUserFormData>({
+        resolver: zodResolver(createUserSchema),
+        defaultValues: { name: "", email: "", password: "", role: "reader" },
+    });
+
+    const {
+        register: registerEdit,
+        handleSubmit: handleSubmitEdit,
+        control: controlEdit,
+        reset: resetEdit,
+        formState: { errors: editErrors, isSubmitting: isEditing },
+    } = useForm<EditUserFormData>({
+        resolver: zodResolver(editUserSchema),
+        defaultValues: { name: "", email: "", role: "reader" },
+    });
+
+    const {
+        register: registerReset,
+        handleSubmit: handleSubmitReset,
+        reset: resetResetForm,
+        formState: { errors: resetErrors, isSubmitting: isResettingPassword },
+    } = useForm<ResetPasswordFormData>({
+        resolver: zodResolver(resetPasswordSchema),
+        defaultValues: { password: "" },
+    });
 
     useEffect(() => {
         setCurrentPage(1);
@@ -131,44 +156,24 @@ export function UsersPage() {
         return () => clearTimeout(timeoutId);
     }, [searchQuery, roleFilter, currentPage]);
 
-    const handleCreateUser = async (e: FormEvent) => {
-        e.preventDefault();
-
-        if (!createForm.name || !createForm.email || !createForm.password) {
-            toast.error("Preencha todos os campos");
-            return;
-        }
-
-        if (createForm.password.length < 8) {
-            toast.error("A senha deve ter pelo menos 8 caracteres");
-            return;
-        }
-
+    const onCreateUser = async (data: CreateUserFormData) => {
         try {
-            setIsCreating(true);
             const response = await api.post<{ data: User }>(
                 "/admin/users",
-                createForm,
+                data,
             );
             setUsers(prev => [...prev, response.data.data]);
             setCreateDialogOpen(false);
-            setCreateForm({
-                name: "",
-                email: "",
-                password: "",
-                role: "reader",
-            });
+            resetCreate();
             toast.success("Usuário criado com sucesso!");
         } catch {
             toast.error("Erro ao criar usuário");
-        } finally {
-            setIsCreating(false);
         }
     };
 
     const openEditDialog = (user: User) => {
         setUserToEdit(user);
-        setEditForm({
+        resetEdit({
             name: user.name,
             email: user.email,
             role: user.role === "superadmin" ? "admin" : user.role,
@@ -176,20 +181,13 @@ export function UsersPage() {
         setEditDialogOpen(true);
     };
 
-    const handleEditUser = async (e: FormEvent) => {
-        e.preventDefault();
+    const onEditUser = async (data: EditUserFormData) => {
         if (!userToEdit) return;
 
-        if (!editForm.name || !editForm.email) {
-            toast.error("Preencha todos os campos");
-            return;
-        }
-
         try {
-            setIsEditing(true);
             const response = await api.put<{ data: User }>(
                 `/admin/users/${userToEdit.uuid}`,
-                editForm,
+                data,
             );
             setUsers(prev =>
                 prev.map(u =>
@@ -201,8 +199,6 @@ export function UsersPage() {
             toast.success("Usuário atualizado com sucesso!");
         } catch {
             toast.error("Erro ao atualizar usuário");
-        } finally {
-            setIsEditing(false);
         }
     };
 
@@ -223,28 +219,20 @@ export function UsersPage() {
         }
     };
 
-    const handleResetPassword = async (e: FormEvent) => {
-        e.preventDefault();
+    const onResetPassword = async (data: ResetPasswordFormData) => {
         if (!userToResetPassword) return;
 
-        if (!newPassword || newPassword.length < 8) {
-            toast.error("A senha deve ter pelo menos 8 caracteres");
-            return;
-        }
-
         try {
-            setIsResettingPassword(true);
-            await api.put(`/admin/users/${userToResetPassword.uuid}/password`, {
-                password: newPassword,
-            });
+            await api.put(
+                `/admin/users/${userToResetPassword.uuid}/password`,
+                data,
+            );
             setResetPasswordDialogOpen(false);
             setUserToResetPassword(null);
-            setNewPassword("");
+            resetResetForm();
             toast.success("Senha resetada com sucesso!");
         } catch {
             toast.error("Erro ao resetar senha");
-        } finally {
-            setIsResettingPassword(false);
         }
     };
 
@@ -337,7 +325,7 @@ export function UsersPage() {
                     </Button>
                 </div>
             ),
-            className: "w-32 text-right",
+            className: "w-37 text-right",
         },
     ];
 
@@ -425,77 +413,81 @@ export function UsersPage() {
                             Preencha os dados para criar um novo usuário
                         </DialogDescription>
                     </DialogHeader>
-                    <form onSubmit={handleCreateUser} className="space-y-4">
+                    <form
+                        onSubmit={handleSubmitCreate(onCreateUser)}
+                        className="space-y-4"
+                    >
                         <div className="space-y-2">
                             <Label htmlFor="create-name">Nome</Label>
                             <Input
                                 id="create-name"
-                                value={createForm.name}
-                                onChange={e =>
-                                    setCreateForm({
-                                        ...createForm,
-                                        name: e.target.value,
-                                    })
-                                }
                                 placeholder="Nome do usuário"
+                                aria-invalid={!!createErrors.name}
+                                {...registerCreate("name")}
                             />
+                            {createErrors.name && (
+                                <p className="text-destructive text-sm">
+                                    {createErrors.name.message}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="create-email">Email</Label>
                             <Input
                                 id="create-email"
                                 type="email"
-                                value={createForm.email}
-                                onChange={e =>
-                                    setCreateForm({
-                                        ...createForm,
-                                        email: e.target.value,
-                                    })
-                                }
                                 placeholder="email@exemplo.com"
+                                aria-invalid={!!createErrors.email}
+                                {...registerCreate("email")}
                             />
+                            {createErrors.email && (
+                                <p className="text-destructive text-sm">
+                                    {createErrors.email.message}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="create-password">Senha</Label>
                             <Input
                                 id="create-password"
                                 type="password"
-                                value={createForm.password}
-                                onChange={e =>
-                                    setCreateForm({
-                                        ...createForm,
-                                        password: e.target.value,
-                                    })
-                                }
                                 placeholder="Mínimo 8 caracteres"
+                                aria-invalid={!!createErrors.password}
+                                {...registerCreate("password")}
                             />
+                            {createErrors.password && (
+                                <p className="text-destructive text-sm">
+                                    {createErrors.password.message}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="create-role">Role</Label>
-                            <Select
-                                value={createForm.role}
-                                onValueChange={(
-                                    value: Exclude<Role, "superadmin">,
-                                ) =>
-                                    setCreateForm({
-                                        ...createForm,
-                                        role: value,
-                                    })
-                                }
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Selecione uma role" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="reader">
-                                        Leitor
-                                    </SelectItem>
-                                    <SelectItem value="editor">
-                                        Editor
-                                    </SelectItem>
-                                    <SelectItem value="admin">Admin</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <Controller
+                                name="role"
+                                control={controlCreate}
+                                render={({ field }) => (
+                                    <Select
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Selecione uma role" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="reader">
+                                                Leitor
+                                            </SelectItem>
+                                            <SelectItem value="editor">
+                                                Editor
+                                            </SelectItem>
+                                            <SelectItem value="admin">
+                                                Admin
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
                         </div>
                         <DialogFooter>
                             <Button
@@ -525,55 +517,64 @@ export function UsersPage() {
                             Atualize os dados do usuário
                         </DialogDescription>
                     </DialogHeader>
-                    <form onSubmit={handleEditUser} className="space-y-4">
+                    <form
+                        onSubmit={handleSubmitEdit(onEditUser)}
+                        className="space-y-4"
+                    >
                         <div className="space-y-2">
                             <Label htmlFor="edit-name">Nome</Label>
                             <Input
                                 id="edit-name"
-                                value={editForm.name}
-                                onChange={e =>
-                                    setEditForm({
-                                        ...editForm,
-                                        name: e.target.value,
-                                    })
-                                }
+                                aria-invalid={!!editErrors.name}
+                                {...registerEdit("name")}
                             />
+                            {editErrors.name && (
+                                <p className="text-destructive text-sm">
+                                    {editErrors.name.message}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="edit-email">Email</Label>
                             <Input
                                 id="edit-email"
                                 type="email"
-                                value={editForm.email}
-                                onChange={e =>
-                                    setEditForm({
-                                        ...editForm,
-                                        email: e.target.value,
-                                    })
-                                }
+                                aria-invalid={!!editErrors.email}
+                                {...registerEdit("email")}
                             />
+                            {editErrors.email && (
+                                <p className="text-destructive text-sm">
+                                    {editErrors.email.message}
+                                </p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="edit-role">Role</Label>
-                            <Select
-                                value={editForm.role}
-                                onValueChange={(
-                                    value: Exclude<Role, "superadmin">,
-                                ) => setEditForm({ ...editForm, role: value })}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="reader">
-                                        Leitor
-                                    </SelectItem>
-                                    <SelectItem value="editor">
-                                        Editor
-                                    </SelectItem>
-                                    <SelectItem value="admin">Admin</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <Controller
+                                name="role"
+                                control={controlEdit}
+                                render={({ field }) => (
+                                    <Select
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="reader">
+                                                Leitor
+                                            </SelectItem>
+                                            <SelectItem value="editor">
+                                                Editor
+                                            </SelectItem>
+                                            <SelectItem value="admin">
+                                                Admin
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
                         </div>
                         <DialogFooter>
                             <Button
@@ -640,16 +641,24 @@ export function UsersPage() {
                             &quot;
                         </DialogDescription>
                     </DialogHeader>
-                    <form onSubmit={handleResetPassword} className="space-y-4">
+                    <form
+                        onSubmit={handleSubmitReset(onResetPassword)}
+                        className="space-y-4"
+                    >
                         <div className="space-y-2">
                             <Label htmlFor="new-password">Nova Senha</Label>
                             <Input
                                 id="new-password"
                                 type="password"
-                                value={newPassword}
-                                onChange={e => setNewPassword(e.target.value)}
                                 placeholder="Mínimo 8 caracteres"
+                                aria-invalid={!!resetErrors.password}
+                                {...registerReset("password")}
                             />
+                            {resetErrors.password && (
+                                <p className="text-destructive text-sm">
+                                    {resetErrors.password.message}
+                                </p>
+                            )}
                         </div>
                         <DialogFooter>
                             <Button
@@ -657,7 +666,7 @@ export function UsersPage() {
                                 variant="outline"
                                 onClick={() => {
                                     setResetPasswordDialogOpen(false);
-                                    setNewPassword("");
+                                    resetResetForm();
                                 }}
                                 disabled={isResettingPassword}
                             >

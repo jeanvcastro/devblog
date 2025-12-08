@@ -17,7 +17,8 @@ export function TagBadge({ tag }: TagBadgeProps) {
         e.stopPropagation();
 
         if (location.pathname === "/posts") {
-            const currentTags = searchParams.get("tags")?.split(",").filter(Boolean) || [];
+            const currentTags =
+                searchParams.get("tags")?.split(",").filter(Boolean) || [];
 
             if (!currentTags.includes(tag.slug)) {
                 const newTags = [...currentTags, tag.slug];
@@ -33,7 +34,7 @@ export function TagBadge({ tag }: TagBadgeProps) {
     return (
         <Badge
             variant="secondary"
-            className="hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
+            className="hover:bg-primary hover:text-primary-foreground cursor-pointer transition-colors"
             onClick={handleClick}
         >
             {tag.name}

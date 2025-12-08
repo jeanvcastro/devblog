@@ -1,13 +1,12 @@
-import { AdminLayout } from "@/layout/admin-layout";
-import { StatsCard } from "./components/stats-card";
-import { DataTable, type DataTableColumn } from "./components/data-table";
 import type { Post, Tag } from "@/@types";
-import api from "@/services/api";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+import { AdminLayout } from "@/layout/admin-layout";
+import api from "@/services/api";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
+import { useEffect, useState } from "react";
+import { DataTable, type DataTableColumn } from "./components/data-table";
+import { StatsCard } from "./components/stats-card";
 
 dayjs.locale("pt-br");
 
@@ -42,10 +41,10 @@ export function DashboardPage() {
                 const posts = postsRes.data.data;
                 const totalViews = posts.reduce(
                     (sum, post) => sum + post.views_count,
-                    0
+                    0,
                 );
                 const publishedPosts = posts.filter(
-                    (post) => post.status === "published"
+                    post => post.status === "published",
                 ).length;
 
                 setStats({
@@ -70,7 +69,7 @@ export function DashboardPage() {
         {
             key: "title",
             header: "Título",
-            cell: (post) => (
+            cell: post => (
                 <div className="min-w-0 space-y-1">
                     <div className="group-hover:text-primary font-medium">
                         {post.title}
@@ -98,7 +97,7 @@ export function DashboardPage() {
         {
             key: "status",
             header: "Status",
-            cell: (post) => (
+            cell: post => (
                 <Badge
                     variant={
                         post.status === "published" ? "default" : "secondary"
@@ -112,13 +111,13 @@ export function DashboardPage() {
         {
             key: "views_count",
             header: "Views",
-            cell: (post) => post.views_count.toLocaleString("pt-BR"),
+            cell: post => post.views_count.toLocaleString("pt-BR"),
             className: "hidden w-24 text-right sm:table-cell",
         },
         {
             key: "published_at",
             header: "Data",
-            cell: (post) =>
+            cell: post =>
                 post.published_at
                     ? dayjs(post.published_at).format("DD/MM/YYYY")
                     : "-",
@@ -149,7 +148,9 @@ export function DashboardPage() {
                     <StatsCard
                         title="Total de Visualizações"
                         value={
-                            loading ? "-" : stats.total_views.toLocaleString("pt-BR")
+                            loading
+                                ? "-"
+                                : stats.total_views.toLocaleString("pt-BR")
                         }
                     />
                     <StatsCard
@@ -168,9 +169,6 @@ export function DashboardPage() {
                         columns={columns}
                         loading={loading}
                         emptyMessage="Nenhum post encontrado."
-                        actions={(post) => (
-                            <Link to={`/admin/posts/${post.uuid}/edit`} className="absolute inset-0" />
-                        )}
                     />
                 </div>
             </div>
