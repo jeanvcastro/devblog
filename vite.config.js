@@ -29,4 +29,24 @@ export default defineConfig({
     define: {
         global: "globalThis",
     },
+    build: {
+        target: "es2020",
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    markdown: [
+                        "react-markdown",
+                        "remark-gfm",
+                        "react-syntax-highlighter",
+                    ],
+                    ui: [
+                        "@radix-ui/react-dialog",
+                        "@radix-ui/react-popover",
+                        "@radix-ui/react-select",
+                        "@radix-ui/react-tabs",
+                    ],
+                },
+            },
+        },
+    },
 });
